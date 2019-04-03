@@ -20,7 +20,7 @@ import { DataTableService } from './datatable.service';
 import { DTCheckboxComponent } from './datatable-checkbox.component';
 
 import { DatatableFooterComponent } from './table/datatable-footer.component';
-import { SlotDirective } from './datatable-slot.directive';
+import { FarrisColumnTemplateDirective } from './datatable-slot.directive';
 import { RowDirective } from './datatable-row.component';
 
 import { DragColumnDirective } from './utils/drag.directive';
@@ -50,12 +50,12 @@ import { DateFormatPipe } from './utils/datatable-date-format.pipe';
         // InputGroupModule
     ],
     exports: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DataTableBodyComponent,
-        DatatableFooterComponent, SlotDirective, RowDirective, DragColumnDirective,
+        DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective, DragColumnDirective,
         FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
         DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,
         FarrisFilterResetDirective, FarrisFilterSingleDirective],
     declarations: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DragColumnDirective,
-        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, SlotDirective, RowDirective,
+        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective,
         FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
         DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,
         FarrisFilterResetDirective, FarrisFilterSingleDirective],

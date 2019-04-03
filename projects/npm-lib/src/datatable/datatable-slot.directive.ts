@@ -1,8 +1,8 @@
 import { Directive, TemplateRef } from '@angular/core';
 @Directive({
-    selector: '[slot]'
+    selector: '[farrisColumnTemplate]'
 })
-export class SlotDirective {
+export class FarrisColumnTemplateDirective {
     constructor(public templateRef: TemplateRef<any>) {
     }
 }

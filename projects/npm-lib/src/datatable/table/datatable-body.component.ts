@@ -27,7 +27,7 @@ import { ColumnFormatService } from '@farris/ui';
                     *ngFor="let col of columns;let colIndex=index" [style.textAlign]="col.align || 'left'">
                         <ng-container *ngIf="!col.cellTempl; else cellTemp">
                             <span *ngIf="col.formatter"
-                                [innerHtml]="formatData(getValue(col.field, row), row, col.formatter)">
+                                [innerHtml]="col.formatter">
                             </span>
                             <span *ngIf="!col.formatter" class="text-truncate">
                               {{ getValue(col.field, row)}}

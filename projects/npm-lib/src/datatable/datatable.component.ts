@@ -292,6 +292,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                         media: col.media,
                         sortable: col.sortable,
                         edit: col.edit,
+                        formatter: col.formatter,
                         // 单元格模板
                         cellTempl: col.cellTempl
                     };

@@ -1,8 +1,8 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <farris-table [bordered]="true" [size]="'small'" [width]="1000" [data]="data" [pagination]="false">
   <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field">
-    <ng-template slot let-row  let-value="value">
-      {{col.formatter}}
+    <ng-template farrisColumnTemplate let-row let-column="column">
+      <span [innerHtml]="formatter({row:row,column:col})"></span>
     </ng-template>
   </farris-table-column>
 </farris-table>

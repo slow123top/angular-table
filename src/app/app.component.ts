@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
-
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
+  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService) {
+
+  }
   title = 'ng-table';
   columns = [
     {
-      title: '编号', field: 'Code', width: 60, align: 'center'
+      title: '编号', field: 'Code', type: 'string', width: 60, align: 'center'
       // 添加列样式
     },
     // { title: '姓名', field: 'Name', width: 80, fixed: { type: 'left', media: 'md' } },
-    { title: '姓名', field: 'Name', width: 80 },
-    { title: '年龄', field: 'Age', width: 90 },
+    { title: '姓名', field: 'Name', type: 'string', width: 80 },
+    { title: '年龄', field: 'Age', type: 'number', width: 90 },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
-    { title: '出生日期', field: 'birthday', width: 140, formatter: { type: 'datetime', options: { format: 'YYYY-MM-DD' } } },
-    { title: '身份证号', field: 'idcode', width: 120 },
-    { title: '邮编', field: 'postcode', width: 120 },
-    { title: '地址', field: 'address', width: 200 }
+    { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD' },
+    { title: '身份证号', field: 'idcode', type: 'string', width: 120 },
+    { title: '邮编', field: 'postcode', type: 'string', width: 120 },
+    { title: '地址', field: 'address', type: 'string', width: 200 },
+    { title: '对错', field: 'correct', type: 'boolean', width: 120 }
   ];
   data = [
     {
@@ -38,4 +42,29 @@ export class AppComponent {
     { Code: 11, Name: '珠港澳10', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
     { Code: 12, Name: '珠港澳11', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false }
   ];
+  ngOnInit() {
+  }
+  ngAfterViewInit() {
+
+  }
+  formatter(param: any) {
+    console.log(param);
+    const column = param.column;
+    const value = param.row[column.field];
+    const type = column.type;
+    if (type === 'date') {
+      return this.dateSer.formatTo(value, column.format);
+    } else if (type === 'number') {
+      const opts = {
+        prefix: '',
+        suffix: '岁'
+      };
+      return this.numberSer.formatMoney(value, opts);
+    } else if (type === 'boolean') {
+      return value ? '是' : '否';
+    } else {
+      return value;
+    }
+  }
+
 }
