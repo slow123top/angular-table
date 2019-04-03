@@ -6,17 +6,15 @@ import { DataTableColumn, deepCopy, convertColumns } from '../datatable-column';
     template: `
     <table class="table"
     [class.table-sm]="size==='small'"
+    [class.table-striped]="striped"
+    [class.table-bordered]="bordered"
     >
-        <colgroup>
-            <col class="dt-checkbox-cell" *ngIf="!singleSelect"/>
-            <col *ngFor="let col of columns" [style.width]="col.width + 'px'"/>
-        </colgroup>
         <thead>
             <tr>
-                <th drag-column class="dt-checkbox-cell" *ngIf="!singleSelect">
+                <th class="dt-checkbox-cell" *ngIf="!singleSelect">
                     <dt-checkbox [checked]="isCheckAll" (checkedChange)="onCheckedChange($event)"></dt-checkbox>
                 </th>
-                <th drag-column *ngFor="let col of columns;let i=index" [attr.align]="col.align||'left'">
+                <th *ngFor="let col of columns;let i=index" [style.textAlign]="col.align" [style.width]="col.width+'px'">
                     <span>{{ col.title }}</span>
                 </th>
             </tr>

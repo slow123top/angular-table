@@ -16,14 +16,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       // 添加列样式
     },
     // { title: '姓名', field: 'Name', width: 80, fixed: { type: 'left', media: 'md' } },
-    { title: '姓名', field: 'Name', type: 'string', width: 80 },
-    { title: '年龄', field: 'Age', type: 'number', width: 90 },
+    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center' },
+    { title: '年龄', field: 'Age', type: 'number', width: 90, align: 'center' },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
-    { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD' },
-    { title: '身份证号', field: 'idcode', type: 'string', width: 120 },
-    { title: '邮编', field: 'postcode', type: 'string', width: 120 },
-    { title: '地址', field: 'address', type: 'string', width: 200 },
-    { title: '对错', field: 'correct', type: 'boolean', width: 120 }
+    { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD', align: 'center' },
+    { title: '身份证号', field: 'idcode', type: 'string', width: 120, align: 'center' },
+    { title: '邮编', field: 'postcode', type: 'string', width: 120, align: 'center' },
+    { title: '地址', field: 'address', type: 'string', width: 200, align: 'center' },
+    { title: '对错', field: 'correct', type: 'boolean', width: 120, align: 'center' }
   ];
   data = [
     {

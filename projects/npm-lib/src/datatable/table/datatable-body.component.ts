@@ -11,35 +11,37 @@ import { ColumnFormatService } from '@farris/ui';
     [class.table-sm]="size==='small'"
     [class.table-striped]="striped"
     [class.table-bordered]="bordered">
-        <colgroup>
-            <col class="dt-checkbox-cell" *ngIf="!dt.singleSelect"/>
-            <col *ngFor="let col of columns" [style.width]="col.width + 'px'" />
-        </colgroup>
-        <tbody class="ui-table-tbody">
-            <ng-container *ngIf="!isRowTempl">
-                <tr [ngClass]="createRowClassName(row,rowIndex)"
+        <thead>
+            <tr>
+                <th class="dt-checkbox-cell" *ngIf="!dt.singleSelect">
+                    <dt-checkbox [checked]="isCheckAll" (checkedChange)="onCheckedChange($event)"></dt-checkbox>
+                </th>
+                <th *ngFor="let col of columns;let i=index" [style.textAlign]="col.align||'left'" [style.width]="col.width+'px'">
+                    <span>{{ col.title }}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr [ngClass]="createRowClassName(row,rowIndex)"
                 *ngFor="let row of rows ; let rowIndex = index"
                  [class.selected]="isSelected(row)">
-                    <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect">
+                <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect">
                         <dt-checkbox [checked]="isSelected(row)" (checkedChange)="onChecked($event, rowIndex, row)"></dt-checkbox>
-                    </td>
-                    <td [ngClass]="getTdClassName(row[col.field],col)"
-                    *ngFor="let col of columns;let colIndex=index" [style.textAlign]="col.align || 'left'">
-                        <ng-container *ngIf="!col.cellTempl; else cellTemp">
-                            <span *ngIf="col.formatter"
-                                [innerHtml]="col.formatter">
-                            </span>
-                            <span *ngIf="!col.formatter" class="text-truncate">
+                </td>
+                <td [ngClass]="getTdClassName(row[col.field],col)"
+                    *ngFor="let col of columns;let colIndex=index" [style.textAlign]="col.align||'left'" [style.width]="col.width + 'px'">
+                    <ng-container *ngIf="!col.cellTempl; else cellTemp">
+                        <span *ngIf="col.formatter" [innerHtml]="col.formatter">
+                        </span>
+                        <span *ngIf="!col.formatter" class="text-truncate">
                               {{ getValue(col.field, row)}}
-                            </span>
-                        </ng-container>
-                        <ng-template #cellTemp [ngTemplateOutlet]="col.cellTempl"
-                        [ngTemplateOutletContext]="{ $implicit: row,rowIndex:rowIndex,column:col,
-                            columnIndex:colIndex}">
-                        </ng-template>
-                    </td>
-                </tr>
-            </ng-container>
+                        </span>
+                    </ng-container>
+                    <ng-template #cellTemp [ngTemplateOutlet]="col.cellTempl"
+                        [ngTemplateOutletContext]="{ $implicit: row,rowIndex:rowIndex,column:col,columnIndex:colIndex}">
+                    </ng-template>
+                </td>
+            </tr>
         </tbody>
     </table>
     `,

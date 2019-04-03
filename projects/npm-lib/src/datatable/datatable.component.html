@@ -1,32 +1,39 @@
-<div [ngStyle]="{'height': tableHeight +'px', 'width': width +'px' }" class="farris-datatable-container">
-    <div class="farris-datatable">
-        <div #tableHeader class="farris-table-header">
-            <datatable-header #dtHeader [size]="size" [columns]="columns" [singleSelect]="singleSelect" [data]="data"
-                (checkedAll)="onCheckAll($event)" (on-sort-change)="headerSortChange($event)">
-                <ng-content select="data-columns"></ng-content>
-            </datatable-header>
-        </div>
-        <div #scorllableBody class="farris-table-scorllable-body" [style.height]="scorllableBodyHeight + 'px'">
-            <perfect-scrollbar #perfectScrollbar [config]="{}" (psScrollX)="onScrollX($event)"
-                (psScrollY)="onScrollY($event)">
-                <ng-container [style.display]="data && data.length ? 'block': 'none'">
-                    <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data"
-                        [size]="size" [columns]="columns" [striped]="striped" [bordered]="bordered"
-                        [rowClassName]="rowClassName" [cellClassName]="cellClassName"
-                        (on-edit-grid)="onCellClick($event)" (on-select-row)="onSelectRow($event)">
-                    </datatable-body>
-                </ng-container>
-                <ng-container *ngIf="!(data && data.length)">
-                    <h1 style="text-align:center;color:#ccc; margin-top: 50px;"></h1>
-                </ng-container>
-            </perfect-scrollbar>
-        </div>
-        <div class="farris-table-header" *ngIf="footer">
-            <ng-template [ngTemplateOutlet]="footer">
-            </ng-template>
-        </div>
-    </div>
+<div [style.width]="width+'px'">
+    <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data" [size]="size"
+        [columns]="columns" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
+        [cellClassName]="cellClassName" (on-edit-grid)="onCellClick($event)" (on-select-row)="onSelectRow($event)">
+    </datatable-body>
 </div>
+
+
+<!-- <div class="farris-datatable">
+    <div #tableHeader class="farris-table-header">
+        <datatable-header #dtHeader [size]="size" [columns]="columns" [singleSelect]="singleSelect" [data]="data"
+            (checkedAll)="onCheckAll($event)">
+            <ng-content select="data-columns"></ng-content>
+        </datatable-header>
+    </div>
+    <div #scorllableBody class="farris-table-scorllable-body" [style.height]="scorllableBodyHeight + 'px'">
+        <perfect-scrollbar #perfectScrollbar [config]="{}" (psScrollX)="onScrollX($event)"
+            (psScrollY)="onScrollY($event)">
+            <ng-container [style.display]="data && data.length ? 'block': 'none'">
+                <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data" [size]="size"
+                    [columns]="columns" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
+                    [cellClassName]="cellClassName" (on-edit-grid)="onCellClick($event)"
+                    (on-select-row)="onSelectRow($event)">
+                </datatable-body>
+            </ng-container>
+            <ng-container *ngIf="!(data && data.length)">
+                <h1 style="text-align:center;color:#ccc; margin-top: 50px;"></h1>
+            </ng-container>
+        </perfect-scrollbar>
+    </div>
+</div> -->
+<!-- 表尾 -->
+<!-- <div class="farris-table-header" *ngIf="footer">
+        <ng-template [ngTemplateOutlet]="footer">
+        </ng-template>
+    </div> -->
 <!-- 固定表头 -->
 <!-- <div class="farris-table-fixed-header" [style.width]="fixedLeftWidth" *ngIf="hasFixed">
     <datatable-header #dtLeftFixedHeader [size]="size" [columns]="columns" [data]="data" [singleSelect]="singleSelect"
