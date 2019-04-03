@@ -1,3 +1,9 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<farris-table [showFilterBar]="true" [bordered]="true" [width]="900" [columns]="columns" [data]="data" [pagination]="false"></farris-table>
+<farris-table [bordered]="true" [size]="'small'" [width]="1000" [data]="data" [pagination]="false">
+  <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field">
+    <ng-template slot let-row  let-value="value">
+      {{col.formatter}}
+    </ng-template>
+  </farris-table-column>
+</farris-table>
 <router-outlet></router-outlet>

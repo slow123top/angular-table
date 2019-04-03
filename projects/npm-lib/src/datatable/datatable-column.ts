@@ -24,8 +24,8 @@ export interface DataTableColumn {
     edit?: string;
     // 响应式属性
     media?: object;
-    // 列格式化API
-    formatter?: () => {};
+    // 列格式化API 用户自定义
+    formatter?: any;
 }
 export const convertColumns = (columns: any, direction: any) => {
     const tempFixedColumns = [];

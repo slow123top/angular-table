@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { DataTableColumn, deepCopy } from './datatable-column';
-import { ColumnDirective } from './datatable-column.component';
+import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableService } from './datatable.service';
 import { PaginationInstance, PerfectScrollbarComponent } from '@farris/ui';
 import { IdService } from './utils/id.service';
@@ -90,7 +90,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Output('on-select-row') selectRows = new EventEmitter<any>();
     @Output('on-edit-grid') cellClick = new EventEmitter<any>();
     @ContentChildren(RowDirective) rowsRef: QueryList<RowDirective>;
-    @ContentChildren(ColumnDirective) columnsRef: QueryList<ColumnDirective>;
+    @ContentChildren(FarrisTableColumnDirective) columnsRef: QueryList<FarrisTableColumnDirective>;
     // 表尾
     @ContentChild('footer') footer: TemplateRef<any>;
     // 表格可拖拽宽度系列

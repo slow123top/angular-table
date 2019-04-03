@@ -1,15 +1,15 @@
 import { Directive, OnInit, Input, ContentChild, TemplateRef, ElementRef, HostBinding } from '@angular/core';
 import { SlotDirective } from './datatable-slot.directive';
 @Directive({
-    selector: 'data-column'
+    selector: 'farris-table-column'
 })
-export class ColumnDirective implements OnInit {
+export class FarrisTableColumnDirective implements OnInit {
 
     @Input() edit: string;
     @Input() title: string;
     @Input() field: string;
     @Input() width: number;
-    @Input() align: 'left' | 'center' | 'right' = 'left';
+    @Input() align: 'left' | 'center' | 'right';
     @Input() fixed?: any;
     @Input() className?: string;
     @Input() media?: object;

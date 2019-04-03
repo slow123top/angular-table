@@ -29,19 +29,14 @@ import { ColumnFormatService } from '@farris/ui';
                             <span *ngIf="col.formatter"
                                 [innerHtml]="formatData(getValue(col.field, row), row, col.formatter)">
                             </span>
-                            <div *ngIf="!col.formatter" class="text-truncate">
-                                <span *ngIf="!edit[rowIndex+'-'+colIndex]&&col.edit==='date'">
-                                {{row[col.field]|dateFormat:'yyyy-MM-dd'}}</span>
-                                <span *ngIf="!edit[rowIndex+'-'+colIndex]&&col.edit!=='date'">{{ getValue(col.field, row)}}</span>
-                                <input [type]="col.edit==='boolean'?'checkbox':col.edit" [(ngModel)]="row[col.field]"
-                                *ngIf="col.edit!=='date'&&edit[rowIndex+'-'+colIndex]"/>
-                                <input type="date" [ngModel]="row[col.field]|dateFormat:'yyyy-MM-dd'"
-                                (ngModelChange)="row[col.field]=$event"
-                                *ngIf="col.edit==='date'&&edit[rowIndex+'-'+colIndex]"/>
-                            </div>
+                            <span *ngIf="!col.formatter" class="text-truncate">
+                              {{ getValue(col.field, row)}}
+                            </span>
                         </ng-container>
                         <ng-template #cellTemp [ngTemplateOutlet]="col.cellTempl"
-                        [ngTemplateOutletContext]="{ $implicit: row,rowIndex:rowIndex,value:row[col.field] }"></ng-template>
+                        [ngTemplateOutletContext]="{ $implicit: row,rowIndex:rowIndex,column:col,
+                            columnIndex:colIndex}">
+                        </ng-template>
                     </td>
                 </tr>
             </ng-container>
@@ -117,7 +112,7 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
     }
 
     constructor(public el: ElementRef, private dataService: DataTableService, private render: Renderer2,
-                @Optional() public dt: DataTableComponent, public colFormatSer: ColumnFormatService) { }
+        @Optional() public dt: DataTableComponent, public colFormatSer: ColumnFormatService) { }
 
     /**
      * 获取对象中指定字段的值。 field: 可以为带有层级结构的路径，如： user.firstName | name 等
