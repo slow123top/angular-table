@@ -1,10 +1,9 @@
 <div [style.width]="width+'px'">
     <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data" [size]="size"
         [columns]="columns" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
-        [cellClassName]="cellClassName" (on-edit-grid)="onCellClick($event)" (on-select-row)="onSelectRow($event)">
+        [cellClassName]="cellClassName">
     </datatable-body>
 </div>
-
 
 <!-- <div class="farris-datatable">
     <div #tableHeader class="farris-table-header">

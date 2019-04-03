@@ -9,7 +9,7 @@ import { IntlModule } from '@progress/kendo-angular-intl';
 import { DataTableComponent } from './datatable.component';
 import {
     PerfectScrollbarModule, PaginationModule, ColumnFormatService, FarrisPopoverModule, DateTimeHelperService,
-    NumberHelperService
+    NumberHelperService, FDropdownDirectiveTypeModule
 } from '@farris/ui';
 import { DataTableHeaderComponent } from './table/datatable-header.component';
 import { FarrisTableColumnDirective } from './datatable-column.component';

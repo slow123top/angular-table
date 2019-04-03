@@ -1,9 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
   constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService) {
@@ -48,7 +49,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   }
   formatter(param: any) {
-    console.log(param);
     const column = param.column;
     const value = param.row[column.field];
     const type = column.type;
@@ -64,6 +64,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       return value ? '是' : '否';
     } else {
       return value;
+    }
+  }
+  rowClassName(row, index) {
+    if (index > 6) {
+      return 'tr-color-red';
+    }
+  }
+  cellClassName(value, col, index) {
+    if (value === '珠港澳2') {
+      return 'td-bg-blue';
     }
   }
 

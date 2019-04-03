@@ -28,7 +28,7 @@ import { ColumnFormatService } from '@farris/ui';
                 <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect">
                         <dt-checkbox [checked]="isSelected(row)" (checkedChange)="onChecked($event, rowIndex, row)"></dt-checkbox>
                 </td>
-                <td [ngClass]="getTdClassName(row[col.field],col)"
+                <td [ngClass]="createCellClassName(getValue(col.field,row),col,colIndex)"
                     *ngFor="let col of columns;let colIndex=index" [style.textAlign]="col.align||'left'" [style.width]="col.width + 'px'">
                     <ng-container *ngIf="!col.cellTempl; else cellTemp">
                         <span *ngIf="col.formatter" [innerHtml]="col.formatter">
@@ -81,7 +81,7 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
     // tslint:disable-next-line:no-input-rename
     @Input() rows: any[] = [];
     @Input() rowClassName: (row: any, index: number) => string;
-    @Input() cellClassName: (value: any, col: any) => string;
+    @Input() cellClassName: (value: any, col: any, colIndex: number) => string;
     // tslint:disable-next-line:no-output-rename
     @Output('on-select-row') selectRow: EventEmitter<any> = new EventEmitter<any>();
     // tslint:disable-next-line:no-output-rename
@@ -220,15 +220,15 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
     }
     // 添加自定义设置列 单元格类样式
     getTdClassName(value, col) {
-        const tempClassName = {};
-        // 列类的样式
-        if (col.className && Object.prototype.toString.call(col.className) === '[object String]') {
-            tempClassName[col.className] = true;
-        }
-        // 行类的样式
-        if (this.cellClassName && this.cellClassName(value, col)) {
-            tempClassName[this.cellClassName(value, col)] = true;
-        }
+        // const tempClassName = {};
+        // // 列类的样式
+        // if (col.className && Object.prototype.toString.call(col.className) === '[object String]') {
+        //     tempClassName[col.className] = true;
+        // }
+        // // 行类的样式
+        // if (this.cellClassName && this.cellClassName(value, col)) {
+        //     tempClassName[this.cellClassName(value, col)] = true;
+        // }
         // 定义是否有固定列
         // if (col.hasOwbProperty('fixed')) {
         //     if (col.fixed === 'left' || col.fixed === 'right') {
@@ -239,10 +239,13 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
         //         tempClassName[`td-hidden`] = false;
         //     }
         // }
-        return tempClassName;
+        // return tempClassName;
     }
-    createRowClassName(row, index) {
+    createRowClassName(row: any, index: number) {
         return this.rowClassName ? this.rowClassName(row, index) : '';
+    }
+    createCellClassName(value: any, col: any, colIndex: number) {
+        return this.cellClassName ? this.cellClassName(value, col, colIndex) : '';
     }
     /**
      * 单元格编辑

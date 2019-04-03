@@ -29,9 +29,9 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() size: string;
     @Input() allColumnsTitle = '所有列';
     // table 尺寸
-    @Input() width;
+    @Input() width: number;
     // 组件级高度包括过滤条高度
-    @Input() height;
+    @Input() height: number;
 
     tableHeight: number; // 数据表高度
     // 是否填充
@@ -78,15 +78,14 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @ViewChild('tablePager') tablePager: ElementRef;
     @ViewChild('dtHeader') dtHeader: DataTableHeaderComponent;
     @ViewChild('dtBody') dtBody: DataTableBodyComponent;
-    @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
-    @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
-    @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
-    @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
+    // @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
+    // @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
+    // @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
+    // @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
     // 分页事件
     @Output() pageChanged = new EventEmitter();
     @Output() pageSizeChanged = new EventEmitter();
     @Output() search = new EventEmitter<{ field: string, value: string }>();
-    @Output() sortChange = new EventEmitter<any>();
     @Output('on-select-row') selectRows = new EventEmitter<any>();
     @Output('on-edit-grid') cellClick = new EventEmitter<any>();
     @ContentChildren(RowDirective) rowsRef: QueryList<RowDirective>;
@@ -199,7 +198,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     ngOnInit() {
         setTimeout(() => {
             this.setBodyHeight();
-            this.ps = this.perfectScrollbar.directiveRef.ps();
+            // this.ps = this.perfectScrollbar.directiveRef.ps();
         });
 
         if (!this.id) {
@@ -219,7 +218,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         if (this.showFilterBar) {
             this.tableHeight = this.height - 46;
         }
-        this.scorllableBodyHeight = this.tableHeight - this.tableHeader.nativeElement.clientHeight;
+        this.scorllableBodyHeight = this.tableHeight;
 
         if (this.pagination) {
             this.scorllableBodyHeight = this.scorllableBodyHeight - 50;
@@ -315,46 +314,46 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             this.setFixed(window.innerWidth);
         }, 0);
     }
-    hoverTr(tr, color) {
-        const headerTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-        let leftBodyTrs, rightBodyTrs;
-        if (this.dtLeftFixed) {
-            leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-        }
-        if (this.dtRightFixed) {
-            rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-        }
-        for (let i = 0; i < headerTrs.length; i++) {
-            if (tr === headerTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-                headerTrs[i].style.backgroundColor = color;
-                // tslint:disable-next-line:no-unused-expression
-                leftBodyTrs && (leftBodyTrs[i].style.backgroundColor = color);
-                // tslint:disable-next-line:no-unused-expression
-                rightBodyTrs && (rightBodyTrs[i].style.backgroundColor = color);
-            }
-        }
-    }
-    clickTr(e, tr) {
-        let leftBodyTrs, rightBodyTrs;
-        if (this.dtLeftFixed) {
-            leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-        }
-        if (this.dtRightFixed) {
-            rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-        }
-        const bodyTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-        for (let i = 0; i < bodyTrs.length; i++) {
-            if (tr === bodyTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-                this.dtBody.selectedRow(e, i, this.dtBody.rows[i]);
-                if (this.dtLeftBody) {
-                    this.dtLeftBody.selectedRow(e, i, this.dtLeftBody.rows[i]);
-                }
-                if (this.dtRightBody) {
-                    this.dtRightBody.selectedRow(e, i, this.dtRightBody.rows[i]);
-                }
-            }
-        }
-    }
+    // hoverTr(tr, color) {
+    //     const headerTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
+    //     let leftBodyTrs, rightBodyTrs;
+    //     if (this.dtLeftFixed) {
+    //         leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
+    //     }
+    //     if (this.dtRightFixed) {
+    //         rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
+    //     }
+    //     for (let i = 0; i < headerTrs.length; i++) {
+    //         if (tr === headerTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
+    //             headerTrs[i].style.backgroundColor = color;
+    //             // tslint:disable-next-line:no-unused-expression
+    //             leftBodyTrs && (leftBodyTrs[i].style.backgroundColor = color);
+    //             // tslint:disable-next-line:no-unused-expression
+    //             rightBodyTrs && (rightBodyTrs[i].style.backgroundColor = color);
+    //         }
+    //     }
+    // }
+    // clickTr(e, tr) {
+    //     let leftBodyTrs, rightBodyTrs;
+    //     if (this.dtLeftFixed) {
+    //         leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
+    //     }
+    //     if (this.dtRightFixed) {
+    //         rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
+    //     }
+    //     const bodyTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
+    //     for (let i = 0; i < bodyTrs.length; i++) {
+    //         if (tr === bodyTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
+    //             this.dtBody.selectedRow(e, i, this.dtBody.rows[i]);
+    //             if (this.dtLeftBody) {
+    //                 this.dtLeftBody.selectedRow(e, i, this.dtLeftBody.rows[i]);
+    //             }
+    //             if (this.dtRightBody) {
+    //                 this.dtRightBody.selectedRow(e, i, this.dtRightBody.rows[i]);
+    //             }
+    //         }
+    //     }
+    // }
     sortData(count, col, sortType) {
         const sort = count % 3;
         if (sort === 0) {
@@ -380,9 +379,9 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     /**
      * 排序弹出事件
      */
-    headerSortChange(event) {
-        this.sortChange.emit(event);
-    }
+    // headerSortChange(event) {
+    //     this.sortChange.emit(event);
+    // }
     /* 筛选事件
     *
     */
@@ -510,8 +509,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             return;
         }
         const y = e.srcElement.scrollTop;
-        this.dtLeftFixed.nativeElement.style.top = -y + 'px';
-        this.dtRightFixed.nativeElement.style.top = -y + 'px';
+        // this.dtLeftFixed.nativeElement.style.top = -y + 'px';
+        // this.dtRightFixed.nativeElement.style.top = -y + 'px';
 
     }
 
