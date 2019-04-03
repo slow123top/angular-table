@@ -12,7 +12,7 @@ import {
     NumberHelperService
 } from '@farris/ui';
 import { DataTableHeaderComponent } from './table/datatable-header.component';
-import { ColumnDirective } from './datatable-column.component';
+import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableBodyComponent } from './table/datatable-body.component';
 import { IdService } from './utils/id.service';
 import { DataTableService } from './datatable.service';
@@ -49,12 +49,12 @@ import { DateFormatPipe } from './utils/datatable-date-format.pipe';
         // FarrisPopoverModule,
         // InputGroupModule
     ],
-    exports: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DataTableBodyComponent,
+    exports: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DataTableBodyComponent,
         DatatableFooterComponent, SlotDirective, RowDirective, DragColumnDirective,
         FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
         DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,
         FarrisFilterResetDirective, FarrisFilterSingleDirective],
-    declarations: [DataTableComponent, DataTableHeaderComponent, ColumnDirective, DragColumnDirective,
+    declarations: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DragColumnDirective,
         DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, SlotDirective, RowDirective,
         FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
         DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,

@@ -16,7 +16,7 @@ export class AppComponent {
     { title: '姓名', field: 'Name', width: 80 },
     { title: '年龄', field: 'Age', width: 90 },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
-    { title: '出生日期', field: 'birthday', width: 140 },
+    { title: '出生日期', field: 'birthday', width: 140, formatter: { type: 'datetime', options: { format: 'YYYY-MM-DD' } } },
     { title: '身份证号', field: 'idcode', width: 120 },
     { title: '邮编', field: 'postcode', width: 120 },
     { title: '地址', field: 'address', width: 200 }
