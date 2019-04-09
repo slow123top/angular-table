@@ -24,16 +24,6 @@ import { FarrisColumnTemplateDirective } from './datatable-slot.directive';
 import { RowDirective } from './datatable-row.component';
 
 import { DragColumnDirective } from './utils/drag.directive';
-import { FarrisColumnResDirective } from './utils/datatable-responsive.directive';
-import { FarrisHoverDirective } from './utils/datatable-hover.directive';
-import { FarrisEditFocusDirective } from './utils/datatable-edit-focus.directive';
-import { FarrisEditEventDirective } from './utils/datatable-edit-event.directive';
-import { FarrisSortDirective } from './utils/datatable-sort.directive';
-import { FarrisFilterDirective } from './utils/datatable-filter.directive';
-import { FarrisFilterSaveDirective } from './utils/datatable-filter-save.directive';
-import { FarrisFilterResetDirective } from './utils/datatable-filter-reset.directive';
-import { FarrisFilterSingleDirective } from './utils/datatable-filter-single.directive';
-import { DateFormatPipe } from './utils/datatable-date-format.pipe';
 
 @NgModule({
     imports: [
@@ -50,15 +40,9 @@ import { DateFormatPipe } from './utils/datatable-date-format.pipe';
         // InputGroupModule
     ],
     exports: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DataTableBodyComponent,
-        DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective, DragColumnDirective,
-        FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
-        DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,
-        FarrisFilterResetDirective, FarrisFilterSingleDirective],
+        DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective, DragColumnDirective],
     declarations: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DragColumnDirective,
-        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective,
-        FarrisColumnResDirective, FarrisHoverDirective, FarrisEditFocusDirective, FarrisEditEventDirective,
-        DateFormatPipe, FarrisSortDirective, FarrisFilterDirective, FarrisFilterSaveDirective,
-        FarrisFilterResetDirective, FarrisFilterSingleDirective],
+        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective],
     providers: [DataTableService, ColumnFormatService, IdService, DateTimeHelperService, NumberHelperService]
 })
 export class DataTableModule { }

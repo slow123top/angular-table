@@ -8,13 +8,10 @@ import { DataTableColumn, deepCopy } from './datatable-column';
 import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableService } from './datatable.service';
 import { PaginationInstance, PerfectScrollbarComponent } from '@farris/ui';
-import { IdService } from './utils/id.service';
 import { DataTableHeaderComponent } from './table/datatable-header.component';
 import { DataTableBodyComponent } from './table/datatable-body.component';
-import { fromEvent } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
-import { size } from './utils/datatable-responsive-size';
 import { Subscription } from 'rxjs';
+import { IdService } from './utils/id.service';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -23,6 +20,10 @@ import { Subscription } from 'rxjs';
 })
 export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterContentInit, AfterViewInit {
     searchButtonText = '<i class="f-icon datatable-icon-search"></i>';
+    // 排序
+    @Input() sortType: 'single' | 'multiple';
+    @Input() sortable: boolean;
+    @Input() sortSetting: any[];
     // tslint:disable-next-line:no-input-rename
     @Input('keydown-enter-edit') keydownEnterEdit = false;
     @Input() id: string;
@@ -157,7 +158,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @ViewChild('perfectScrollbar') perfectScrollbar: PerfectScrollbarComponent;
 
     scorllableBodyHeight: number;
-    constructor(private dataService: DataTableService, private idService: IdService, private el: ElementRef) {
+    constructor(private dataService: DataTableService, private el: ElementRef, private idService: IdService) {
 
         this.dataService.selectedRow.subscribe((e: any) => {
             if (this.singleSelect) {
@@ -165,7 +166,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                 this._currentRow = e.rowData;
             } else {
                 if (this.selections) {
-                    this.dtHeader.isCheckAll = Object.keys(this.selections).length === this.data.length;
+                    this.dtBody.isCheckAll = Object.keys(this.selections).length === this.data.length;
                 }
             }
         });
@@ -175,7 +176,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                 this._currentRow = undefined;
                 this._currentRowIndex = -1;
             } else {
-                this.dtHeader.isCheckAll = false;
+                this.dtBody.isCheckAll = false;
             }
         });
     }
@@ -298,7 +299,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                 });
             }
         }
-        this.fixColByResolution();
     }
     ngOnDestroy() {
         this.subscription.forEach(sub => {
@@ -311,7 +311,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         this.datatableContainer = this.el.nativeElement.querySelector('.farris-datatable');
         // this.headerTr = this.tableHeader.nativeElement.querySelectorAll('tr');
         setTimeout(() => {
-            this.setFixed(window.innerWidth);
+            // this.setFixed(window.innerWidth);
         }, 0);
     }
     // hoverTr(tr, color) {
@@ -556,94 +556,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             this.total = data.total;
             this.pageSize = data.pageSize;
             this.pageIndex = data.pageIndex;
-        }
-    }
-
-    // 根据分辨率  设置固定列
-    fixColByResolution() {
-        this.subscription.push(fromEvent(window, 'resize')
-            .pipe(throttleTime(80))
-            .subscribe((e: any) => {
-                this.setFixed(e.srcElement.innerWidth);
-            }));
-    }
-    // 如果columns存在数据  进行固定列的设置
-    setFixed(currentWidth) {
-        if (!this.columns) {
-            return;
-        }
-        this.hasFixed = this.columns.some(ele => {
-            return ele.hasOwnProperty('fixed') && ele.fixed;
-        });
-        if (this.hasFixed) {
-            const fixedArr = this.columns.filter(ele => {
-                return ele.hasOwnProperty('fixed');
-            });
-            const dtHeaderTh = this.dtHeader.el.nativeElement.querySelectorAll('th');
-            // let resWidth = 0;
-            // 初始化就已经固定列
-            let leftWidth = 0;
-            leftWidth += fixedArr.filter(element => {
-                return element.fixed === 'left';
-            }).reduce((pre, current) => {
-                return pre + current.width;
-            }, 0);
-            // 暂存此时固定列宽度
-            if (leftWidth) {
-                if (!this.singleSelect) {
-                    // 若为多选  则首先固定住
-                    leftWidth += dtHeaderTh[0].clientWidth;
-                }
-            }
-            const tempLeftWidth = leftWidth;
-            // 响应式固定列  每增加一个固定列  固定列宽度就会增加
-            const responsiveLeftFixed = fixedArr.filter(ele => {
-                return typeof ele.fixed === 'object' && ele.fixed.type === 'left';
-            });
-            let count = 0;
-            responsiveLeftFixed.forEach(element => {
-                if (element.fixed.type === 'left') {
-                    if (currentWidth <= size[element.fixed.media][1]) {
-                        if (!this.singleSelect) {
-                            // 若为多选  则首先固定住
-                            leftWidth += dtHeaderTh[0].clientWidth;
-                        }
-                        leftWidth += element.width;
-                        count++;
-                    }
-                }
-            });
-            if (!tempLeftWidth) {
-                if (leftWidth > tempLeftWidth) {
-                    leftWidth -= dtHeaderTh[0].clientWidth * (count - 1);
-                } else {
-                    leftWidth -= dtHeaderTh[0].clientWidth * count;
-                }
-            } else {
-                if (leftWidth > tempLeftWidth) {
-                    leftWidth -= dtHeaderTh[0].clientWidth * count;
-                }
-            }
-            this.fixedLeftWidth = leftWidth + 'px';
-            // 右固定列设置
-            let rightWidth = fixedArr.filter(element => {
-                return element.fixed === 'right';
-            }).reduce((pre, current) => {
-                return pre + current.width;
-            }, 0);
-            // 响应式固定列  每增加一个固定列  固定列宽度就会增加
-            const responsiveRightFixed = fixedArr.filter(ele => {
-                return typeof ele.fixed === 'object' && ele.fixed.type === 'right';
-            });
-
-            responsiveRightFixed.forEach(element => {
-                if (element.fixed.type === 'right') {
-                    if (currentWidth <= size[element.fixed.media][1]) {
-                        rightWidth += element.width;
-                    }
-                }
-            });
-            this.fixedRightWidth = rightWidth + 'px';
         }
     }
     /*

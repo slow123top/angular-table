@@ -13,11 +13,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'ng-table';
   columns = [
     {
-      title: '编号', field: 'Code', type: 'string', width: 60, align: 'center'
+      title: '编号', field: 'Code', type: 'string', width: 60, align: 'center', sortable: true
       // 添加列样式
     },
     // { title: '姓名', field: 'Name', width: 80, fixed: { type: 'left', media: 'md' } },
-    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center' },
+    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center', sortable: true },
     { title: '年龄', field: 'Age', type: 'number', width: 90, align: 'center' },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
     { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD', align: 'center' },
@@ -31,8 +31,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       Code: 1, Name: '珠港澳', Age: 20, birthday: '1998-05-06', idcode: '没有权限查看', postcode: '05310000',
       address: '地球', correct: false
     },
-    { Code: 2, Name: '珠港澳1', Age: 21, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 3, Name: '珠港澳2', Age: 22, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
+    { Code: 3, Name: '珠港澳1aaaa', Age: 21, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
+    { Code: 56, Name: '珠港澳2', Age: 22, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
     { Code: 4, Name: '珠港澳3', Age: 23, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
     { Code: 5, Name: '珠港澳4', Age: 24, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
     { Code: 6, Name: '珠港澳5', Age: 25, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },

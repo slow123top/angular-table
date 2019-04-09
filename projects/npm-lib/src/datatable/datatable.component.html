@@ -1,7 +1,7 @@
 <div [style.width]="width+'px'">
     <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data" [size]="size"
         [columns]="columns" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
-        [cellClassName]="cellClassName">
+        [cellClassName]="cellClassName" (checkedAll)="onCheckAll($event)">
     </datatable-body>
 </div>
 

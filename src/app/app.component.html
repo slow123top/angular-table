@@ -1,7 +1,8 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<farris-table [bordered]="false" [striped]="true" [size]="'small'" [width]="1200" [data]="data" [pagination]="false"
+<farris-table [singleSelect]="false" [idField]="'Code'" [bordered]="false" [striped]="true" [size]="'small'" [width]="1200" [data]="data" [pagination]="false"
+[sortable]="true" [sortSetting]="[{field:'Code'}]"
 [rowClassName]="rowClassName" [cellClassName]="cellClassName">
-  <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field" [width]="col.width" [align]="col.align">
+  <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field" [width]="col.width" [align]="col.align" [sortable]="col.sortable">
     <ng-template farrisColumnTemplate let-row let-column="column">
       <span [innerHtml]="formatter({row:row,column:col})"></span>
     </ng-template>
