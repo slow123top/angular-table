@@ -1,5 +1,5 @@
 import { Directive, OnInit, Input, ContentChild, TemplateRef, ElementRef, HostBinding } from '@angular/core';
-import { SlotDirective } from './datatable-slot.directive';
+import { FarrisColumnTemplateDirective } from './datatable-slot.directive';
 @Directive({
     selector: 'farris-table-column'
 })
@@ -14,13 +14,14 @@ export class FarrisTableColumnDirective implements OnInit {
     @Input() className?: string;
     @Input() media?: object;
     @Input() sortable?: boolean;
+    @Input() formatter?: (param: any) => {};
     // tslint:disable-next-line:no-inferrable-types
     @Input() multipleFilter?: boolean = true;
     @Input() filter?: any;
     @HostBinding('class.fixed') fixedClass = this.fixed === 'left';
     //    指定模板
     @Input()
-    @ContentChild(SlotDirective, { read: TemplateRef }) cellTempl: TemplateRef<any>;
+    @ContentChild(FarrisColumnTemplateDirective, { read: TemplateRef }) cellTempl: TemplateRef<any>;
 
     constructor(private el: ElementRef) {
 

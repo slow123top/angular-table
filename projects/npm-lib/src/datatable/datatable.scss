@@ -1,5 +1,13 @@
-
 @import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../icon/iconfont.css';
+.table.selected {
+    background-color: #D8F2FF;
+}
+.no-data{
+    text-align: center;
+    opacity: .8;
+}
+
 .farris-ui-datatable {
     display: flex;
     flex-direction: column;
@@ -11,8 +19,7 @@
         table-layout: fixed;
     }
     .farris-table-header {
-        position: relative;
-        // overflow: hidden;
+        position: relative; // overflow: hidden;
         min-height: 34px;
         thead>tr>th {
             padding: 0.571em 0.857em;

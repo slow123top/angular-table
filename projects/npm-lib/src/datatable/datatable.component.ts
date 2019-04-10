@@ -8,13 +8,10 @@ import { DataTableColumn, deepCopy } from './datatable-column';
 import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableService } from './datatable.service';
 import { PaginationInstance, PerfectScrollbarComponent } from '@farris/ui';
-import { IdService } from './utils/id.service';
 import { DataTableHeaderComponent } from './table/datatable-header.component';
 import { DataTableBodyComponent } from './table/datatable-body.component';
-import { fromEvent } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
-import { size } from './utils/datatable-responsive-size';
 import { Subscription } from 'rxjs';
+import { IdService } from './utils/id.service';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -23,15 +20,24 @@ import { Subscription } from 'rxjs';
 })
 export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterContentInit, AfterViewInit {
     searchButtonText = '<i class="f-icon datatable-icon-search"></i>';
+    // 排序
+    @Input() sortType: 'single' | 'multiple';
+    @Input() sortable: boolean;
+    @Input() sortSetting: any[];
+    // 行号
+    @Input() lineNumber: boolean;
+    // 空数据提示
+    @Input()
+    @ContentChild('noDataText') noDataText: TemplateRef<any>;
     // tslint:disable-next-line:no-input-rename
     @Input('keydown-enter-edit') keydownEnterEdit = false;
     @Input() id: string;
     @Input() size: string;
     @Input() allColumnsTitle = '所有列';
     // table 尺寸
-    @Input() width;
+    @Input() width: number;
     // 组件级高度包括过滤条高度
-    @Input() height;
+    @Input() height: number;
 
     tableHeight: number; // 数据表高度
     // 是否填充
@@ -78,15 +84,14 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @ViewChild('tablePager') tablePager: ElementRef;
     @ViewChild('dtHeader') dtHeader: DataTableHeaderComponent;
     @ViewChild('dtBody') dtBody: DataTableBodyComponent;
-    @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
-    @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
-    @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
-    @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
+    // @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
+    // @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
+    // @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
+    // @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
     // 分页事件
     @Output() pageChanged = new EventEmitter();
     @Output() pageSizeChanged = new EventEmitter();
     @Output() search = new EventEmitter<{ field: string, value: string }>();
-    @Output() sortChange = new EventEmitter<any>();
     @Output('on-select-row') selectRows = new EventEmitter<any>();
     @Output('on-edit-grid') cellClick = new EventEmitter<any>();
     @ContentChildren(RowDirective) rowsRef: QueryList<RowDirective>;
@@ -158,7 +163,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @ViewChild('perfectScrollbar') perfectScrollbar: PerfectScrollbarComponent;
 
     scorllableBodyHeight: number;
-    constructor(private dataService: DataTableService, private idService: IdService, private el: ElementRef) {
+    constructor(private dataService: DataTableService, private el: ElementRef, private idService: IdService) {
 
         this.dataService.selectedRow.subscribe((e: any) => {
             if (this.singleSelect) {
@@ -166,7 +171,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                 this._currentRow = e.rowData;
             } else {
                 if (this.selections) {
-                    this.dtHeader.isCheckAll = Object.keys(this.selections).length === this.data.length;
+                    this.dtBody.isCheckAll = Object.keys(this.selections).length === this.data.length;
                 }
             }
         });
@@ -176,7 +181,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                 this._currentRow = undefined;
                 this._currentRowIndex = -1;
             } else {
-                this.dtHeader.isCheckAll = false;
+                this.dtBody.isCheckAll = false;
             }
         });
     }
@@ -199,7 +204,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     ngOnInit() {
         setTimeout(() => {
             this.setBodyHeight();
-            this.ps = this.perfectScrollbar.directiveRef.ps();
+            // this.ps = this.perfectScrollbar.directiveRef.ps();
         });
 
         if (!this.id) {
@@ -219,7 +224,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         if (this.showFilterBar) {
             this.tableHeight = this.height - 46;
         }
-        this.scorllableBodyHeight = this.tableHeight - this.tableHeader.nativeElement.clientHeight;
+        this.scorllableBodyHeight = this.tableHeight;
 
         if (this.pagination) {
             this.scorllableBodyHeight = this.scorllableBodyHeight - 50;
@@ -292,13 +297,13 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                         media: col.media,
                         sortable: col.sortable,
                         edit: col.edit,
+                        formatter: col.formatter,
                         // 单元格模板
                         cellTempl: col.cellTempl
                     };
                 });
             }
         }
-        this.fixColByResolution();
     }
     ngOnDestroy() {
         this.subscription.forEach(sub => {
@@ -311,76 +316,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         this.datatableContainer = this.el.nativeElement.querySelector('.farris-datatable');
         // this.headerTr = this.tableHeader.nativeElement.querySelectorAll('tr');
         setTimeout(() => {
-            this.setFixed(window.innerWidth);
+            // this.setFixed(window.innerWidth);
         }, 0);
-    }
-    hoverTr(tr, color) {
-        const headerTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-        let leftBodyTrs, rightBodyTrs;
-        if (this.dtLeftFixed) {
-            leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-        }
-        if (this.dtRightFixed) {
-            rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-        }
-        for (let i = 0; i < headerTrs.length; i++) {
-            if (tr === headerTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-                headerTrs[i].style.backgroundColor = color;
-                // tslint:disable-next-line:no-unused-expression
-                leftBodyTrs && (leftBodyTrs[i].style.backgroundColor = color);
-                // tslint:disable-next-line:no-unused-expression
-                rightBodyTrs && (rightBodyTrs[i].style.backgroundColor = color);
-            }
-        }
-    }
-    clickTr(e, tr) {
-        let leftBodyTrs, rightBodyTrs;
-        if (this.dtLeftFixed) {
-            leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-        }
-        if (this.dtRightFixed) {
-            rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-        }
-        const bodyTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-        for (let i = 0; i < bodyTrs.length; i++) {
-            if (tr === bodyTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-                this.dtBody.selectedRow(e, i, this.dtBody.rows[i]);
-                if (this.dtLeftBody) {
-                    this.dtLeftBody.selectedRow(e, i, this.dtLeftBody.rows[i]);
-                }
-                if (this.dtRightBody) {
-                    this.dtRightBody.selectedRow(e, i, this.dtRightBody.rows[i]);
-                }
-            }
-        }
-    }
-    sortData(count, col, sortType) {
-        const sort = count % 3;
-        if (sort === 0) {
-            // 恢复原数据
-            this.data = deepCopy(this.copyData);
-            sortType[col.field] = 'normal';
-        } else if (sort === 1) {
-            // 升序
-            this.data = this.data.sort((pre, next) => {
-                return pre[col.field] - next[col.field];
-            });
-            sortType[col.field] = 'asc';
-        } else if (sort === 2) {
-            // 降序
-            this.data = this.data.sort((pre, next) => {
-                return next[col.field] - pre[col.field];
-            });
-            sortType[col.field] = 'desc';
-        } else {
-            return;
-        }
-    }
-    /**
-     * 排序弹出事件
-     */
-    headerSortChange(event) {
-        this.sortChange.emit(event);
     }
     /* 筛选事件
     *
@@ -509,8 +446,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             return;
         }
         const y = e.srcElement.scrollTop;
-        this.dtLeftFixed.nativeElement.style.top = -y + 'px';
-        this.dtRightFixed.nativeElement.style.top = -y + 'px';
+        // this.dtLeftFixed.nativeElement.style.top = -y + 'px';
+        // this.dtRightFixed.nativeElement.style.top = -y + 'px';
 
     }
 
@@ -556,94 +493,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             this.total = data.total;
             this.pageSize = data.pageSize;
             this.pageIndex = data.pageIndex;
-        }
-    }
-
-    // 根据分辨率  设置固定列
-    fixColByResolution() {
-        this.subscription.push(fromEvent(window, 'resize')
-            .pipe(throttleTime(80))
-            .subscribe((e: any) => {
-                this.setFixed(e.srcElement.innerWidth);
-            }));
-    }
-    // 如果columns存在数据  进行固定列的设置
-    setFixed(currentWidth) {
-        if (!this.columns) {
-            return;
-        }
-        this.hasFixed = this.columns.some(ele => {
-            return ele.hasOwnProperty('fixed') && ele.fixed;
-        });
-        if (this.hasFixed) {
-            const fixedArr = this.columns.filter(ele => {
-                return ele.hasOwnProperty('fixed');
-            });
-            const dtHeaderTh = this.dtHeader.el.nativeElement.querySelectorAll('th');
-            // let resWidth = 0;
-            // 初始化就已经固定列
-            let leftWidth = 0;
-            leftWidth += fixedArr.filter(element => {
-                return element.fixed === 'left';
-            }).reduce((pre, current) => {
-                return pre + current.width;
-            }, 0);
-            // 暂存此时固定列宽度
-            if (leftWidth) {
-                if (!this.singleSelect) {
-                    // 若为多选  则首先固定住
-                    leftWidth += dtHeaderTh[0].clientWidth;
-                }
-            }
-            const tempLeftWidth = leftWidth;
-            // 响应式固定列  每增加一个固定列  固定列宽度就会增加
-            const responsiveLeftFixed = fixedArr.filter(ele => {
-                return typeof ele.fixed === 'object' && ele.fixed.type === 'left';
-            });
-            let count = 0;
-            responsiveLeftFixed.forEach(element => {
-                if (element.fixed.type === 'left') {
-                    if (currentWidth <= size[element.fixed.media][1]) {
-                        if (!this.singleSelect) {
-                            // 若为多选  则首先固定住
-                            leftWidth += dtHeaderTh[0].clientWidth;
-                        }
-                        leftWidth += element.width;
-                        count++;
-                    }
-                }
-            });
-            if (!tempLeftWidth) {
-                if (leftWidth > tempLeftWidth) {
-                    leftWidth -= dtHeaderTh[0].clientWidth * (count - 1);
-                } else {
-                    leftWidth -= dtHeaderTh[0].clientWidth * count;
-                }
-            } else {
-                if (leftWidth > tempLeftWidth) {
-                    leftWidth -= dtHeaderTh[0].clientWidth * count;
-                }
-            }
-            this.fixedLeftWidth = leftWidth + 'px';
-            // 右固定列设置
-            let rightWidth = fixedArr.filter(element => {
-                return element.fixed === 'right';
-            }).reduce((pre, current) => {
-                return pre + current.width;
-            }, 0);
-            // 响应式固定列  每增加一个固定列  固定列宽度就会增加
-            const responsiveRightFixed = fixedArr.filter(ele => {
-                return typeof ele.fixed === 'object' && ele.fixed.type === 'right';
-            });
-
-            responsiveRightFixed.forEach(element => {
-                if (element.fixed.type === 'right') {
-                    if (currentWidth <= size[element.fixed.media][1]) {
-                        rightWidth += element.width;
-                    }
-                }
-            });
-            this.fixedRightWidth = rightWidth + 'px';
         }
     }
     /*

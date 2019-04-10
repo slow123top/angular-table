@@ -1,6 +1,6 @@
 import { Component, Input, ContentChild, TemplateRef } from '@angular/core';
 import { DataTableColumn } from '../datatable-column';
-import { SlotDirective } from '../datatable-slot.directive';
+import { FarrisColumnTemplateDirective } from '../datatable-slot.directive';
 @Component({
     selector: 'datatable-footer',
     template:
@@ -34,7 +34,7 @@ export class DatatableFooterComponent {
     isCheckAll = false;
     // 表格 footer 可添加模板
     @Input()
-    @ContentChild(SlotDirective, { read: TemplateRef }) tableFooter: TemplateRef<any>;
+    @ContentChild(FarrisColumnTemplateDirective, { read: TemplateRef }) tableFooter: TemplateRef<any>;
     constructor() {
     }
     onCheckedChange($event: any) {
