@@ -16,11 +16,14 @@ import { sortBy, nextSort } from '../utils/sort';
                 <th class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
                     <dt-checkbox [checked]="isCheckAll" (checkedChange)="onCheckedChange($event)"></dt-checkbox>
                 </th>
+                <th style="width:50px" *ngIf="dt.lineNumber">
+                   <span>#</span>
+                </th>
                 <th *ngFor="let col of columns;let i=index" [style.textAlign]="'left'" [style.width]="col.width+'px'"
                 (click)="sort($event,col)">
                     <span>{{ col.title }}</span>
-                    <i class="iconfont icon-xiangshang" *ngIf="col.sortDir==='asc'"></i>
-                    <i class="iconfont icon-xiangxia" *ngIf="col.sortDir==='desc'"></i>
+                    <i class="iconfont icon-tubiao_jiyao-xiangshang" *ngIf="col.sortDir==='asc'"></i>
+                    <i class="iconfont icon-tubiao_jiyao-xiangxia" *ngIf="col.sortDir==='desc'"></i>
                 </th>
             </tr>
         </thead>
@@ -30,6 +33,9 @@ import { sortBy, nextSort } from '../utils/sort';
             [class.selected]="isSelected(row)">
                 <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
                     <dt-checkbox [checked]="isSelected(row)" (checkedChange)="onChecked($event, rowIndex, row)"></dt-checkbox>
+                </td>
+                <td *ngIf="dt.lineNumber">
+                   <span>{{rowIndex+1}}</span>
                 </td>
                 <td [ngClass]="createCellClassName(getValue(col.field,row),col,colIndex)"
                     *ngFor="let col of columns;let colIndex=index" [style.textAlign]="col.align||'left'" [style.width]="col.width + 'px'">
@@ -140,7 +146,7 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
         });
     }
     private sortable() {
-        return !this.dt.sortable || !this.dt.sortSetting;
+        return !this.dt.sortable || !this.dt.data.length;
     }
     // 排序事件 设置下一个排序状态 暴露出API 当前列标识以及下一个排序状态
     sort(event: MouseEvent, column: any) {

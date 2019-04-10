@@ -1,8 +1,21 @@
 <div [style.width]="width+'px'">
-    <datatable-body #dtBody [rows]="pagination ? (data | paginate: paginationOptions) : data" [size]="size"
-        [columns]="columns" [striped]="striped" [bordered]="bordered" [rowClassName]="rowClassName"
-        [cellClassName]="cellClassName" (checkedAll)="onCheckAll($event)">
+    <datatable-body #dtBody 
+        [rows]="pagination ? (data | paginate: paginationOptions) : data"
+        [size]="size"
+        [columns]="columns" 
+        [striped]="striped" 
+        [bordered]="bordered" 
+        [rowClassName]="rowClassName"
+        [cellClassName]="cellClassName" 
+        (checkedAll)="onCheckAll($event)">
     </datatable-body>
+    <ng-container *ngIf="data&&!data.length">
+        <div class="no-data" *ngIf="!noDataText;else noData">
+            <img src="assets/no-data.svg" alt="暂无数据" width="100">
+            <div class="no-data">暂无数据</div>
+        </div>
+        <ng-template #noData [ngTemplateOutlet]="noDataText"></ng-template>
+    </ng-container>
 </div>
 
 <!-- <div class="farris-datatable">

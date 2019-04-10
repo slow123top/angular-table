@@ -24,6 +24,11 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() sortType: 'single' | 'multiple';
     @Input() sortable: boolean;
     @Input() sortSetting: any[];
+    // 行号
+    @Input() lineNumber: boolean;
+    // 空数据提示
+    @Input()
+    @ContentChild('noDataText') noDataText: TemplateRef<any>;
     // tslint:disable-next-line:no-input-rename
     @Input('keydown-enter-edit') keydownEnterEdit = false;
     @Input() id: string;
@@ -314,74 +319,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             // this.setFixed(window.innerWidth);
         }, 0);
     }
-    // hoverTr(tr, color) {
-    //     const headerTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-    //     let leftBodyTrs, rightBodyTrs;
-    //     if (this.dtLeftFixed) {
-    //         leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-    //     }
-    //     if (this.dtRightFixed) {
-    //         rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-    //     }
-    //     for (let i = 0; i < headerTrs.length; i++) {
-    //         if (tr === headerTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-    //             headerTrs[i].style.backgroundColor = color;
-    //             // tslint:disable-next-line:no-unused-expression
-    //             leftBodyTrs && (leftBodyTrs[i].style.backgroundColor = color);
-    //             // tslint:disable-next-line:no-unused-expression
-    //             rightBodyTrs && (rightBodyTrs[i].style.backgroundColor = color);
-    //         }
-    //     }
-    // }
-    // clickTr(e, tr) {
-    //     let leftBodyTrs, rightBodyTrs;
-    //     if (this.dtLeftFixed) {
-    //         leftBodyTrs = this.dtLeftFixed.nativeElement.querySelectorAll('tr');
-    //     }
-    //     if (this.dtRightFixed) {
-    //         rightBodyTrs = this.dtRightFixed.nativeElement.querySelectorAll('tr');
-    //     }
-    //     const bodyTrs = this.dtBody.el.nativeElement.querySelectorAll('tr');
-    //     for (let i = 0; i < bodyTrs.length; i++) {
-    //         if (tr === bodyTrs[i] || (leftBodyTrs && tr === leftBodyTrs[i]) || (rightBodyTrs && tr === rightBodyTrs[i])) {
-    //             this.dtBody.selectedRow(e, i, this.dtBody.rows[i]);
-    //             if (this.dtLeftBody) {
-    //                 this.dtLeftBody.selectedRow(e, i, this.dtLeftBody.rows[i]);
-    //             }
-    //             if (this.dtRightBody) {
-    //                 this.dtRightBody.selectedRow(e, i, this.dtRightBody.rows[i]);
-    //             }
-    //         }
-    //     }
-    // }
-    sortData(count, col, sortType) {
-        const sort = count % 3;
-        if (sort === 0) {
-            // 恢复原数据
-            this.data = deepCopy(this.copyData);
-            sortType[col.field] = 'normal';
-        } else if (sort === 1) {
-            // 升序
-            this.data = this.data.sort((pre, next) => {
-                return pre[col.field] - next[col.field];
-            });
-            sortType[col.field] = 'asc';
-        } else if (sort === 2) {
-            // 降序
-            this.data = this.data.sort((pre, next) => {
-                return next[col.field] - pre[col.field];
-            });
-            sortType[col.field] = 'desc';
-        } else {
-            return;
-        }
-    }
-    /**
-     * 排序弹出事件
-     */
-    // headerSortChange(event) {
-    //     this.sortChange.emit(event);
-    // }
     /* 筛选事件
     *
     */

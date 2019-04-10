@@ -1,11 +1,24 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<farris-table [singleSelect]="false" [idField]="'Code'" [bordered]="false" [striped]="true" [size]="'small'" [width]="1200" [data]="data" [pagination]="false"
-[sortable]="true" [sortSetting]="[{field:'Code'}]"
-[rowClassName]="rowClassName" [cellClassName]="cellClassName">
+<farris-table 
+  [singleSelect]="false" 
+  [idField]="'Code'" 
+  [lineNumber]="true"
+  [bordered]="false"
+  [striped]="true"
+  [size]="'small'" 
+  [width]="1200"
+  [data]="data"
+  [pagination]="false"
+  [sortable]="true"
+  [rowClassName]="rowClassName"
+  [cellClassName]="cellClassName">
   <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field" [width]="col.width" [align]="col.align" [sortable]="col.sortable">
     <ng-template farrisColumnTemplate let-row let-column="column">
       <span [innerHtml]="formatter({row:row,column:col})"></span>
     </ng-template>
   </farris-table-column>
+  <!-- <ng-template #noDataText>
+    <h3 style="text-align: center">没有数据</h3>
+  </ng-template> -->
 </farris-table>
 <router-outlet></router-outlet>

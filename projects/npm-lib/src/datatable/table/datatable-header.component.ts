@@ -23,6 +23,8 @@ import { DataTableColumn, deepCopy, convertColumns } from '../datatable-column';
     `
 })
 export class DataTableHeaderComponent implements OnInit, AfterViewInit {
+    @Input() striped: boolean;
+    @Input() bordered: boolean;
     @Input() size: string;
     @Input() hover: boolean;
     @Input() columns: DataTableColumn[] = [];
