@@ -1,98 +1,81 @@
 import { Component, OnInit, Input, EventEmitter, AfterViewInit, Output, ElementRef, Optional, Renderer2 } from '@angular/core';
 import { DataTableColumn, deepCopy, convertColumns } from '../datatable-column';
-
+import { DataTableComponent } from '../datatable.component';
 @Component({
     selector: 'datatable-header',
     template: `
     <table class="table"
     [class.table-sm]="size==='small'"
     [class.table-striped]="striped"
-    [class.table-bordered]="bordered"
-    >
-        <thead>
+    [class.table-bordered]="bordered" style="margin:0">
+        <thead class="thead-light">
             <tr>
-                <th class="dt-checkbox-cell" *ngIf="!singleSelect">
+                <th class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
                     <dt-checkbox [checked]="isCheckAll" (checkedChange)="onCheckedChange($event)"></dt-checkbox>
                 </th>
-                <th *ngFor="let col of columns;let i=index" [style.textAlign]="col.align" [style.width]="col.width+'px'">
-                    <span>{{ col.title }}</span>
+                <th style="width:50px" *ngIf="dt.showLineNumber">
+                   <span>#</span>
                 </th>
+                <ng-container *ngFor="let col of columns;let i=index">
+                    <th [style.textAlign]="col.align||'left'" [style.width]="col.width+'px'"
+                    (click)="sort($event,col)" *ngIf="!col.hidden">
+                        <span>{{ col.title }}</span>
+                        <i class="iconfont icon-tubiao_jiyao-xiangshang" *ngIf="col.direction==='asc'"></i>
+                        <i class="iconfont icon-tubiao_jiyao-xiangxia" *ngIf="col.direction==='desc'"></i>
+                    </th>
+                </ng-container>
             </tr>
         </thead>
     </table>
     `
 })
 export class DataTableHeaderComponent implements OnInit, AfterViewInit {
-    @Input() striped: boolean;
-    @Input() bordered: boolean;
-    @Input() size: string;
-    @Input() hover: boolean;
-    @Input() columns: DataTableColumn[] = [];
-    @Input() singleSelect = true;
-    @Input() fixed: string;
-    // 数据排序使用
-    @Input() rows: any;
-    // 恢复源数据使用
-    @Input() data: any;
-    @Input() rowClassName: (row: any, index: number) => string;
-    @Output() checkedAll = new EventEmitter();
-    @Output('on-sort-change') onSortChange = new EventEmitter<any>();
-    @Output() rowsChange = new EventEmitter<any>();
-    sortType = {};
-    filterFields = {};
-    clickedUp = false;
-    clickedDown = false;
-    copyColumns: any;
-    copyRows: any;
-    originRows: any;
+    // 是否全选
     isCheckAll = false;
-    allClass = ' ';
-    constructor(public el: ElementRef) {
-        this.allClass += this.el.nativeElement.classList.value;
+    /* 表格尺寸 */
+    get size(): string {
+        return this.dt.size;
     }
-    width = '100%';
-    ngOnInit() {
-        if (this.fixed === 'left') {
-            this.columns = convertColumns(this.columns, 'left');
-        }
-        if (this.fixed === 'right') {
-            this.columns = convertColumns(this.columns, 'right');
-        }
+    /* 表格列数据 */
+    get columns(): DataTableColumn[] {
+        return this.dt.columns;
     }
-    ngAfterViewInit() {
+    /* 斑马样式 */
+    get striped(): boolean {
+        return this.dt.striped;
+    }
+    /* 边框 */
+    get bordered(): boolean {
+        return this.dt.bordered;
+    }
+    /* 是否单选 */
+    get isSingle(): boolean {
+        return this.dt.singleSelect;
+    }
+    /* checkbox 选中事件传播 */
+    @Output() checkedAll = new EventEmitter();
+    /* 排序 事件传播 */
+    @Output() sortChange = new EventEmitter();
+
+    constructor(private dt: DataTableComponent) {
     }
 
+    ngOnInit() {
+
+    }
+
+    ngAfterViewInit() {
+
+    }
+
+    /* checkbox 事件 */
     onCheckedChange($event: any) {
         this.isCheckAll = $event.checked;
         this.checkedAll.emit($event.checked);
     }
-    createRowClassName(row: any, index: number) {
-        return this.rowClassName ? this.rowClassName(row, index) : '';
-    }
-    sortChange(event: any) {
-        this.onSortChange.emit(event);
-    }
-
-    deepCopyData() {
-        const copyColumns = deepCopy(this.columns);
-        const copyRows = deepCopy(this.rows);
-        copyColumns.forEach(element => {
-            element.sortType = 'normal';
-        });
-        return {
-            [copyColumns]: copyColumns,
-            [copyRows]: copyRows
-        };
-    }
-    /* 若存在筛选条件 保存按钮可点击
-     */
-    hasChecked(col: any) {
-        if (this.filterFields.hasOwnProperty(col.field)) {
-            this.filterFields[col.field].some(ele => {
-                return ele.checked;
-            });
-        }
-        return false;
+    /* 排序 */
+    sort(event: MouseEvent, col: DataTableColumn) {
+        this.dt.sortData(event, col);
     }
 
 }

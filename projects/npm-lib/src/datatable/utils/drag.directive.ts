@@ -30,7 +30,7 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
     }
 
     isEnable() {
-        return this.dt.dragable && !this.dt.hasFixed;
+        return this.dt.draggable && !this.dt.hasFixed;
     }
 
     bindDocumentEvents() {

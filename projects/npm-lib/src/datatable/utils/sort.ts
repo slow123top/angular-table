@@ -22,5 +22,25 @@ export const nextSort = (dir: string) => {
         return undefined;
     }
 };
+export const sortData = (originData: any, data: any, column: any) => {
+    // 获取当前的排序类型  升序 降序 还原  三种状态转换
+    const direction = nextSort(column.direction);
+    // 数据排序
+    if (!direction) {
+        return {
+            data: JSON.parse(JSON.stringify(originData)),
+            dir: direction
+        };
+    }
+    const sortedData = sortBy(data, [{
+        field: column.field,
+        dir: direction
+    }]);
+    return {
+        data: sortedData,
+        dir: direction
+    };
+};
+
 
 

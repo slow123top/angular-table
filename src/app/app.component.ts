@@ -17,7 +17,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // 添加列样式
     },
     // { title: '姓名', field: 'Name', width: 80, fixed: { type: 'left', media: 'md' } },
-    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center', sortable: true },
+    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center', sortable: true, hidden: true },
     { title: '年龄', field: 'Age', type: 'number', width: 90, align: 'center' },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
     { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD', align: 'center' },

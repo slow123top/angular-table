@@ -14,6 +14,7 @@ export class FarrisTableColumnDirective implements OnInit {
     @Input() className?: string;
     @Input() media?: object;
     @Input() sortable?: boolean;
+    @Input() hidden?: boolean;
     @Input() formatter?: (param: any) => {};
     // tslint:disable-next-line:no-inferrable-types
     @Input() multipleFilter?: boolean = true;

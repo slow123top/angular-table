@@ -1,13 +1,9 @@
 <div [style.width]="width+'px'">
-    <datatable-body #dtBody 
-        [rows]="pagination ? (data | paginate: paginationOptions) : data"
-        [size]="size"
-        [columns]="columns" 
-        [striped]="striped" 
-        [bordered]="bordered" 
-        [rowClassName]="rowClassName"
-        [cellClassName]="cellClassName" 
-        (checkedAll)="onCheckAll($event)">
+    <datatable-header #dtHeader (checkedAll)="onCheckAll($event)">
+
+    </datatable-header>
+    <datatable-body #dtBody class="farris-table" [rows]="pagination ? (data | paginate: paginationOptions) : data"
+        [rowClassName]="rowClassName" [cellClassName]="cellClassName">
     </datatable-body>
     <ng-container *ngIf="data&&!data.length">
         <div class="no-data" *ngIf="!noDataText;else noData">

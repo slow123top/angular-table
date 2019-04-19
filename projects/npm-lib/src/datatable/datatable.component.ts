@@ -12,6 +12,7 @@ import { DataTableHeaderComponent } from './table/datatable-header.component';
 import { DataTableBodyComponent } from './table/datatable-body.component';
 import { Subscription } from 'rxjs';
 import { IdService } from './utils/id.service';
+import { sortBy, nextSort, sortData } from './utils/sort';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -25,12 +26,11 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() sortable: boolean;
     @Input() sortSetting: any[];
     // 行号
-    @Input() lineNumber: boolean;
+    @Input() showLineNumber: boolean;
     // 空数据提示
     @Input()
     @ContentChild('noDataText') noDataText: TemplateRef<any>;
     // tslint:disable-next-line:no-input-rename
-    @Input('keydown-enter-edit') keydownEnterEdit = false;
     @Input() id: string;
     @Input() size: string;
     @Input() allColumnsTitle = '所有列';
@@ -52,7 +52,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() columns: DataTableColumn[];
     @Input() searchFields: { label: string, value: string }[];
     // 可筛选
-    @Input() showFilterBar = false;
     // table  数据
     _data = [];
     @Input()
@@ -62,6 +61,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     set data(data: Array<any>) {
         this._data = data;
     }
+    originData: any;
     // 深拷贝data 数据
     copyData: any;
     //
@@ -78,23 +78,19 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     // 支持添加行 单元格 类样式
     @Input() rowClassName: (row: any, index: number) => string;
     @Input() cellClassName: (value: any, col: any) => string;
+
+    @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
     // 滚动条引用
-    @ViewChild('scorllableBody') scorllableBody: ElementRef;
-    @ViewChild('tableHeader') tableHeader: ElementRef;
-    @ViewChild('tablePager') tablePager: ElementRef;
-    @ViewChild('dtHeader') dtHeader: DataTableHeaderComponent;
-    @ViewChild('dtBody') dtBody: DataTableBodyComponent;
     // @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
     // @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
     // @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
     // @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
+    @ViewChild('dtBody') dtBody: DataTableBodyComponent;
     // 分页事件
     @Output() pageChanged = new EventEmitter();
     @Output() pageSizeChanged = new EventEmitter();
     @Output() search = new EventEmitter<{ field: string, value: string }>();
     @Output('on-select-row') selectRows = new EventEmitter<any>();
-    @Output('on-edit-grid') cellClick = new EventEmitter<any>();
-    @ContentChildren(RowDirective) rowsRef: QueryList<RowDirective>;
     @ContentChildren(FarrisTableColumnDirective) columnsRef: QueryList<FarrisTableColumnDirective>;
     // 表尾
     @ContentChild('footer') footer: TemplateRef<any>;
@@ -102,8 +98,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     // 拖拽线
     @ViewChild('dragLine') dragLine: ElementRef;
     // 是否可拖拽  默认可以
-    @Input() dragable = false;
-    // 是否有行模板
+    @Input() draggable = false;
+    // 是否有行模板dragable
     hasRowTepml = false;
     // 用户获取表头+表格内容的高度  宽度  等
     datatableContainer: HTMLDivElement;
@@ -114,19 +110,11 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     //
     currentColumn: any;
     // 设置左固定列
-    hasFixed: boolean;
-    fixedLeftWidth: string;
     // 设置右固定列
-    fixedRightWidth: string;
-    searchData = { field: '*', value: '' };
     // 事件订阅存储  便于销毁
     subscription: Subscription[] = [];
     // 固定列时  同一行的tr hover事件
-    headerTr: any;
-    leftFixedHeaderTr: any;
-    rightFixedHeaderTr: any;
     // 原数据
-    public filter = '';
     public maxSize = 7;
     public directionLinks = true;
     public autoHide = false;
@@ -188,23 +176,9 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
     private ps: PerfectScrollbar;
 
-    getSearchColumns() {
-        if (this.searchFields) {
-            return this.searchFields;
-        }
-        return this.columns.filter(c => c.field).map(col => {
-            return {
-                label: col.title,
-                value: col.field
-            };
-        });
-    }
-
-
     ngOnInit() {
         setTimeout(() => {
             this.setBodyHeight();
-            // this.ps = this.perfectScrollbar.directiveRef.ps();
         });
 
         if (!this.id) {
@@ -216,19 +190,35 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         if (this.remote === 'server') {
             this.paginationOptions['totalItems'] = 1;
         }
-        this.copyData = deepCopy(this.data);
+        // 初始化排序 备份数据
+        this.originData = JSON.parse(JSON.stringify(this.data));
     }
 
-    private setBodyHeight() {
-        this.tableHeight = this.height;
-        if (this.showFilterBar) {
-            this.tableHeight = this.height - 46;
+    private setSortDirection() {
+        this.columns.forEach(ele => {
+            ele['direction'] = undefined;
+        });
+    }
+    // 排序事件 设置下一个排序状态 暴露出API 当前列标识以及下一个排序状态
+    sortData(event: MouseEvent, column: any) {
+        event.preventDefault();
+        if (!this.sortable || !column.sortable) {
+            return;
         }
-        this.scorllableBodyHeight = this.tableHeight;
+        const sortInfo = sortData(this.originData, this.data, column);
+        this.data = sortInfo.data;
+        this.setSortDirection();
+        // 排序图标
+        column.direction = sortInfo.dir;
+        // 重置所有列的排序方向
+        this.sortChange.emit([{
+            field: column.field,
+            dir: sortInfo.dir
+        }]);
 
-        if (this.pagination) {
-            this.scorllableBodyHeight = this.scorllableBodyHeight - 50;
-        }
+    }
+    private setBodyHeight() {
+        /*  */
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -244,43 +234,34 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             this.paginationOptions.itemsPerPage = changes.pageSize.currentValue;
         }
 
-        if (changes.data && !changes.data.isFirstChange()) {
-            const rows = changes.data.currentValue;
-            if (rows) {
-                if (this.selections) {
-                    const keys = Object.keys(this.selections);
-                    if (keys.length) {
-                        let count = 0;
-                        const ids = rows.map((row: any) => {
-                            return row[this.idField].toString();
-                        });
-                        keys.forEach(id => {
-                            if (ids.indexOf(id) > -1) {
-                                count++;
-                            }
-                        });
-                        this.dtHeader.isCheckAll = ids.length === count;
-                    } else {
-                        this.dtHeader.isCheckAll = false;
-                    }
-                } else {
-                    this.dtHeader.isCheckAll = false;
-                }
-            }
-            this.dataService.loadSuccess.next(changes.data.currentValue);
-        }
+        // if (changes.data && !changes.data.isFirstChange()) {
+        //     const rows = changes.data.currentValue;
+        //     if (rows) {
+        //         if (this.selections) {
+        //             const keys = Object.keys(this.selections);
+        //             if (keys.length) {
+        //                 let count = 0;
+        //                 const ids = rows.map((row: any) => {
+        //                     return row[this.idField].toString();
+        //                 });
+        //                 keys.forEach(id => {
+        //                     if (ids.indexOf(id) > -1) {
+        //                         count++;
+        //                     }
+        //                 });
+        //                 this.dtHeader.isCheckAll = ids.length === count;
+        //             } else {
+        //                 this.dtHeader.isCheckAll = false;
+        //             }
+        //         } else {
+        //             this.dtHeader.isCheckAll = false;
+        //         }
+        //     }
+        //     this.dataService.loadSuccess.next(changes.data.currentValue);
+        // }
     }
 
     ngAfterContentInit() {
-        // 支持行模板
-        if (this.rowsRef && this.rowsRef.length) {
-            this.data = this.rowsRef.map(row => {
-                return {
-                    rowTempl: row.rowTempl
-                };
-            });
-            return;
-        }
         // 支持列组件写入
         if (!this.columns) {
             if (this.columnsRef && this.columnsRef.length) {
@@ -298,6 +279,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
                         sortable: col.sortable,
                         edit: col.edit,
                         formatter: col.formatter,
+                        hidden: col.hidden,
                         // 单元格模板
                         cellTempl: col.cellTempl
                     };
@@ -312,29 +294,15 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         this.subscription = [];
     }
     ngAfterViewInit() {
+
+        // 初始化排序  初始化数据排序
+        this.setSortDirection();
         // 获取表格容器  即表格
         this.datatableContainer = this.el.nativeElement.querySelector('.farris-datatable');
         // this.headerTr = this.tableHeader.nativeElement.querySelectorAll('tr');
         setTimeout(() => {
             // this.setFixed(window.innerWidth);
         }, 0);
-    }
-    /* 筛选事件
-    *
-    */
-    filterData(filterFields, field) {
-        // 被筛选的数据
-        const filterData = this._unique(this.data, field);
-        filterData.forEach(ele => {
-            filterFields.push({
-                label: ele[field],
-                checked: false
-            });
-        });
-    }
-    filterCheckedData(checkedData, field) {
-        this.resetData();
-        this.data.splice(0, this.copyData.length);
     }
     resetData() {
         this.data = deepCopy(this.copyData);
@@ -477,14 +445,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
     selectRow(row: any) { }
 
-    // tslint:disable-next-line:no-shadowed-variable
-    resize(size: { width: number, height: number }) {
-        this.width = size.width;
-        this.height = size.height;
-
-        this.setBodyHeight();
-    }
-
     loadData(data: { pageSize: number, total: number, data: any, pageIndex: number }) {
         this.data = data.data;
         if (this.pagination) {
@@ -495,50 +455,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             this.pageIndex = data.pageIndex;
         }
     }
-    /*
-     */
-    onCellClick(e) {
-        this.cellClick.emit(e);
-    }
     onSelectRow(e) {
         this.selectRows.emit(e);
-    }
-    private _unique(objArray, field) {
-        const hash = {};
-        objArray = objArray.reduce((item, next) => {
-            if (hash.hasOwnProperty(next[field])) {
-                return item;
-            }
-            hash[next[field]] = true;
-            item.push(next);
-            return item;
-        }, []);
-        return objArray;
-    }
-    /* 添加行 */
-    addRows(dataItem) {
-        this.data = this.data.concat(dataItem);
-    }
-    /* 删除行 */
-    removeRows() {
-        // console.log(object)
-        const SELECTIONS = this.dtBody.selections;
-        console.log(SELECTIONS);
-        if (this.singleSelect) {
-            for (let i = 0; i < this.data.length; i++) {
-                if (this.data[i] === SELECTIONS) {
-                    this.data.splice(i, 1);
-                }
-            }
-        } else {
-            for (const selection of SELECTIONS) {
-                for (let j = 0; j < this.data.length; j++) {
-                    if (selection[this.idField] === this.data[j][this.idField]) {
-                        this.data.splice(j, 1);
-                    }
-                }
-            }
-        }
     }
 }
 
