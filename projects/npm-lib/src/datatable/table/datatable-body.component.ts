@@ -12,7 +12,7 @@ import { ColumnFormatService } from '@farris/ui';
     [class.table-striped]="striped"
     [class.table-bordered]="bordered">
         <tbody>
-            <tr [ngClass]="createRowClassName(row,rowIndex)" *ngFor="let row of rows ; let rowIndex = index"
+            <tr [ngClass]="createRowClassName(row,rowIndex)" *ngFor="let row of data ; let rowIndex = index"
             (click)="selectedRow($event,rowIndex,row)"
             [class.selected]="isSelected(row)">
                 <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
@@ -71,12 +71,10 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
         return this.dt.columns;
     }
 
-    @Input() rows: any[] = [];
+    @Input() data: any[] = [];
     // tslint:disable-next-line:no-output-rename
     @Output('on-select-row') selectRow: EventEmitter<any> = new EventEmitter<any>();
     // tslint:disable-next-line:no-output-rename
-
-    data: any;
     // tslint:disable-next-line:no-inferrable-types
     lastRowIndex: number = 0;
     // tslint:disable-next-line:no-inferrable-types
@@ -122,7 +120,7 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.dataService.selectedAll.subscribe(allChecked => {
             const idfield = this.idField();
-            this.rows.forEach(row => {
+            this.data.forEach(row => {
                 if (allChecked) {
                     this.tempSelections[row[idfield]] = row;
                 } else {

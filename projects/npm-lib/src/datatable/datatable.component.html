@@ -1,10 +1,13 @@
-<div [style.width]="width+'px'">
-    <datatable-header #dtHeader (checkedAll)="onCheckAll($event)">
-
-    </datatable-header>
-    <datatable-body #dtBody class="farris-table" [rows]="pagination ? (data | paginate: paginationOptions) : data"
-        [rowClassName]="rowClassName" [cellClassName]="cellClassName">
-    </datatable-body>
+<div class="farris-table" [style.width]="width+'px'">
+    <div class="farris-table-header">
+        <datatable-header #dtHeader (checkedAll)="onCheckAll($event)">
+        </datatable-header>
+    </div>
+    <div class="farris-table-body">
+        <datatable-body #dtBody  [data]="data"
+            [rowClassName]="rowClassName" [cellClassName]="cellClassName">
+        </datatable-body>
+    </div>
     <ng-container *ngIf="data&&!data.length">
         <div class="no-data" *ngIf="!noDataText;else noData">
             <img src="assets/no-data.svg" alt="暂无数据" width="100">

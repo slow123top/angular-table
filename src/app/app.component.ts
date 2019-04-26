@@ -1,5 +1,8 @@
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
+import { AdItem } from './dynamic/ad-item';
+import { AdService } from './dynamic/ad.service';
+import { HeroProfileComponent } from './dynamic/hero-profile.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,7 +10,8 @@ import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService) {
+  ads: AdItem[];
+  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
 
   }
   title = 'ng-table';
@@ -44,6 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     { Code: 12, Name: '珠港澳11', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false }
   ];
   ngOnInit() {
+    this.ads = [new AdItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })];
   }
   ngAfterViewInit() {
 

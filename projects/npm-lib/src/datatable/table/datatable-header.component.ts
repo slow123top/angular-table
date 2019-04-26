@@ -12,16 +12,19 @@ import { DataTableComponent } from '../datatable.component';
             <tr>
                 <th class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
                     <dt-checkbox [checked]="isCheckAll" (checkedChange)="onCheckedChange($event)"></dt-checkbox>
+                    <span class="column-resize-handler" resize></span>
                 </th>
                 <th style="width:50px" *ngIf="dt.showLineNumber">
-                   <span>#</span>
+                   #
+                   <span class="column-resize-handler" resize></span>
                 </th>
                 <ng-container *ngFor="let col of columns;let i=index">
                     <th [style.textAlign]="col.align||'left'" [style.width]="col.width+'px'"
                     (click)="sort($event,col)" *ngIf="!col.hidden">
-                        <span>{{ col.title }}</span>
+                        {{ col.title }}
                         <i class="iconfont icon-tubiao_jiyao-xiangshang" *ngIf="col.direction==='asc'"></i>
                         <i class="iconfont icon-tubiao_jiyao-xiangxia" *ngIf="col.direction==='desc'"></i>
+                        <span class="column-resize-handler" resize></span>
                     </th>
                 </ng-container>
             </tr>

@@ -5,16 +5,27 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { DataTableModule } from '../../projects/npm-lib/src/datatable';
+
+import { HeroJobAdComponent } from './dynamic/hero-job-ad.component';
+import { HeroProfileComponent } from './dynamic/hero-profile.component';
+import { AdDirective } from './dynamic/ad.directive';
+import { AdService } from './dynamic/ad.service';
+import { AdBannerComponent } from './dynamic/ad-banner.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AdDirective,
+    HeroJobAdComponent,
+    HeroProfileComponent,
+    AdBannerComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     DataTableModule
   ],
-  providers: [],
+  providers: [AdService],
+  entryComponents: [HeroJobAdComponent, HeroProfileComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
