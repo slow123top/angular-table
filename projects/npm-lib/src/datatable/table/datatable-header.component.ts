@@ -60,7 +60,7 @@ export class DataTableHeaderComponent implements OnInit, AfterViewInit {
     /* 排序 事件传播 */
     @Output() sortChange = new EventEmitter();
 
-    constructor(private dt: DataTableComponent) {
+    constructor(public dt: DataTableComponent) {
     }
 
     ngOnInit() {

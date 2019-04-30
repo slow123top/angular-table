@@ -1,9 +1,14 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="padding: 5rem">
   <farris-table [singleSelect]="false" [idField]="'Code'" [showLineNumber]="true" [bordered]="true" [striped]="false"
-    [size]="'small'" [width]="1000" [data]="data" [sortable]="false" [draggable]="false"
+    [size]="'small'" [width]="1000" [height]="500" [data]="data" [sortable]="false" [draggable]="false" 
+    [total]="total"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [pagination]="true"
     [resizable]="true"
-    [rowClassName]="rowClassName" [cellClassName]="cellClassName">
+    [rowClassName]="rowClassName" [cellClassName]="cellClassName"
+    (changePage)="changePage($event)">
     <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field" [width]="col.width"
       [align]="col.align" [sortable]="col.sortable" [hidden]="col.hidden">
       <ng-template farrisColumnTemplate let-row let-column="column">

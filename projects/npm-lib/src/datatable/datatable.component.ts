@@ -35,7 +35,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() bordered: boolean;
 
     /* 表格大小 紧密型还是疏松型*/
-    @Input() size = 'small';
+    @Input() size: string;
 
     /* 支持添加行 单元格 类样式 */
     @Input() rowClassName: (row: any, index: number) => string;
@@ -66,7 +66,15 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     // 数据
     @Input() data: any[];
 
+    /* 分页 */
+    @Input() total: number;
+    @Input() pageIndex = 1;
+    @Input() pageSize = 10;
+    @Input() pagination: boolean;
 
+
+    /* 分页 */
+    @Output() changePage = new EventEmitter();
     /* 排序广播事件 */
     @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -146,6 +154,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             ele['direction'] = undefined;
         });
     }
+
     // 排序事件 设置下一个排序状态 暴露出API 当前列标识以及下一个排序状态
     sortData(event: MouseEvent, column: any) {
         event.stopPropagation();
@@ -179,8 +188,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             }
         }
     }
-    ngAfterViewInit() {
 
+    ngAfterViewInit() {
         // 初始化排序  初始化数据排序
         this.setSortDirection();
         // 获取表格容器  即表格
@@ -190,20 +199,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     }
     ngOnDestroy() {
     }
-
-    /**
-     * 获取表格容器的位置  距离左边视口和上边视口的距离  如果页面有滚动条  需要加上滚动条滚动的数值
-     */
-    getContainerOffset() {
-        const rect = this.datatableContainer.getBoundingClientRect();
-        return {
-            left: rect.left + document.body.scrollLeft,
-            top: rect.top + document.body.scrollTop,
-            right: rect.right,
-            bottom: rect.bottom,
-        };
-    }
-
+    /* 伸缩列 或者调整列宽 */
     /* 鼠标按下伸缩列引擎元素 */
     beginDrag(e: any, ele: HTMLSpanElement) {
         e.preventDefault();
@@ -241,12 +237,6 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
             tableHeader.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
             tableBody.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
         }
-        // el.style.width = '10px';
-        // el.style.position = 'absolute';
-        // el.style.right = '0px';
-        // this.dragLine.nativeElement.style.left = (e.pageX - containerLeft) + 'px';
-        // 鼠标移动  设置拖拽线总是可见
-        // this.dragLine.nativeElement.style.display = 'block';
     }
 
     /* 鼠标抬起伸缩列引擎元素 */
@@ -256,61 +246,22 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         // const tableBody = this.dtBody.el.nativeElement.querySelector('.table');
         // tableHeader.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
         // tableBody.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
+    }
 
-        console.log(tableHeader.clientWidth - this.tableHeaderX);
+    /* 分页 */
+    changePageHandler(event: any) {
+        // 广播
+        this.changePage.emit(event);
     }
-    resizeColumn(e, column) {
-        // // 偏移量
-        // 拖拽前列宽
-        // const columnWidth = column.offsetWidth;
-        // // 拖拽后列宽
-        // // const newColumnWidth = columnWidth + delta;
-        // // 最小宽度
-        // const minWidth = column.style.minWidth || 15;
-        // // 设置头部拖动后宽度
-        // column.style.width = newColumnWidth + 'px';
-        // // 设置表体拖动后宽度
-        // const headerCells = this.dtHeader.nativeElement.querySelectorAll('th');
-        // let cellIndex;
-        // for (const i in headerCells) {
-        //     if (headerCells[i] === column) {
-        //         cellIndex = i;
-        //     }
-        // }
-        // // const cellIndex = headerCells.findIndex((ele: any) => {
-        // //     return ele === column;
-        // // });
-        // const bodyCells = this.dtBody.el.nativeElement.querySelectorAll('td');
-        // bodyCells[cellIndex].style.width = newColumnWidth + 'px';
-        // col.style.width = newColumnWidth + 'px';
-        // 新宽度大于最小宽度时  重新设置宽度
-        // if (newColumnWidth > parseInt(minWidth, 10)) {
-        //     let colIndex = -1;
-        // const cols = this.dtHeader.nativeElement.querySelectorAll('th');
-        // for (let i = 0; i < cols.length; i++) {
-        //     if (cols[i] === column) {
-        //         colIndex = i;
-        //     }
-        // }
-        //     // 设置后一个单元格宽度
-        //     const nextColumn = column.nextElementSibling;
-        //     if (nextColumn) {
-        //         // 下一个单元格的最新宽度
-        //         const nextColumnWidth = nextColumn.offsetWidth - delta;
-        //         const nextColumnMinWidth = nextColumn.style.minWidth || 15;
-        //         if (newColumnWidth > 15 && nextColumnWidth > parseInt(nextColumnMinWidth, 10)) {
-        //             this.resizeColGroup(this.dtHeader.nativeElement, colIndex, newColumnWidth, nextColumnWidth);
-        //             this.resizeColGroup(this.dtBody.el.nativeElement, colIndex, newColumnWidth, nextColumnWidth);
-        //         }
-        //     }
-        // }
-        // 计算宽度完毕  设置拖拽线隐藏
-    }
+
+
+
     onScrollX(e: any) {
         // 横向滚动 非固定表头滚动
         const x = e.srcElement.scrollLeft;
         // this.tableHeader.nativeElement.scrollTo(x, 0);
     }
+
     /**
      * 滚动条纵向滚动
      */
@@ -320,6 +271,7 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         // this.dtRightFixed.nativeElement.style.top = -y + 'px';
 
     }
+
     onCheckAll(state: boolean) {
         this.dataService.selectedAll.next(state);
     }

@@ -25,6 +25,8 @@ import { RowDirective } from './datatable-row.component';
 
 import { DragColumnDirective } from './utils/drag.directive';
 
+import { FarrisPageComponent } from './pagination/pagination.component';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -40,9 +42,10 @@ import { DragColumnDirective } from './utils/drag.directive';
         // InputGroupModule
     ],
     exports: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DataTableBodyComponent,
-        DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective, DragColumnDirective],
+        DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective, DragColumnDirective, FarrisPageComponent],
     declarations: [DataTableComponent, DataTableHeaderComponent, FarrisTableColumnDirective, DragColumnDirective,
-        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective],
+        DataTableBodyComponent, DTCheckboxComponent, DatatableFooterComponent, FarrisColumnTemplateDirective, RowDirective,
+        FarrisPageComponent],
     providers: [DataTableService, ColumnFormatService, IdService, DateTimeHelperService, NumberHelperService]
 })
 export class DataTableModule { }

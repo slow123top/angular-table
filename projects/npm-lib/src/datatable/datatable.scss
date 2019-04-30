@@ -5,6 +5,7 @@
     // display: flex;
     // flex-direction: column;
     // position: relative;
+    width: 100%;
     height: 100%;
     overflow: auto;
 }
@@ -35,7 +36,7 @@
             width: 2px;
             height: 100%;
             position: absolute;
-            top:0;
+            top: 0;
             right: 0;
             cursor: col-resize;
             touch-action: none;

@@ -3,6 +3,7 @@ import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
 import { AdItem } from './dynamic/ad-item';
 import { AdService } from './dynamic/ad.service';
 import { HeroProfileComponent } from './dynamic/hero-profile.component';
+import { info } from './data';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,9 +11,15 @@ import { HeroProfileComponent } from './dynamic/hero-profile.component';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  total: number;
+  pageIndex: number;
+  pageSize: number;
   ads: AdItem[];
   constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
-
+    this.total = info.length;
+    this.pageIndex = 3;
+    this.pageSize = 10;
+    this.loadData();
   }
   title = 'ng-table';
   columns = [
@@ -21,7 +28,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       // 添加列样式
     },
     // { title: '姓名', field: 'Name', width: 80, fixed: { type: 'left', media: 'md' } },
-    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center', sortable: true, hidden: true },
+    { title: '姓名', field: 'Name', type: 'string', width: 80, align: 'center', sortable: true },
     { title: '年龄', field: 'Age', type: 'number', width: 90, align: 'center' },
     // { title: '年龄', field: 'Age', width: 90, sortable: true, className: 'table-success' },
     { title: '出生日期', field: 'birthday', type: 'date', width: 140, format: 'YYYY-MM-DD', align: 'center' },
@@ -30,25 +37,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     { title: '地址', field: 'address', type: 'string', width: 200, align: 'center' },
     { title: '对错', field: 'correct', type: 'boolean', width: 120, align: 'center' }
   ];
-  data = [
-    {
-      Code: 1, Name: '珠港澳', Age: 20, birthday: '1998-05-06', idcode: '没有权限查看', postcode: '05310000',
-      address: '地球', correct: false
-    },
-    { Code: 3, Name: '珠港澳1aaaa', Age: 21, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 56, Name: '珠港澳2', Age: 22, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 4, Name: '珠港澳3', Age: 23, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 5, Name: '珠港澳4', Age: 24, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 6, Name: '珠港澳5', Age: 25, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 7, Name: '珠港澳6', Age: 26, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 8, Name: '珠港澳7', Age: 27, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 9, Name: '珠港澳8', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 10, Name: '珠港澳9', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 11, Name: '珠港澳10', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 12, Name: '珠港澳11', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false }
-  ];
+  data: any;
   ngOnInit() {
     this.ads = [new AdItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })];
+
   }
   ngAfterViewInit() {
 
@@ -71,15 +63,28 @@ export class AppComponent implements OnInit, AfterViewInit {
       return value;
     }
   }
-  rowClassName(row, index) {
+  rowClassName(row: any, index: number) {
     if (index > 6) {
       return 'tr-color-red';
     }
   }
-  cellClassName(value, col, index) {
+  cellClassName(value: any, col: any, index: number) {
     if (value === '珠港澳2') {
       return 'td-bg-blue';
     }
+  }
+  /* 分页事件 */
+  changePage(event: any) {
+    // 当前索引 每页数量
+    const { pageIndex, pageSize } = event;
+    this.pageIndex = pageIndex;
+    this.pageSize = pageSize;
+    this.loadData();
+  }
+  private loadData() {
+    const start = (this.pageIndex - 1) * this.pageSize;
+    const end = this.pageIndex * this.pageSize;
+    this.data = info.slice(start, end);
   }
 
 }
