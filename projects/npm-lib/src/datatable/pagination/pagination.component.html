@@ -1,18 +1,37 @@
-<ul class="pagination justify-content-end" [class.pagination-sm]="size==='small'">
-    <li class="page-item" [class.disabled]="pageIndex===1" [class.pagination-not-allowed]="pageIndex===1">
-        <a class="page-link" href="#" (click)="changePageEvent(-1)">Previous</a></li>
-    <!-- <li>
-        <span class="pagination-ellipsis" *ngIf="pageIndex>buttonCount">•••</span>
-    </li> -->
-    <li class="page-item" *ngFor="let page of pages">
-        <a class="page-link" href="#" (click)="changePageEvent(page)">
-            {{page}}
-        </a>
-    </li>
-    <!-- <li>
-        <span class="pagination-ellipsis" *ngIf="pageIndex>buttonCount">•••</span>
-    </li> -->
-    <li class="page-item" [class.disabled]="pageIndex===pageCount"
-        [class.pagination-not-allowed]="pageIndex===pageCount">
-        <a class="page-link" href="#" (click)="changePageEvent(pageCount+1)">Next</a></li>
-</ul>
+<div class="d-flex justify-content-end">
+    <ul class="pagination" [class.pagination-sm]="size==='small'">
+        <li class="page-item" [class.disabled]="pageIndex===1" [class.pagination-not-allowed]="pageIndex===1">
+            <a class="page-link" href="#" (click)="changePageEvent(-1)">Previous</a></li>
+        <li *ngIf="hasLeftEllipsis()">
+            <a class="page-link">
+                •••
+            </a>
+        </li>
+        <ng-container *ngFor="let page of pages">
+            <li class="page-item" [class.active]="pageIndex === page.label" *ngIf="!page.hidden">
+                <a class="page-link" href="#" (click)="changePageEvent(page.label)">
+                    {{page.label}}
+                </a>
+            </li>
+        </ng-container>
+        <li *ngIf="hasRightEllipsis()">
+            <a class="page-link">
+                •••
+            </a>
+        </li>
+        <li class="page-item" [class.disabled]="pageIndex===pageCount"
+            [class.pagination-not-allowed]="pageIndex===pageCount">
+            <a class="page-link" href="#" (click)="changePageEvent(pageCount+1)">Next</a>
+        </li>
+    </ul>
+    <ng-container *ngIf="showJumpPage">
+        &nbsp;
+        <span>跳转到</span>
+        &nbsp;
+        第
+        <input type="number" [min]="1" [max]="pageCount" [(ngModel)]="pageIndex" class="form-control"
+            [class.form-control-sm]="size==='small'" style="width:80px">
+        页
+    </ng-container>
+
+</div>

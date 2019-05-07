@@ -1,11 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="padding: 5rem">
   <farris-table [singleSelect]="false" [idField]="'Code'" [showLineNumber]="true" [bordered]="true" [striped]="false"
-    [size]="'small'" [width]="1000" [height]="500" [data]="data" [sortable]="false" [draggable]="false" 
-    [total]="total"
-    [pageIndex]="pageIndex"
-    [pageSize]="pageSize"
-    [pagination]="true"
+    [width]="1000" [height]="500" [data]="data" [sortable]="false" [draggable]="false"
+    [size]="'small'"
+    [pagination]="pagination"
+    [pageable]="true"
     [resizable]="true"
     [rowClassName]="rowClassName" [cellClassName]="cellClassName"
     (changePage)="changePage($event)">
@@ -15,8 +14,8 @@
         <span [innerHtml]="formatter({row:row,column:col})"></span>
       </ng-template>
     </farris-table-column>
-    <ng-template #noDataText>
+    <!-- <ng-template #noDataText>
       <h3 style="text-align: center">没有数据</h3>
-    </ng-template>
+    </ng-template> -->
   </farris-table>
 </div>

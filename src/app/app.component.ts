@@ -4,6 +4,7 @@ import { AdItem } from './dynamic/ad-item';
 import { AdService } from './dynamic/ad.service';
 import { HeroProfileComponent } from './dynamic/hero-profile.component';
 import { info } from './data';
+import { PaginationSetting } from '../../projects/npm-lib/src/datatable/pagination';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,14 +12,16 @@ import { info } from './data';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  total: number;
-  pageIndex: number;
-  pageSize: number;
+  pagination: PaginationSetting;
+
   ads: AdItem[];
   constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
-    this.total = info.length;
-    this.pageIndex = 3;
-    this.pageSize = 10;
+    this.pagination = {
+      total: info.length,
+      pageIndex: 3,
+      pageSize: 10
+    };
+
     this.loadData();
   }
   title = 'ng-table';
@@ -77,13 +80,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   changePage(event: any) {
     // 当前索引 每页数量
     const { pageIndex, pageSize } = event;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
+    this.pagination.pageIndex = pageIndex;
+    this.pagination.pageSize = pageSize;
     this.loadData();
   }
   private loadData() {
-    const start = (this.pageIndex - 1) * this.pageSize;
-    const end = this.pageIndex * this.pageSize;
+    const start = (this.pagination.pageIndex - 1) * this.pagination.pageSize;
+    const end = this.pagination.pageIndex * this.pagination.pageSize;
     this.data = info.slice(start, end);
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
-  })
+})
 export class IdService {
     /**
      * uuid(8, 2)  //  "01001010"
@@ -13,7 +13,8 @@ export class IdService {
      */
     uuid(len, radix) {
         const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-        let uuid = [], i;
+        const uuid = [];
+        let i: any;
         radix = radix || chars.length;
 
         if (len) {

@@ -16,8 +16,8 @@
             <ng-template #noData [ngTemplateOutlet]="noDataText"></ng-template>
         </ng-container>
     </div>
-    <farris-page [size]="size" [total]="total" [pageIndex]="pageIndex" [pageSize]="pageSize"
-        (changePage)="changePageHandler($event)" *ngIf="pagination">
+    <farris-page [size]="size" [total]="pagination.total" [pageIndex]="pagination.pageIndex" [pageSize]="pagination.pageSize"
+        [showJumpPage]="pagination.showJumpPage" (changePage)="changePageHandler($event)" *ngIf="pageable">
     </farris-page>
 </div>
 <!-- <div class="farris-datatable">

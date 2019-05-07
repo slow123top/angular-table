@@ -1,9 +1,7 @@
-import { DataTableHeaderComponent } from './table/datatable-header.component';
 import {
     Component, OnInit, ViewChild, ElementRef, OnChanges, Input, SimpleChanges, ContentChild, TemplateRef,
     QueryList, AfterContentInit, AfterViewInit, ContentChildren, Output, EventEmitter, ViewEncapsulation, OnDestroy
 } from '@angular/core';
-import PerfectScrollbar from 'perfect-scrollbar';
 import { DataTableColumn } from './datatable-column';
 import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableService } from './datatable.service';
@@ -11,6 +9,7 @@ import { DataTableBodyComponent } from './table/datatable-body.component';
 import { Subscription } from 'rxjs';
 import { IdService } from './utils/id.service';
 import { sortData } from './utils/sort';
+import { PaginationSetting } from './pagination';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -70,7 +69,11 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input() total: number;
     @Input() pageIndex = 1;
     @Input() pageSize = 10;
-    @Input() pagination: boolean;
+    @Input() pageable: boolean;
+    @Input()
+    showJumpPage: boolean;
+    @Input()
+    pagination: PaginationSetting;
 
 
     /* 分页 */
