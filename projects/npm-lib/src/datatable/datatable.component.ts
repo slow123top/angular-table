@@ -78,6 +78,8 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
     /* 分页 */
     @Output() changePage = new EventEmitter();
+    @Output() changePageSize = new EventEmitter();
+
     /* 排序广播事件 */
     @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
 
@@ -257,7 +259,11 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
         this.changePage.emit(event);
     }
 
+    /* 改变页面数量 */
 
+    changePageSizeHandler(event: any) {
+        this.changePageSize.emit(event);
+    }
 
     onScrollX(e: any) {
         // 横向滚动 非固定表头滚动

@@ -19,7 +19,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.pagination = {
       total: info.length,
       pageIndex: 3,
-      pageSize: 10
+      pageSize: 10,
+      enableChangePageSize: true,
+      enableChangePageIndex: true
     };
 
     this.loadData();
@@ -79,6 +81,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   /* 分页事件 */
   changePage(event: any) {
     // 当前索引 每页数量
+    const { pageIndex, pageSize } = event;
+    this.pagination.pageIndex = pageIndex;
+    this.pagination.pageSize = pageSize;
+    this.loadData();
+  }
+  changePageSize(event: any) {
     const { pageIndex, pageSize } = event;
     this.pagination.pageIndex = pageIndex;
     this.pagination.pageSize = pageSize;

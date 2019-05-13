@@ -17,11 +17,15 @@ export class FarrisPageComponent implements OnInit {
     @Input()
     total: number;
 
-    /* 每页数量 */
+    /* 初始化每页数量 */
     @Input()
     pageSize = 10;
 
-    /* 当前索引页 */
+    /* 自定义每页改变的数量 */
+    @Input()
+    pageSizeCollection: number[] = [10, 20, 30, 40];
+
+    /* 初始化当前索引页 */
     @Input()
     get pageIndex() {
         return this.ngPageIndex;
@@ -32,19 +36,31 @@ export class FarrisPageComponent implements OnInit {
 
     /* 展示的页码个数 */
     @Input()
-    showPages = 4;
+    displayPages = 4;
 
     /* 分页组件大小 */
     @Input()
     size: string;
 
-    /*  */
+
+    /* 自定义每页数量集合的开关 */
     @Input()
-    showJumpPage: boolean;
+    enableChangePageSize: boolean;
+
+    /* 自定义跳转页码的开关 */
+    @Input()
+    enableChangePageIndex: boolean;
 
     ngPageIndex = 1;
+
+    show = false;
     /* 总页数 */
-    pageCount: number;
+    get pageCount(): number {
+        const mod = this.total % this.pageSize;
+        const count = Math.floor(this.total / this.pageSize);
+        return mod ? count + 1 : count;
+    }
+
     /* 自定义要显示的页数 */
     get pages(): Page[] {
         // 初始化分页
@@ -55,12 +71,12 @@ export class FarrisPageComponent implements OnInit {
                 hidden: false
             };
         });
-        if (this.showPages >= this.pageCount) {
+        if (this.displayPages >= this.pageCount) {
             return pages;
         }
         // 如果要显示的按钮少于总按钮数
-        const showPages = this.showPages % 2 ? this.showPages : this.showPages - 1;
-        const partialPage = Math.floor((showPages - 1) / 2);
+        const displayPages = this.displayPages % 2 ? this.displayPages : this.displayPages - 1;
+        const partialPage = Math.floor((displayPages - 1) / 2);
         pages.forEach(page => {
             if (Math.abs(page.label - this.pageIndex) > partialPage) {
                 page.hidden = true;
@@ -92,7 +108,7 @@ export class FarrisPageComponent implements OnInit {
         const len = pages.filter(ele => {
             return !ele.hidden;
         }).length;
-        if (len !== this.showPages) {
+        if (len !== this.displayPages) {
             const firstShow = pages.findIndex(ele => {
                 return !ele.hidden;
             });
@@ -104,14 +120,17 @@ export class FarrisPageComponent implements OnInit {
     /* 广播页码切换事件 */
     @Output() changePage = new EventEmitter();
 
+    /* 广播每页数量改变事件 */
+    @Output() changePageSize = new EventEmitter();
+
     constructor() {
     }
 
     ngOnInit() {
         // 获取页数
-        const mod = this.total % this.pageSize;
-        const count = Math.floor(this.total / this.pageSize);
-        this.pageCount = mod ? count + 1 : count;
+        // const mod = this.total % this.pageSize;
+        // const count = Math.floor(this.total / this.pageSize);
+        // this.pageCount = mod ? count + 1 : count;
         // 页码集合
     }
 
@@ -146,6 +165,9 @@ export class FarrisPageComponent implements OnInit {
     /* 出现左省略号 */
 
     hasLeftEllipsis() {
+        if (this.displayPages >= this.pageCount) {
+            return false;
+        }
         return this.pages.findIndex(ele => {
             return !ele.hidden;
         }) !== 0;
@@ -153,10 +175,37 @@ export class FarrisPageComponent implements OnInit {
 
     /* 出现右省略号 */
     hasRightEllipsis() {
-
+        if (this.displayPages >= this.pageCount) {
+            return false;
+        }
         return this.pages.findIndex(ele => {
             return !ele.hidden;
-        }) + this.showPages !== this.pageCount;
+        }) + this.displayPages !== this.pageCount;
+    }
+
+    /* 是否显示下拉 */
+    showPageChanger(e: any) {
+        e.stopPropagation();
+        this.show = !this.show;
+    }
+
+    /* 改变分页 */
+    changePageSizeEvent(event: any) {
+        // this.pageSize = event;
+        this.changePageSize.emit({
+            pageIndex: this.pageIndex,
+            pageSize: event
+        });
+    }
+
+    /* 失去焦点之后跳转到某一页 */
+    jumpPage(event: any) {
+        console.log(event);
+        this.pageIndex = Number(event.srcElement.value);
+        this.changePage.emit({
+            pageIndex: this.pageIndex,
+            pageSize: this.pageSize
+        });
     }
 
 }

@@ -24,13 +24,26 @@
             <a class="page-link" href="#" (click)="changePageEvent(pageCount+1)">Next</a>
         </li>
     </ul>
-    <ng-container *ngIf="showJumpPage">
+    <ng-container *ngIf="enableChangePageSize">
+        &nbsp;
+        <div class="dropdown" (click)="showPageChanger($event)">
+            <span class="btn btn-secondary dropdown-toggle" [class.btn-sm]="size==='small'">
+                {{pageSize+'/页'}}
+            </span>
+            <div class="dropdown-menu" [class.show]="show">
+                <a class="dropdown-item" (click)="changePageSizeEvent(item)" *ngFor="let item of pageSizeCollection">
+                    {{item+'/页'}}
+                </a>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="enableChangePageIndex">
         &nbsp;
         <span>跳转到</span>
         &nbsp;
         第
-        <input type="number" [min]="1" [max]="pageCount" [(ngModel)]="pageIndex" class="form-control"
-            [class.form-control-sm]="size==='small'" style="width:80px">
+        <input type="text" [value]="pageIndex" class="form-control" [class.form-control-sm]="size==='small'"
+            (blur)="jumpPage($event)" style="width:80px">
         页
     </ng-container>
 

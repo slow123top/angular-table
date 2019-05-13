@@ -1,21 +1,48 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="padding: 5rem">
+<!-- <div style="padding: 5rem">
   <farris-table [singleSelect]="false" [idField]="'Code'" [showLineNumber]="true" [bordered]="true" [striped]="false"
-    [width]="1000" [height]="500" [data]="data" [sortable]="false" [draggable]="false"
-    [size]="'small'"
-    [pagination]="pagination"
-    [pageable]="true"
-    [resizable]="true"
-    [rowClassName]="rowClassName" [cellClassName]="cellClassName"
-    (changePage)="changePage($event)">
+    [width]="1000" [height]="500" [data]="data" [sortable]="false" [draggable]="false" [size]="'small'"
+    [pagination]="pagination" [pageable]="true" [resizable]="true" [rowClassName]="rowClassName"
+    [cellClassName]="cellClassName" (changePage)="changePage($event)" (changePageSize)="changePageSize($event)">
     <farris-table-column *ngFor="let col of columns" [title]="col.title" [field]="col.field" [width]="col.width"
       [align]="col.align" [sortable]="col.sortable" [hidden]="col.hidden">
       <ng-template farrisColumnTemplate let-row let-column="column">
         <span [innerHtml]="formatter({row:row,column:col})"></span>
       </ng-template>
     </farris-table-column>
-    <!-- <ng-template #noDataText>
-      <h3 style="text-align: center">没有数据</h3>
-    </ng-template> -->
   </farris-table>
+</div> -->
+<div style="padding: 5rem">
+  <ny-select>
+    <ny-option [value]="1" [label]="'栏目1'">
+    </ny-option>
+    <ny-option [value]="2" [label]="'栏目2'">
+    </ny-option>
+  </ny-select>
+  <farris-radio-group [name]="'sa'" [model]="3" [horizontal]="true">
+    <farris-radio [label]="3" [disabled]="true">高级</farris-radio>
+    <farris-radio [label]="6">中级</farris-radio>
+    <farris-radio [label]="7">低级</farris-radio>
+  </farris-radio-group>
+  <farris-radio-group [model]="6">
+    <farris-radio [label]="3">高级</farris-radio>
+    <farris-radio [label]="6">中级</farris-radio>
+    <farris-radio [label]="7">低级</farris-radio>
+  </farris-radio-group>
+  <farris-checkbox-group [model]="['b']">
+    <farris-checkbox [label]="'a'">高级</farris-checkbox>
+    <farris-checkbox [label]="'b'">中级</farris-checkbox>
+    <farris-checkbox [label]="'c'">低级</farris-checkbox>
+  </farris-checkbox-group>
+  <farris-checkbox-group [model]="['a']">
+    <farris-checkbox [label]="'b'">高级</farris-checkbox>
+    <farris-checkbox [label]="'c'">中级</farris-checkbox>
+    <farris-checkbox [label]="'a'">低级</farris-checkbox>
+  </farris-checkbox-group>
 </div>
+
+
+<!-- <div style="width: 100px">
+  <ny-dropdown [trigger]="'hover'" [dropdownItems]="['济南','青岛','滨州']" [title]="'城市'">
+  </ny-dropdown>
+</div> -->

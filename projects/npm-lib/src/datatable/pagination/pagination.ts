@@ -16,14 +16,17 @@ export interface PaginationSetting {
     /* 每页数量 */
     pageSize?: number;
 
+    /* 自定义每页数量集合 */
+    pageSizeCollection?: number[];
+
     /* 展示的页数*/
-    showPages?: number;
+    displayPages?: number;
 
     /* 展示可改变每页数量的下拉框 */
 
-    showPageSizeChanger?: boolean;
+    enableChangePageSize?: boolean;
 
     /* 展示可跳转多页的输入框 */
 
-    showJumpPage?: boolean;
+    enableChangePageIndex?: boolean;
 }
