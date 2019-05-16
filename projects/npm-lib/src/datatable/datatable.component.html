@@ -1,23 +1,29 @@
-<div [style.width]="width+'px'">
-    <datatable-body #dtBody 
-        [rows]="pagination ? (data | paginate: paginationOptions) : data"
-        [size]="size"
-        [columns]="columns" 
-        [striped]="striped" 
-        [bordered]="bordered" 
-        [rowClassName]="rowClassName"
-        [cellClassName]="cellClassName" 
-        (checkedAll)="onCheckAll($event)">
-    </datatable-body>
-    <ng-container *ngIf="data&&!data.length">
-        <div class="no-data" *ngIf="!noDataText;else noData">
-            <img src="assets/no-data.svg" alt="暂无数据" width="100">
-            <div class="no-data">暂无数据</div>
+<div class="farris-table-container" [style.width]="width+'px'" [style.height]="height+'px'">
+    <div class="farris-table">
+        <div class="farris-table-header">
+            <datatable-header #dtHeader (checkedAll)="onCheckAll($event)">
+            </datatable-header>
         </div>
-        <ng-template #noData [ngTemplateOutlet]="noDataText"></ng-template>
-    </ng-container>
+        <div class="farris-table-body">
+            <datatable-body #dtBody [data]="data" [rowClassName]="rowClassName" [cellClassName]="cellClassName">
+            </datatable-body>
+        </div>
+        <ng-container *ngIf="data&&!data.length">
+            <div class="no-data" *ngIf="!noDataText;else noData">
+                <img src="assets/no-data.svg" alt="暂无数据" width="100">
+                <div class="no-data">暂无数据</div>
+            </div>
+            <ng-template #noData [ngTemplateOutlet]="noDataText"></ng-template>
+        </ng-container>
+    </div>
+    <farris-page [size]="size" [total]="pagination.total" [pageIndex]="pagination.pageIndex"
+        [pageSize]="pagination.pageSize" [enableChangePageSize]="pagination.enableChangePageSize"
+        [enableChangePageIndex]="pagination.enableChangePageIndex" 
+        (changePage)="changePageHandler($event)" 
+        (changePageSize)="changePageSizeHandler($event)"
+        *ngIf="pageable">
+    </farris-page>
 </div>
-
 <!-- <div class="farris-datatable">
     <div #tableHeader class="farris-table-header">
         <datatable-header #dtHeader [size]="size" [columns]="columns" [singleSelect]="singleSelect" [data]="data"

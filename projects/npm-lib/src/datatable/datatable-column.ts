@@ -1,12 +1,11 @@
+import { TemplateRef } from '@angular/core';
 export interface DataTableColumn {
     // 字段名
-    title?: string;
+    title: string;
     // 字段id
-    field?: string;
+    field: string;
     // 列宽
     width: number;
-    // 对齐方式
-    hAlign?: string;
     // 列横向对齐方式
     align?: string;
     // 列的显隐
@@ -15,17 +14,14 @@ export interface DataTableColumn {
     fixed?: any;
     // 列排序
     sortable?: boolean;
-    // 筛选
-    multipleFilter: boolean;
-    filter?: any;
-    filterMethod?: (value: any, row: any) => boolean;
     className?: string;
     // 可编辑
     edit?: string;
-    // 响应式属性
-    media?: object;
     // 列格式化API 用户自定义
     formatter?: any;
+    /* 单元格模板和编辑模板 */
+    cellTempl?: TemplateRef<any>;
+    editTempl?: TemplateRef<any>;
 }
 export const convertColumns = (columns: any, direction: any) => {
     const tempFixedColumns = [];

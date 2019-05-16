@@ -1,5 +1,10 @@
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
+import { AdItem } from './dynamic/ad-item';
+import { AdService } from './dynamic/ad.service';
+import { HeroProfileComponent } from './dynamic/hero-profile.component';
+import { info } from './data';
+import { PaginationSetting } from '../../projects/npm-lib/src/datatable/pagination';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,8 +12,24 @@ import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService) {
 
+  editable = {};
+
+  radioValues = [{ text: '男', value: 'male' }, { text: '女', value: 'female' }];
+  pagination: PaginationSetting;
+
+  ads: AdItem[];
+  tableInstance: any;
+  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
+    this.pagination = {
+      total: info.length,
+      pageIndex: 3,
+      pageSize: 10,
+      enableChangePageSize: true,
+      enableChangePageIndex: true
+    };
+
+    this.loadData();
   }
   title = 'ng-table';
   columns = [
@@ -26,31 +47,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     { title: '地址', field: 'address', type: 'string', width: 200, align: 'center' },
     { title: '对错', field: 'correct', type: 'boolean', width: 120, align: 'center' }
   ];
-  data = [
-    {
-      Code: 1, Name: '珠港澳', Age: 20, birthday: '1998-05-06', idcode: '没有权限查看', postcode: '05310000',
-      address: '地球', correct: false
-    },
-    { Code: 3, Name: '珠港澳1aaaa', Age: 21, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 56, Name: '珠港澳2', Age: 22, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 4, Name: '珠港澳3', Age: 23, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 5, Name: '珠港澳4', Age: 24, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 6, Name: '珠港澳5', Age: 25, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 7, Name: '珠港澳6', Age: 26, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 8, Name: '珠港澳7', Age: 27, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 9, Name: '珠港澳8', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 10, Name: '珠港澳9', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 11, Name: '珠港澳10', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
-    { Code: 12, Name: '珠港澳11', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false }
-  ];
+  data: any;
   ngOnInit() {
+    this.ads = [new AdItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })];
+
   }
   ngAfterViewInit() {
 
   }
   formatter(param: any) {
     const column = param.column;
-    const value = param.row[column.field];
+    const value = param.dataItem[column.field];
     const type = column.type;
     if (type === 'date') {
       return this.dateSer.formatTo(value, column.format);
@@ -66,15 +73,58 @@ export class AppComponent implements OnInit, AfterViewInit {
       return value;
     }
   }
-  rowClassName(row, index) {
+  rowClassName(row: any, index: number) {
     if (index > 6) {
       return 'tr-color-red';
     }
   }
-  cellClassName(value, col, index) {
+  cellClassName(value: any, col: any, index: number) {
     if (value === '珠港澳2') {
       return 'td-bg-blue';
     }
+  }
+  /* 分页事件 */
+  changePage(event: any) {
+    // 当前索引 每页数量
+    const { pageIndex, pageSize } = event;
+    this.pagination.pageIndex = pageIndex;
+    this.pagination.pageSize = pageSize;
+    this.loadData();
+  }
+  changePageSize(event: any) {
+    const { pageIndex, pageSize } = event;
+    this.pagination.pageIndex = pageIndex;
+    this.pagination.pageSize = pageSize;
+    this.loadData();
+  }
+  private loadData() {
+    const start = (this.pagination.pageIndex - 1) * this.pagination.pageSize;
+    const end = this.pagination.pageIndex * this.pagination.pageSize;
+    this.data = info.slice(start, end);
+  }
+  changeValue(value: any) {
+    console.log(value);
+  }
+
+  dbclick(e: any, rowIndex: number, column: any) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.editable[rowIndex + column.field] = true;
+  }
+
+  blurInput(rowIndex: number, column: any) {
+    this.editable[rowIndex + column.field] = false;
+  }
+  editCell(param) {
+    const { tableInstance, rowIndex, columnIndex, isEditable } = param;
+    this.tableInstance = tableInstance;
+    if (!isEditable) {
+      tableInstance.editCell(rowIndex, columnIndex);
+    }
+  }
+
+  closeCell(param) {
+    console.log(this.tableInstance);
   }
 
 }

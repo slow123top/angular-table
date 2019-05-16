@@ -1,7 +1,7 @@
 import { Directive, ElementRef, NgZone, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
 import { DataTableComponent } from '../datatable.component';
 @Directive({
-    selector: '[drag-column]'
+    selector: '[resize]'
 })
 export class DragColumnDirective implements AfterViewInit, OnDestroy {
     resizer: HTMLSpanElement;
@@ -18,19 +18,19 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.isEnable()) {
-            this.render.addClass(this.el.nativeElement, 'resizable-column');
-            this.resizer = document.createElement('span');
-            this.resizer.className = 'column-resizer';
-            this.el.nativeElement.appendChild(this.resizer);
+            // this.render.addClass(this.el.nativeElement, 'resizable-column');
+            // this.resizer = document.createElement('span');
+            // this.resizer.className = 'column-resizer';
+            // this.el.nativeElement.appendChild(this.resizer);
             this.ngzone.runOutsideAngular(() => {
                 this.resizerMouseDownListener = this.onMouseDown.bind(this);
-                this.resizer.addEventListener('mousedown', this.resizerMouseDownListener);
+                this.el.nativeElement.addEventListener('mousedown', this.resizerMouseDownListener);
             });
         }
     }
 
     isEnable() {
-        return this.dt.dragable && !this.dt.hasFixed;
+        return this.dt.resizable;
     }
 
     bindDocumentEvents() {
@@ -56,13 +56,13 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
     }
 
     onMouseDown(event: Event) {
-        this.dt.beginDrag(event);
+        this.dt.beginDrag(event, this.el.nativeElement);
         this.bindDocumentEvents();
 
     }
 
     onMouseMove(event: Event) {
-        this.dt.moveDrag(event);
+        this.dt.moveDrag(event, this.el.nativeElement);
     }
 
     onMouseUp(event: Event) {
@@ -72,7 +72,7 @@ export class DragColumnDirective implements AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.resizerMouseDownListener) {
-            this.resizer.removeEventListener('mousedown', this.resizerMouseDownListener);
+            this.el.nativeElement.removeEventListener('mousedown', this.resizerMouseDownListener);
         }
 
         this.unbindDocumentEvents();

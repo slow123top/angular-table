@@ -24,6 +24,72 @@
       ],
       "npm-lib/*": [
         "dist/npm-lib/*"
+      ],
+      "dropdown": [
+        "dist/dropdown"
+      ],
+      "dropdown/*": [
+        "dist/dropdown/*"
+      ],
+      "select": [
+        "dist/select"
+      ],
+      "select/*": [
+        "dist/select/*"
+      ],
+      "tag": [
+        "dist/tag"
+      ],
+      "tag/*": [
+        "dist/tag/*"
+      ],
+      "input": [
+        "dist/input"
+      ],
+      "input/*": [
+        "dist/input/*"
+      ],
+      "@farris/forms": [
+        "dist/farris/forms"
+      ],
+      "@farris/forms/*": [
+        "dist/farris/forms/*"
+      ],
+      "form": [
+        "dist/form"
+      ],
+      "form/*": [
+        "dist/form/*"
+      ],
+      "radio": [
+        "dist/radio"
+      ],
+      "radio/*": [
+        "dist/radio/*"
+      ],
+      "checkbox": [
+        "dist/checkbox"
+      ],
+      "checkbox/*": [
+        "dist/checkbox/*"
+      ],
+      "switch": [
+        "dist/switch"
+      ],
+      "switch/*": [
+        "dist/switch/*"
+      ],
+      "flex": [
+        "dist/flex"
+      ],
+      "flex/*": [
+        "dist/flex/*"
+      ],
+      "grid12": [
+        "dist/grid12"
+      ],
+      "grid12/*": [
+        "dist/grid12/*"
       ]
     }
   }

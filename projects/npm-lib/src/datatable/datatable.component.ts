@@ -1,17 +1,16 @@
-import { RowDirective } from './datatable-row.component';
 import {
     Component, OnInit, ViewChild, ElementRef, OnChanges, Input, SimpleChanges, ContentChild, TemplateRef,
     QueryList, AfterContentInit, AfterViewInit, ContentChildren, Output, EventEmitter, ViewEncapsulation, OnDestroy
 } from '@angular/core';
-import PerfectScrollbar from 'perfect-scrollbar';
-import { DataTableColumn, deepCopy } from './datatable-column';
+import { DataTableColumn } from './datatable-column';
 import { FarrisTableColumnDirective } from './datatable-column.component';
 import { DataTableService } from './datatable.service';
-import { PaginationInstance, PerfectScrollbarComponent } from '@farris/ui';
-import { DataTableHeaderComponent } from './table/datatable-header.component';
 import { DataTableBodyComponent } from './table/datatable-body.component';
 import { Subscription } from 'rxjs';
 import { IdService } from './utils/id.service';
+import { sortData } from './utils/sort';
+import { PaginationSetting } from './pagination';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -19,156 +18,132 @@ import { IdService } from './utils/id.service';
     encapsulation: ViewEncapsulation.None
 })
 export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterContentInit, AfterViewInit {
-    searchButtonText = '<i class="f-icon datatable-icon-search"></i>';
-    // 排序
+
+    // 多选  单选
+    @Input() singleSelect = true;
+
+    /* 数据标识 */
+    @Input() idField = 'id';
+
+    /* 鼠标悬停高亮 */
+    @Input() hover: boolean;
+
+    /* 行斑马线样式 */
+    @Input() striped: boolean;
+
+    /* 表格边框 */
+    @Input() bordered: boolean;
+
+    /* 表格大小 紧密型还是疏松型*/
+    @Input() size: string;
+
+    /* 支持添加行 单元格 类样式 */
+    @Input() rowClassName: (row: any, index: number) => string;
+    @Input() cellClassName: (value: any, col: any) => string;
+
+    /*列支持排序 */
     @Input() sortType: 'single' | 'multiple';
     @Input() sortable: boolean;
     @Input() sortSetting: any[];
-    // 行号
-    @Input() lineNumber: boolean;
-    // 空数据提示
+
+    /* 是否显示行号 */
+    @Input() showLineNumber: boolean;
+
+    /* 空数据提示 */
     @Input()
     @ContentChild('noDataText') noDataText: TemplateRef<any>;
-    // tslint:disable-next-line:no-input-rename
-    @Input('keydown-enter-edit') keydownEnterEdit = false;
-    @Input() id: string;
-    @Input() size: string;
-    @Input() allColumnsTitle = '所有列';
-    // table 尺寸
+
+    // 列是否支持resize
+    @Input() resizable: boolean;
+
+    // table 宽高
     @Input() width: number;
-    // 组件级高度包括过滤条高度
     @Input() height: number;
 
-    tableHeight: number; // 数据表高度
-    // 是否填充
-    @Input() fill = false;
-    // 默认分页
-    @Input() pagination = true;
-    @Input() pageSize = 10;
-    @Input() pageIndex = 1;
-    @Input() pageList = [10, 20, 30, 50, 100];
-    @Input() total = 0;
-    // 列 数据
+    // 列 信息
     @Input() columns: DataTableColumn[];
-    @Input() searchFields: { label: string, value: string }[];
-    // 可筛选
-    @Input() showFilterBar = false;
-    // table  数据
-    _data = [];
+
+    // 数据
+    @Input() data: any[];
+
+    /* 分页 */
+    @Input() total: number;
+    @Input() pageIndex = 1;
+    @Input() pageSize = 10;
+    @Input() pageable: boolean;
     @Input()
-    get data() {
-        return this._data;
-    }
-    set data(data: Array<any>) {
-        this._data = data;
-    }
-    // 深拷贝data 数据
-    copyData: any;
-    //
-    @Input() remote = 'client';
-    // 多选  单选
-    @Input() singleSelect = true;
-    @Input() idField = 'id';
-    // 显示鼠标悬停高亮
-    @Input() hover: boolean;
-    // 斑马线
-    @Input() striped: boolean;
-    // 边框
-    @Input() bordered: boolean;
-    // 支持添加行 单元格 类样式
-    @Input() rowClassName: (row: any, index: number) => string;
-    @Input() cellClassName: (value: any, col: any) => string;
-    // 滚动条引用
-    @ViewChild('scorllableBody') scorllableBody: ElementRef;
-    @ViewChild('tableHeader') tableHeader: ElementRef;
-    @ViewChild('tablePager') tablePager: ElementRef;
-    @ViewChild('dtHeader') dtHeader: DataTableHeaderComponent;
+    showJumpPage: boolean;
+    @Input()
+    pagination: PaginationSetting;
+
+    /* 表格form */
+    @Input()
+    formGroup: FormGroup;
+
+    /* 分页广播事件  改变 页数大小 和 页索引 */
+    @Output() changePage = new EventEmitter();
+    @Output() changePageSize = new EventEmitter();
+
+    /* 排序广播事件 */
+    @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
+
+    @Output()
+    clickCell = new EventEmitter<any>();
+
+    @Output()
+    closeCell = new EventEmitter<any>();
+
+    /* 表头dom */
+    @ViewChild('dtHeader', { read: ElementRef }) dtHeader: ElementRef;
+
+    /* 表体 */
     @ViewChild('dtBody') dtBody: DataTableBodyComponent;
-    // @ViewChild('dtLeftBody') dtLeftBody: DataTableBodyComponent;
-    // @ViewChild('dtRightBody') dtRightBody: DataTableBodyComponent;
-    // @ViewChild('dtLeftFixed') dtLeftFixed: ElementRef;
-    // @ViewChild('dtRightFixed') dtRightFixed: ElementRef;
-    // 分页事件
-    @Output() pageChanged = new EventEmitter();
-    @Output() pageSizeChanged = new EventEmitter();
-    @Output() search = new EventEmitter<{ field: string, value: string }>();
-    @Output('on-select-row') selectRows = new EventEmitter<any>();
-    @Output('on-edit-grid') cellClick = new EventEmitter<any>();
-    @ContentChildren(RowDirective) rowsRef: QueryList<RowDirective>;
+
+    /* 表格内有列模板 */
     @ContentChildren(FarrisTableColumnDirective) columnsRef: QueryList<FarrisTableColumnDirective>;
-    // 表尾
-    @ContentChild('footer') footer: TemplateRef<any>;
+
+    /* 原始数据 */
+    originData: any;
+
     // 表格可拖拽宽度系列
     // 拖拽线
-    @ViewChild('dragLine') dragLine: ElementRef;
     // 是否可拖拽  默认可以
-    @Input() dragable = false;
-    // 是否有行模板
-    hasRowTepml = false;
+    movable: boolean;
     // 用户获取表头+表格内容的高度  宽度  等
     datatableContainer: HTMLDivElement;
+
     // 拖拽线初始化位置
-    dragLineX: number;
-    // 设置拖拽停止器
-    moveable = false;
-    //
-    currentColumn: any;
-    // 设置左固定列
-    hasFixed: boolean;
-    fixedLeftWidth: string;
-    // 设置右固定列
-    fixedRightWidth: string;
-    searchData = { field: '*', value: '' };
+    startX: number;
+
+    // 当前可调整列的索引
+    resizeColIndex: number;
+
+    /* 当前列宽度 */
+    resizeThWidth: number;
+
+    /* 表头宽度 */
+    tableHeaderX: number;
+
     // 事件订阅存储  便于销毁
     subscription: Subscription[] = [];
-    // 固定列时  同一行的tr hover事件
-    headerTr: any;
-    leftFixedHeaderTr: any;
-    rightFixedHeaderTr: any;
-    // 原数据
-    public filter = '';
-    public maxSize = 7;
-    public directionLinks = true;
-    public autoHide = false;
-    public responsive = true;
-    public paginationOptions: PaginationInstance = {
-        id: 'Farris-DataTable-Pagination',
-        itemsPerPage: this.pageSize,
-        currentPage: this.pageIndex,
-        pageList: this.pageList,
-        totalItems: this.total
-    };
-    public labels: any = {
-        previousLabel: ' ',
-        nextLabel: ' ',
-        screenReaderPaginationLabel: 'Pagination',
-        screenReaderPageLabel: 'page',
-        screenReaderCurrentLabel: `You're on page`
-    };
 
-    private _currentRowIndex = -1;
-    get currentRowIndex(): number {
-        return this._currentRowIndex;
-    }
+    currentRowIndex: number;
+    currentRow: any;
 
-    private _currentRow = undefined;
-    get currentRow() {
-        return this._currentRow;
-    }
+    /* 是否可编辑 */
+    editable = {};
 
     get selections() {
         return this.dtBody.selections;
     }
 
-    @ViewChild('perfectScrollbar') perfectScrollbar: PerfectScrollbarComponent;
-
-    scorllableBodyHeight: number;
     constructor(private dataService: DataTableService, private el: ElementRef, private idService: IdService) {
 
+        /* 单选多选 */
         this.dataService.selectedRow.subscribe((e: any) => {
             if (this.singleSelect) {
-                this._currentRowIndex = e.rowIndex;
-                this._currentRow = e.rowData;
+                this.currentRowIndex = e.rowIndex;
+                this.currentRow = e.rowData;
             } else {
                 if (this.selections) {
                     this.dtBody.isCheckAll = Object.keys(this.selections).length === this.data.length;
@@ -178,367 +153,159 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
         this.dataService.unSelectedRow.subscribe((e: any) => {
             if (this.singleSelect) {
-                this._currentRow = undefined;
-                this._currentRowIndex = -1;
+                this.currentRow = undefined;
+                this.currentRowIndex = -1;
             } else {
                 this.dtBody.isCheckAll = false;
             }
         });
     }
 
-    private ps: PerfectScrollbar;
-
-    getSearchColumns() {
-        if (this.searchFields) {
-            return this.searchFields;
-        }
-        return this.columns.filter(c => c.field).map(col => {
-            return {
-                label: col.title,
-                value: col.field
-            };
-        });
-    }
-
-
     ngOnInit() {
-        setTimeout(() => {
-            this.setBodyHeight();
-            // this.ps = this.perfectScrollbar.directiveRef.ps();
-        });
+        // 初始化排序 深拷贝数据
+        this.originData = JSON.parse(JSON.stringify(this.data));
 
-        if (!this.id) {
-            this.id = this.idService.uuid(8, 16);
-        }
-
-        this.paginationOptions.id = this.paginationOptions.id + this.id;
-
-        if (this.remote === 'server') {
-            this.paginationOptions['totalItems'] = 1;
-        }
-        this.copyData = deepCopy(this.data);
     }
 
-    private setBodyHeight() {
-        this.tableHeight = this.height;
-        if (this.showFilterBar) {
-            this.tableHeight = this.height - 46;
-        }
-        this.scorllableBodyHeight = this.tableHeight;
+    private setSortDirection() {
+        this.columns.forEach(ele => {
+            ele['direction'] = undefined;
+        });
+    }
 
-        if (this.pagination) {
-            this.scorllableBodyHeight = this.scorllableBodyHeight - 50;
+    // 排序事件 设置下一个排序状态 暴露出API 当前列标识以及下一个排序状态
+    sortData(event: MouseEvent, column: any) {
+        event.stopPropagation();
+        if (!this.sortable || !column.sortable) {
+            return;
         }
+        const sortInfo = sortData(this.originData, this.data, column);
+        this.data = sortInfo.data;
+        this.setSortDirection();
+        // 排序图标
+        column.direction = sortInfo.dir;
+        // 重置所有列的排序方向
+        this.sortChange.emit([{
+            field: column.field,
+            dir: sortInfo.dir
+        }]);
+
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.height && !changes.height.isFirstChange()) {
-            this.setBodyHeight();
-        }
-
-        if (changes.total && !changes.total.isFirstChange()) {
-            this.paginationOptions.totalItems = changes.total.currentValue;
-        }
-
-        if (changes.pageSize) {
-            this.paginationOptions.itemsPerPage = changes.pageSize.currentValue;
-        }
-
-        if (changes.data && !changes.data.isFirstChange()) {
-            const rows = changes.data.currentValue;
-            if (rows) {
-                if (this.selections) {
-                    const keys = Object.keys(this.selections);
-                    if (keys.length) {
-                        let count = 0;
-                        const ids = rows.map((row: any) => {
-                            return row[this.idField].toString();
-                        });
-                        keys.forEach(id => {
-                            if (ids.indexOf(id) > -1) {
-                                count++;
-                            }
-                        });
-                        this.dtHeader.isCheckAll = ids.length === count;
-                    } else {
-                        this.dtHeader.isCheckAll = false;
-                    }
-                } else {
-                    this.dtHeader.isCheckAll = false;
-                }
-            }
-            this.dataService.loadSuccess.next(changes.data.currentValue);
-        }
     }
 
     ngAfterContentInit() {
-        // 支持行模板
-        if (this.rowsRef && this.rowsRef.length) {
-            this.data = this.rowsRef.map(row => {
-                return {
-                    rowTempl: row.rowTempl
-                };
-            });
-            return;
-        }
         // 支持列组件写入
         if (!this.columns) {
             if (this.columnsRef && this.columnsRef.length) {
-                this.columns = this.columnsRef.map(col => {
-                    return {
-                        width: col.width,
-                        title: col.title,
-                        field: col.field,
-                        align: col.align,
-                        fixed: col.fixed,
-                        className: col.className,
-                        multipleFilter: col.multipleFilter,
-                        filter: col.filter,
-                        media: col.media,
-                        sortable: col.sortable,
-                        edit: col.edit,
-                        formatter: col.formatter,
-                        // 单元格模板
-                        cellTempl: col.cellTempl
-                    };
+                this.columns = [];
+                this.columnsRef.forEach((col: any) => {
+                    this.columns.push(col);
                 });
             }
         }
     }
-    ngOnDestroy() {
-        this.subscription.forEach(sub => {
-            sub.unsubscribe();
-        });
-        this.subscription = [];
-    }
-    ngAfterViewInit() {
-        // 获取表格容器  即表格
-        this.datatableContainer = this.el.nativeElement.querySelector('.farris-datatable');
-        // this.headerTr = this.tableHeader.nativeElement.querySelectorAll('tr');
-        setTimeout(() => {
-            // this.setFixed(window.innerWidth);
-        }, 0);
-    }
-    /* 筛选事件
-    *
-    */
-    filterData(filterFields, field) {
-        // 被筛选的数据
-        const filterData = this._unique(this.data, field);
-        filterData.forEach(ele => {
-            filterFields.push({
-                label: ele[field],
-                checked: false
-            });
-        });
-    }
-    filterCheckedData(checkedData, field) {
-        this.resetData();
-        this.data.splice(0, this.copyData.length);
-    }
-    resetData() {
-        this.data = deepCopy(this.copyData);
-    }
-    changeFilterData(filteredData) {
-        this.data = this.data.concat(filteredData);
-        this.data.splice(0, this.copyData.length);
-    }
-    /**
-     * 获取表格容器的位置  距离左边视口和上边视口的距离  如果页面有滚动条  需要加上滚动条滚动的数值
-     */
-    getContainerOffset() {
-        const rect = this.datatableContainer.getBoundingClientRect();
-        return {
-            left: rect.left + document.body.scrollLeft,
-            top: rect.top + document.body.scrollTop,
-            right: rect.right,
-            bottom: rect.bottom,
-        };
-    }
-    beginDrag(e) {
-        this.dragLineX = e.pageX;
-        event.preventDefault();
-    }
-    moveDrag(e) {
-        // 获取表格的左边距离
-        const containerLeft = this.getContainerOffset().left;
-        // 设置拖拽线的高度  即获取表头+表内容+表尾的高度  此表格结构包含了分页  因此要去掉分页的高度
-        if (this.tablePager) {
-            this.dragLine.nativeElement.style.height = this.datatableContainer.offsetHeight -
-                this.tablePager.nativeElement.offsetHeight + 'px';
-        } else {
-            const headerHeight = this.el.nativeElement.querySelector('.farris-table-header');
-            const bodyHeight = this.el.nativeElement.querySelector('.ps-content');
-            this.dragLine.nativeElement.style.height = headerHeight.offsetHeight +
-                bodyHeight.offsetHeight + 'px';
-        }
-        // 设置拖拽线的高度 拖拽线相对于表格relative定位是absolute，因此是0
-        this.dragLine.nativeElement.style.top = 0 + 'px';
-        // 鼠标移动时，拖拽线相对于表格的位置
-        this.dragLine.nativeElement.style.left = (e.pageX - containerLeft) + 'px';
-        // 鼠标移动  设置拖拽线总是可见
-        this.dragLine.nativeElement.style.display = 'block';
-    }
-    stopDrag(e, column) {
-        this.resizeColumn(e, column);
-    }
-    resizeColumn(e, column) {
-        // 偏移量
-        const delta = e.pageX - this.dragLineX;
-        // 拖拽前列宽
-        const columnWidth = column.offsetWidth;
-        // 拖拽后列宽
-        const newColumnWidth = columnWidth + delta;
-        // 最小宽度
-        const minWidth = column.style.minWidth || 15;
-        // 新宽度大于最小宽度时  重新设置宽度
-        if (newColumnWidth > parseInt(minWidth, 10)) {
-            let colIndex = -1;
-            const cols = this.tableHeader.nativeElement.querySelectorAll('th');
-            for (let i = 0; i < cols.length; i++) {
-                if (cols[i] === column) {
-                    colIndex = i;
-                }
-            }
-            // 设置后一个单元格宽度
-            const nextColumn = column.nextElementSibling;
-            if (nextColumn) {
-                // 下一个单元格的最新宽度
-                const nextColumnWidth = nextColumn.offsetWidth - delta;
-                const nextColumnMinWidth = nextColumn.style.minWidth || 15;
-                if (newColumnWidth > 15 && nextColumnWidth > parseInt(nextColumnMinWidth, 10)) {
-                    this.resizeColGroup(this.dtHeader.el.nativeElement, colIndex, newColumnWidth, nextColumnWidth);
-                    this.resizeColGroup(this.dtBody.el.nativeElement, colIndex, newColumnWidth, nextColumnWidth);
-                }
-            }
-        }
-        // 计算宽度完毕  设置拖拽线隐藏
-        this.dragLine.nativeElement.style.display = 'none';
-    }
-    resizeColGroup(table, resizeColumnIndex, newColumnWidth, nextColumnWidth) {
-        if (table) {
-            // 此处要视不同的表格结构来确定 本组件中  header和body结构相同
-            const colGroup = table.childNodes[1].children[0].nodeName === 'COLGROUP' ?
-                table.childNodes[1].children[0] : null;
-            if (colGroup) {
-                const col = colGroup.children[resizeColumnIndex];
-                const nextCol = col.nextElementSibling;
-                col.style.width = newColumnWidth + 'px';
 
-                if (nextCol && nextColumnWidth) {
-                    nextCol.style.width = nextColumnWidth + 'px';
-                }
-            } else {
-                throw new Error('Scrollable tables require a colgroup to support resizable columns');
+    ngAfterViewInit() {
+        // 初始化排序  初始化数据排序
+        this.setSortDirection();
+        // 获取表格容器  即表格
+        // 获取整体table
+        this.datatableContainer = this.el.nativeElement.querySelector('.farris-table');
+
+    }
+    ngOnDestroy() {
+    }
+    /* 伸缩列 或者调整列宽 */
+    /* 鼠标按下伸缩列引擎元素 */
+    beginDrag(e: any, ele: HTMLSpanElement) {
+        e.preventDefault();
+        e.stopPropagation();
+        // 鼠标点击 初始化位置
+        const tableHeader = this.dtHeader.nativeElement.querySelector('.table');
+        const resizeHandlers = this.dtHeader.nativeElement.querySelectorAll('.column-resize-handler');
+        const resizeHandlersParent = ele.parentElement;
+        this.startX = e.pageX;
+        this.tableHeaderX = tableHeader.clientWidth;
+        this.resizeThWidth = resizeHandlersParent.offsetWidth;
+
+        for (const i in resizeHandlers) {
+            if (resizeHandlers[i] === ele) {
+                this.resizeColIndex = Number(i);
             }
         }
+        this.movable = true;
     }
+
+    /* 鼠标移动伸缩列引擎元素 */
+    moveDrag(e, el) {
+        e.stopPropagation();
+        if (this.movable) {
+            const ths = this.dtHeader.nativeElement.querySelectorAll('th');
+            const trs = this.dtBody.el.nativeElement.querySelectorAll('tr');
+            const tableHeader = this.dtHeader.nativeElement.querySelector('.table');
+            const tableBody = this.dtBody.el.nativeElement.querySelector('.table');
+            ths[this.resizeColIndex].style.width = this.resizeThWidth + (e.pageX - this.startX) + 'px';
+            for (const tr of trs) {
+                const tds = tr.querySelectorAll('td');
+                tds[this.resizeColIndex].style.width = this.resizeThWidth + (e.pageX - this.startX) + 'px';
+            }
+            this.columns[this.resizeColIndex].width = this.resizeThWidth + (e.pageX - this.startX);
+            tableHeader.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
+            tableBody.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
+        }
+    }
+
+    /* 鼠标抬起伸缩列引擎元素 */
+    stopDrag(e, column) {
+        this.movable = false;
+        const tableHeader = this.dtHeader.nativeElement.querySelector('.table');
+        // const tableBody = this.dtBody.el.nativeElement.querySelector('.table');
+        // tableHeader.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
+        // tableBody.style.width = this.tableHeaderX + (e.pageX - this.startX) + 'px';
+    }
+
+    /* 分页 */
+    changePageHandler(event: any) {
+        // 广播
+        this.changePage.emit(event);
+    }
+
+    /* 改变页面数量 */
+
+    changePageSizeHandler(event: any) {
+        this.changePageSize.emit(event);
+    }
+
     onScrollX(e: any) {
         // 横向滚动 非固定表头滚动
         const x = e.srcElement.scrollLeft;
-        this.tableHeader.nativeElement.scrollTo(x, 0);
+        // this.tableHeader.nativeElement.scrollTo(x, 0);
     }
+
     /**
      * 滚动条纵向滚动
      */
     onScrollY(e: any) {
-        if (!this.hasFixed) {
-            return;
-        }
         const y = e.srcElement.scrollTop;
         // this.dtLeftFixed.nativeElement.style.top = -y + 'px';
         // this.dtRightFixed.nativeElement.style.top = -y + 'px';
 
     }
 
-    onPageChange(page: { pageIndex: number, pageSize: number }) {
-        this.paginationOptions.currentPage = page.pageIndex;
-        if (this.pageIndex !== page.pageIndex) {
-            this.pageIndex = page.pageIndex;
-            this.pageChanged.emit({ pageInfo: page, search: this.searchData });
-        }
-    }
-
-    onPageSizeChange(pageSize: number) {
-        this.paginationOptions.itemsPerPage = pageSize;
-        if (this.pageSize !== pageSize) {
-            this.pageSize = pageSize;
-            this.pageSizeChanged.emit({ pageInfo: { pageIndex: this.pageIndex, [pageSize]: pageSize }, search: this.searchData });
-        }
-    }
-
-    onSearch() {
-        this.search.emit(this.searchData);
-    }
-
     onCheckAll(state: boolean) {
         this.dataService.selectedAll.next(state);
     }
 
-    selectRow(row: any) { }
-
-    // tslint:disable-next-line:no-shadowed-variable
-    resize(size: { width: number, height: number }) {
-        this.width = size.width;
-        this.height = size.height;
-
-        this.setBodyHeight();
-    }
-
-    loadData(data: { pageSize: number, total: number, data: any, pageIndex: number }) {
-        this.data = data.data;
-        if (this.pagination) {
-            this.paginationOptions.totalItems = data.total;
-            this.paginationOptions.itemsPerPage = data.pageSize;
-            this.total = data.total;
-            this.pageSize = data.pageSize;
-            this.pageIndex = data.pageIndex;
+    /* 进入单元格编辑 formGroup赋值*/
+    editCell(rowIndex: number, column: any, formGroup?: FormGroup) {
+        let col = column;
+        if (typeof column === 'number') {
+            col = this.columns[column];
         }
-    }
-    /*
-     */
-    onCellClick(e) {
-        this.cellClick.emit(e);
-    }
-    onSelectRow(e) {
-        this.selectRows.emit(e);
-    }
-    private _unique(objArray, field) {
-        const hash = {};
-        objArray = objArray.reduce((item, next) => {
-            if (hash.hasOwnProperty(next[field])) {
-                return item;
-            }
-            hash[next[field]] = true;
-            item.push(next);
-            return item;
-        }, []);
-        return objArray;
-    }
-    /* 添加行 */
-    addRows(dataItem) {
-        this.data = this.data.concat(dataItem);
-    }
-    /* 删除行 */
-    removeRows() {
-        // console.log(object)
-        const SELECTIONS = this.dtBody.selections;
-        console.log(SELECTIONS);
-        if (this.singleSelect) {
-            for (let i = 0; i < this.data.length; i++) {
-                if (this.data[i] === SELECTIONS) {
-                    this.data.splice(i, 1);
-                }
-            }
-        } else {
-            for (const selection of SELECTIONS) {
-                for (let j = 0; j < this.data.length; j++) {
-                    if (selection[this.idField] === this.data[j][this.idField]) {
-                        this.data.splice(j, 1);
-                    }
-                }
-            }
-        }
+        this.formGroup = formGroup;
+        this.editable[rowIndex + col.field] = true;
     }
 }
 

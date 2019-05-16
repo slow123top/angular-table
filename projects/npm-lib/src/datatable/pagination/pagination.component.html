@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-end">
+    <ul class="pagination" [class.pagination-sm]="size==='small'">
+        <li class="page-item" [class.disabled]="pageIndex===1" [class.pagination-not-allowed]="pageIndex===1">
+            <a class="page-link" href="#" (click)="changePageEvent(-1)">Previous</a></li>
+        <li *ngIf="hasLeftEllipsis()">
+            <a class="page-link">
+                •••
+            </a>
+        </li>
+        <ng-container *ngFor="let page of pages">
+            <li class="page-item" [class.active]="pageIndex === page.label" *ngIf="!page.hidden">
+                <a class="page-link" href="#" (click)="changePageEvent(page.label)">
+                    {{page.label}}
+                </a>
+            </li>
+        </ng-container>
+        <li *ngIf="hasRightEllipsis()">
+            <a class="page-link">
+                •••
+            </a>
+        </li>
+        <li class="page-item" [class.disabled]="pageIndex===pageCount"
+            [class.pagination-not-allowed]="pageIndex===pageCount">
+            <a class="page-link" href="#" (click)="changePageEvent(pageCount+1)">Next</a>
+        </li>
+    </ul>
+    <ng-container *ngIf="enableChangePageSize">
+        &nbsp;
+        <div class="dropdown" (click)="showPageChanger($event)">
+            <span class="btn btn-secondary dropdown-toggle" [class.btn-sm]="size==='small'">
+                {{pageSize+'/页'}}
+            </span>
+            <div class="dropdown-menu" [class.show]="show">
+                <a class="dropdown-item" (click)="changePageSizeEvent(item)" *ngFor="let item of pageSizeCollection">
+                    {{item+'/页'}}
+                </a>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="enableChangePageIndex">
+        &nbsp;
+        <span>跳转到</span>
+        &nbsp;
+        第
+        <input type="text" [value]="pageIndex" class="form-control" [class.form-control-sm]="size==='small'"
+            (blur)="jumpPage($event)" style="width:80px">
+        页
+    </ng-container>
+
+</div>
