@@ -12,9 +12,14 @@ import { PaginationSetting } from '../../projects/npm-lib/src/datatable/paginati
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit {
+
+  editable = {};
+
+  radioValues = [{ text: '男', value: 'male' }, { text: '女', value: 'female' }];
   pagination: PaginationSetting;
 
   ads: AdItem[];
+  tableInstance: any;
   constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
     this.pagination = {
       total: info.length,
@@ -52,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   formatter(param: any) {
     const column = param.column;
-    const value = param.row[column.field];
+    const value = param.dataItem[column.field];
     const type = column.type;
     if (type === 'date') {
       return this.dateSer.formatTo(value, column.format);
@@ -96,6 +101,30 @@ export class AppComponent implements OnInit, AfterViewInit {
     const start = (this.pagination.pageIndex - 1) * this.pagination.pageSize;
     const end = this.pagination.pageIndex * this.pagination.pageSize;
     this.data = info.slice(start, end);
+  }
+  changeValue(value: any) {
+    console.log(value);
+  }
+
+  dbclick(e: any, rowIndex: number, column: any) {
+    e.stopPropagation();
+    e.preventDefault();
+    this.editable[rowIndex + column.field] = true;
+  }
+
+  blurInput(rowIndex: number, column: any) {
+    this.editable[rowIndex + column.field] = false;
+  }
+  editCell(param) {
+    const { tableInstance, rowIndex, columnIndex, isEditable } = param;
+    this.tableInstance = tableInstance;
+    if (!isEditable) {
+      tableInstance.editCell(rowIndex, columnIndex);
+    }
+  }
+
+  closeCell(param) {
+    console.log(this.tableInstance);
   }
 
 }

@@ -484,6 +484,76 @@
           }
         }
       }
+    },
+    "flex": {
+      "root": "projects/flex",
+      "sourceRoot": "projects/flex/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/flex/tsconfig.lib.json",
+            "project": "projects/flex/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/flex/src/test.ts",
+            "tsConfig": "projects/flex/tsconfig.spec.json",
+            "karmaConfig": "projects/flex/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/flex/tsconfig.lib.json",
+              "projects/flex/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "grid12": {
+      "root": "projects/grid12",
+      "sourceRoot": "projects/grid12/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/grid12/tsconfig.lib.json",
+            "project": "projects/grid12/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/grid12/src/test.ts",
+            "tsConfig": "projects/grid12/tsconfig.spec.json",
+            "karmaConfig": "projects/grid12/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/grid12/tsconfig.lib.json",
+              "projects/grid12/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng-table"

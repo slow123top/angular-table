@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, forwardRef, Output, EventEmitter } from '@angular/core';
 import { CheckboxGroupComponent } from './checkbox-group.component';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 @Component({
   selector: 'farris-checkbox',
   template: `
@@ -12,15 +13,20 @@ import { CheckboxGroupComponent } from './checkbox-group.component';
       </span>
   </label>
   `,
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => CheckboxComponent),
+    multi: true,
+  }],
   styles: []
 })
-export class CheckboxComponent implements OnInit {
+export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
   /* model */
   @Input()
   get model() {
     if (this.hasParent(this.el.nativeElement)) {
-      return this.checkboxSer.model.find(ele => {
+      return this.checkbox.model.find(ele => {
         return ele === this.label;
       });
     }
@@ -39,8 +45,11 @@ export class CheckboxComponent implements OnInit {
   @Input()
   disabled: boolean;
 
+  @Output()
+  modelChange = new EventEmitter<any>();
   nyModel: any;
-  constructor(private checkboxSer: CheckboxGroupComponent,
+  constructor(
+    private checkbox: CheckboxGroupComponent,
     private el: ElementRef) { }
 
   ngOnInit() {
@@ -48,7 +57,13 @@ export class CheckboxComponent implements OnInit {
 
   /* 值传递 */
   changeModelHandler() {
-    this.checkboxSer.changeModel(this.model);
+    // 父元素获取label  子元素再从父元素获取model
+    if (this.hasParent(this.el.nativeElement)) {
+      return this.checkbox.changeModel(this.label);
+    }
+    this.model = this.label;
+    this.modelChange.emit(this.model);
+    this.controlChange(this.label);
   }
 
 
@@ -56,4 +71,19 @@ export class CheckboxComponent implements OnInit {
   hasParent(element: any) {
     return element.parentElement.classList.contains('farris-input-wrap');
   }
+
+  writeValue(value: any): void {
+    this.model = value;
+  }
+
+  registerOnChange(fn: any): void {
+    this.controlChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.controlTouch = fn;
+  }
+  private controlChange: Function = () => { }
+  private controlTouch: Function = () => { }
+
 }

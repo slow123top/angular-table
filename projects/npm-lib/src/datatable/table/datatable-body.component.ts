@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, Optional, ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, Optional, ElementRef, AfterViewInit, EventEmitter, HostListener } from '@angular/core';
 import { DataTableColumn } from '../datatable-column';
 import { DataTableService } from '../datatable.service';
 import { DataTableComponent } from '../datatable.component';
@@ -6,40 +6,7 @@ import { ColumnFormatService } from '@farris/ui';
 
 @Component({
     selector: 'datatable-body',
-    template: `
-    <table class="table"
-    [class.table-sm]="size==='small'"
-    [class.table-striped]="striped"
-    [class.table-bordered]="bordered">
-        <tbody>
-            <tr [ngClass]="createRowClassName(row,rowIndex)" *ngFor="let row of data ; let rowIndex = index"
-            (click)="selectedRow($event,rowIndex,row)"
-            [class.selected]="isSelected(row)">
-                <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
-                    <dt-checkbox [checked]="isSelected(row)" (checkedChange)="onChecked($event, rowIndex, row)"></dt-checkbox>
-                </td>
-                <td style="width:50px"  *ngIf="dt.showLineNumber">
-                   <span>{{rowIndex+1}}</span>
-                </td>
-                <ng-container *ngFor="let col of columns;let colIndex=index">
-                    <td [ngClass]="createCellClassName(getValue(col.field,row),col,colIndex)" [style.textAlign]="col.align||'left'"
-                    [style.width]="col.width + 'px'" *ngIf="!col.hidden">
-                        <ng-container *ngIf="!col.cellTempl; else cellTemp">
-                            <span *ngIf="col.formatter" [innerHtml]="col.formatter">
-                            </span>
-                            <span *ngIf="!col.formatter" class="text-truncate">
-                                  {{ getValue(col.field, row)}}
-                            </span>
-                        </ng-container>
-                        <ng-template #cellTemp [ngTemplateOutlet]="col.cellTempl"
-                            [ngTemplateOutletContext]="{ $implicit: row,rowIndex:rowIndex,column:col,columnIndex:colIndex}">
-                        </ng-template>
-                    </td>
-                </ng-container>
-            </tr>
-        </tbody>
-    </table>
-    `
+    templateUrl: './datatable-body.component.html'
 })
 export class DataTableBodyComponent implements OnInit, AfterViewInit {
 
@@ -71,14 +38,20 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
         return this.dt.columns;
     }
 
-    @Input() data: any[] = [];
+    @Input()
+    data: any[] = [];
     // tslint:disable-next-line:no-output-rename
-    @Output('on-select-row') selectRow: EventEmitter<any> = new EventEmitter<any>();
-    // tslint:disable-next-line:no-output-rename
-    // tslint:disable-next-line:no-inferrable-types
-    lastRowIndex: number = 0;
-    // tslint:disable-next-line:no-inferrable-types
-    lastColumnIndex: number = 0;
+    @Output('on-select-row')
+    selectRow: EventEmitter<any> = new EventEmitter<any>();
+
+    @Output()
+    clickCell = new EventEmitter<any>();
+
+    @Output()
+    closeCell = new EventEmitter<any>();
+
+    editRowIndex: number;
+    editColumnIndex: number;
     selectedRowIndex = -1;
     isCheckAll = false;
     tempSelections = {};
@@ -203,5 +176,43 @@ export class DataTableBodyComponent implements OnInit, AfterViewInit {
     // 添加自定义单元格或者列样式
     createCellClassName(value: any, col: any, colIndex: number) {
         return this.cellClassName ? this.cellClassName(value, col, colIndex) : '';
+    }
+
+    /* 点击单元格进入编辑 */
+    clickCellHandler(event: any, rowNumber: number, columnNumber: number, row: any, col: DataTableColumn) {
+        if (!col.editTempl) {
+            return;
+        }
+        const editId = rowNumber + col.field;
+        event.stopPropagation();
+        // 只允许有一个可编辑
+        Object.keys(this.dt.editable).forEach(ele => {
+            if (ele !== editId) {
+                this.dt.editable[ele] = false;
+            }
+        });
+        this.editRowIndex = rowNumber;
+        this.editColumnIndex = columnNumber;
+        this.dt.clickCell.emit({
+            isEditable: this.dt.editable[editId],
+            rowIndex: rowNumber,
+            columnIndex: columnNumber,
+            dataItem: row,
+            column: col,
+            tableInstance: this.dt
+        });
+    }
+
+    /* 可编辑的单元失去焦点 */
+    @HostListener('window:click', ['$event'])
+    closeCellHandler(e: any) {
+        this.dt.editable[this.editRowIndex + this.columns[this.editColumnIndex].field] = false;
+        this.dt.closeCell.emit({
+            rowIndex: this.editRowIndex,
+            columnIndex: this.editColumnIndex,
+            dataItem: this.data[this.editRowIndex],
+            column: this.columns[this.editColumnIndex],
+            formGroup: this.dt.formGroup
+        });
     }
 }

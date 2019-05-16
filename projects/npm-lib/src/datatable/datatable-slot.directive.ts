@@ -1,8 +1,16 @@
 import { Directive, TemplateRef } from '@angular/core';
 @Directive({
-    selector: '[farrisColumnTemplate]'
+    selector: '[farrisCellTemplate]'
 })
-export class FarrisColumnTemplateDirective {
+export class FarrisCellTemplateDirective {
+    constructor(public templateRef: TemplateRef<any>) {
+    }
+}
+
+@Directive({
+    selector: '[farrisEditTemplate]'
+})
+export class FarrisEditTemplateDirective {
     constructor(public templateRef: TemplateRef<any>) {
     }
 }

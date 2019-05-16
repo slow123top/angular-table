@@ -20,9 +20,9 @@ export class DTCheckboxComponent implements OnInit {
 
     ngOnInit() { }
 
-    handleClick(event) {
+    handleClick(event: any) {
         if (!this.disabled) {
-            this.checkedChange.emit({originalEvent: event, checked: !this.checked});
+            this.checkedChange.emit({ originalEvent: event, checked: !this.checked });
         }
     }
 }

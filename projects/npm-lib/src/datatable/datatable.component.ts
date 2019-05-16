@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { IdService } from './utils/id.service';
 import { sortData } from './utils/sort';
 import { PaginationSetting } from './pagination';
+import { FormGroup } from '@angular/forms';
 @Component({
     selector: 'farris-table',
     templateUrl: './datatable.component.html',
@@ -75,13 +76,22 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
     @Input()
     pagination: PaginationSetting;
 
+    /* 表格form */
+    @Input()
+    formGroup: FormGroup;
 
-    /* 分页 */
+    /* 分页广播事件  改变 页数大小 和 页索引 */
     @Output() changePage = new EventEmitter();
     @Output() changePageSize = new EventEmitter();
 
     /* 排序广播事件 */
     @Output() sortChange: EventEmitter<any> = new EventEmitter<any>();
+
+    @Output()
+    clickCell = new EventEmitter<any>();
+
+    @Output()
+    closeCell = new EventEmitter<any>();
 
     /* 表头dom */
     @ViewChild('dtHeader', { read: ElementRef }) dtHeader: ElementRef;
@@ -119,6 +129,9 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
     currentRowIndex: number;
     currentRow: any;
+
+    /* 是否可编辑 */
+    editable = {};
 
     get selections() {
         return this.dtBody.selections;
@@ -283,6 +296,16 @@ export class DataTableComponent implements OnInit, OnChanges, OnDestroy, AfterCo
 
     onCheckAll(state: boolean) {
         this.dataService.selectedAll.next(state);
+    }
+
+    /* 进入单元格编辑 formGroup赋值*/
+    editCell(rowIndex: number, column: any, formGroup?: FormGroup) {
+        let col = column;
+        if (typeof column === 'number') {
+            col = this.columns[column];
+        }
+        this.formGroup = formGroup;
+        this.editable[rowIndex + col.field] = true;
     }
 }
 

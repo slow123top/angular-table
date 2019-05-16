@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter, forwardRef } from '@angular/core';
-import { RadioService } from './radio.service';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 @Component({
     selector: 'farris-radio-group',
@@ -16,21 +15,23 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
     styles: [],
 })
 export class RadioGroupComponent implements OnInit, ControlValueAccessor {
+
     /* 初始化 radio 的值 */
     @Input()
     model: any;
 
     @Input()
-    name: string;
+    name: string = '';
 
     @Input()
     horizontal: boolean;
+
     @Output()
     modelChange = new EventEmitter<any>();
 
     subscriber: Function[] = [];
 
-    constructor(private radioSer: RadioService) {
+    constructor() {
     }
 
     ngOnInit() {
@@ -38,12 +39,9 @@ export class RadioGroupComponent implements OnInit, ControlValueAccessor {
     }
 
     changeModel(value: any) {
-        this.radioSer.changeRadioValue.subscribe(value => {
-            this.model = value;
-            this.modelChange.emit();
-            this.controlChange(value);
-            this.subscriber.forEach(ele => ele());
-        })
+        this.model = value;
+        this.modelChange.emit(this.model);
+        this.controlChange(value);
     }
     writeValue(value: any): void {
         this.model = value

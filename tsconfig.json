@@ -78,6 +78,18 @@
       ],
       "switch/*": [
         "dist/switch/*"
+      ],
+      "flex": [
+        "dist/flex"
+      ],
+      "flex/*": [
+        "dist/flex/*"
+      ],
+      "grid12": [
+        "dist/grid12"
+      ],
+      "grid12/*": [
+        "dist/grid12/*"
       ]
     }
   }

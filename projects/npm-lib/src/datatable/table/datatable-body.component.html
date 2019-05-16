@@ -1,0 +1,39 @@
+<table class="table" [class.table-sm]="size==='small'" [class.table-striped]="striped"
+    [class.table-bordered]="bordered">
+    <tbody>
+        <tr [ngClass]="createRowClassName(dataItem,rowIndex)" *ngFor="let dataItem of data ; let rowIndex = index"
+            (click)="selectedRow($event,rowIndex,dataItem)" [class.selected]="isSelected(dataItem)">
+            <td class="dt-checkbox-cell" *ngIf="!dt.singleSelect" style="width:50px">
+                <dt-checkbox [checked]="isSelected(dataItem)" (checkedChange)="onChecked($event, rowIndex, dataItem)">
+                </dt-checkbox>
+            </td>
+            <td style="width:50px" *ngIf="dt.showLineNumber">
+                <span>{{rowIndex+1}}</span>
+            </td>
+            <ng-container *ngFor="let col of columns;let colIndex=index">
+                <td [ngClass]="createCellClassName(getValue(col.field,dataItem),col,colIndex)"
+                    [style.textAlign]="col.align||'left'" [style.width]="col.width + 'px'" *ngIf="!col.hidden"
+                    (click)="clickCellHandler($event,rowIndex,colIndex,dataItem,col)">
+                    <ng-container *ngIf="(col.editTempl&&!dt.editable[rowIndex+col.field])||!col.editTempl">
+                        <ng-container *ngIf="!col.cellTempl;else cellTempl">
+                            <span *ngIf="col.formatter" [innerHtml]="col.formatter">
+                            </span>
+                            <span *ngIf="!col.formatter" class="text-truncate">
+                                {{ getValue(col.field, dataItem)}}
+                            </span>
+                        </ng-container>
+                        <ng-template #cellTempl [ngTemplateOutlet]="col.cellTempl"
+                            [ngTemplateOutletContext]="{ $implicit: dataItem,rowIndex:rowIndex,column:col,columnIndex:colIndex}">
+                        </ng-template>
+                    </ng-container>
+                    <!-- 可编辑 -->
+                    <ng-container *ngIf="col.editTempl&&dt.editable[rowIndex+col.field]">
+                        <ng-template [ngTemplateOutlet]="col.editTempl"
+                            [ngTemplateOutletContext]="{ $implicit: dataItem,rowIndex:rowIndex,column:col,columnIndex:colIndex,formGroup:dt.formGroup}">
+                        </ng-template>
+                    </ng-container>
+                </td>
+            </ng-container>
+        </tr>
+    </tbody>
+</table>

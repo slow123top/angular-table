@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Optional, ElementRef, forwardRef } from '@angular/core';
 
 import { RadioGroupComponent } from './radio-group.component';
-import { RadioService } from './radio.service';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
@@ -27,9 +26,13 @@ export class RadioComponent implements OnInit, ControlValueAccessor {
 
   /* radio 原生name 用于多个radio单选使用 */
   get name() {
-    return this.radioGroup.name || '';
+    if (this.hasParent(this.el.nativeElement)) {
+      return this.radioGroup.name;
+    }
+    return '';
   }
 
+  /* radio 值 */
   @Input()
   get model(): any {
     if (this.hasParent(this.el.nativeElement)) {
@@ -55,28 +58,25 @@ export class RadioComponent implements OnInit, ControlValueAccessor {
   disabled: boolean;
 
   nyModel: any;
-  /* 切换 */
+
   @Output()
   modelChange = new EventEmitter<any>();
 
   constructor(
     @Optional() private radioGroup: RadioGroupComponent,
-    private radioSer: RadioService,
     private el: ElementRef
   ) {
   }
 
   ngOnInit() {
-    if (this.hasParent(this.el.nativeElement)) {
-      this.model = this.radioGroup.model;
-    }
   }
+
   changeModelHandler() {
-    this.radioSer.changeRadioValue.next(this.label);
-    // this.radioGroup.changeModel(this.label);
-    // this.radioGroup.subscriber.push(() => {
-    //   this.model = this.radioGroup.model;
-    // });
+    // 父元素获取label  子元素再从父元素获取model
+    if (this.hasParent(this.el.nativeElement)) {
+      return this.radioGroup.changeModel(this.label);
+    }
+    this.model = this.label;
     this.modelChange.emit(this.model);
     this.controlChange(this.label);
   }
