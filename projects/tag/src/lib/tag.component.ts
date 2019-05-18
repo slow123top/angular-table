@@ -1,63 +1,43 @@
-import { Component, Input, ChangeDetectionStrategy, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit, EventEmitter, Output } from '@angular/core'
+import { SafeStyle, DomSanitizer } from '@angular/platform-browser'
+
 @Component({
   selector: 'ny-tag',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button class="k-button k-flat border-0" [class.k-primary]="active" (click)="changeValueHandler()" (blur)="blurHandler($event)">
+    <span [class]="'ny-tag' + (type ? ' ny-tag--' + type : '') + (size ? ' ny-tag--' + size : '')"
+      [class.is-hit]="hit">
       <ng-content></ng-content>
-    </button>
+      <i class="k-icon k-i-close-circle" *ngIf="closable" (click)="close.emit(value)"></i>
+    </span>
   `,
   styleUrls: ['./tag.component.scss']
 })
 export class TagComponent implements OnInit {
 
-  @Input()
-  active: boolean;
-  /* 标识 */
+  @Input() type: string;        // enum: primary/gray/success/warning/danger
+  @Input() closable = false;
+  @Input() hit = false;
+  @Input() color: string;
+  @Input() size: string;
+
   @Input()
   value: any;
 
-  @Input()
-  type: string;        // enum: primary/gray/success/warning/danger
-
-  @Input()
-  closable = false;
-
-  @Input()
-  hit = false;
-
-  @Input()
-  color: string;
-
-  @Input()
-  size: string;
-
   @Output()
-  close = new EventEmitter<any>();
 
-  @Output()
-  changeValue = new EventEmitter<any>();
+  close: EventEmitter<any> = new EventEmitter<any>();
+
+  tagStyles: SafeStyle;
 
   constructor(
+    private sanitizer: DomSanitizer,
   ) {
   }
 
   ngOnInit(): void {
-  }
-
-  /* change tag页签的事件 */
-  changeValueHandler() {
-    this.active = true;
-    this.changeValue.emit(this.value);
-  }
-
-  /* 按钮失去焦点 */
-  blurHandler(e: any) {
-    const srcElement = e.srcElement;
-    if (srcElement.classList) {
-
-    }
-    this.active = false;
+    const styles = `backgroundColor: ${this.color}`;
+    this.tagStyles = this.sanitizer.bypassSecurityTrustStyle(styles);
   }
 
 }
