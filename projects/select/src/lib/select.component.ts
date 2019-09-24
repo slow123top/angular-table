@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation,
+  Renderer2, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'ny-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('state', [
       state('true', style({
@@ -54,19 +58,17 @@ export class SelectComponent implements OnInit {
   show = false;
   inputWidth: number;
   inputHeight: number;
-  inputPaddingLeft: number;
 
   @Output() modelChange = new EventEmitter<any>();
 
   @Output()
   changeValue = new EventEmitter<any>();
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.inputWidth = this.inputElement.nativeElement.offsetWidth;
     this.inputHeight = this.inputElement.nativeElement.offsetHeight;
-    this.inputPaddingLeft = this.inputElement.nativeElement.style.paddingLeft;
   }
 
   enterFocus(e: any) {
@@ -98,10 +100,9 @@ export class SelectComponent implements OnInit {
         this.model.push(option);
       }
     }
-    // e.srcElement.selectionStart = 0;
-    setTimeout(() => {
-      this.updateInputSize();
-    }, 0);
+    this.changeDetectorRef.markForCheck();
+    this.changeDetectorRef.detectChanges();
+    this.updateInputSize();
   }
 
   /* 更新input尺寸 */
@@ -110,6 +111,7 @@ export class SelectComponent implements OnInit {
     const tagsContainer = this.tagsContainer.nativeElement;
     const input = this.inputElement.nativeElement;
     // tags容器高度 由所有的tag决定
+    // 如果tags不存在了  需要光标同步到原位置
     const height = tagsContainer.offsetHeight;
     if (!height) {
       this.renderer.setStyle(input, 'height', this.inputHeight + 'px');

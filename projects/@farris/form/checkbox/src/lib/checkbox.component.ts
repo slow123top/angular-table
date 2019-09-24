@@ -22,6 +22,12 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 })
 export class CheckboxComponent implements OnInit, ControlValueAccessor {
 
+  get name() {
+    if (this.hasParent(this.el.nativeElement)) {
+      return this.checkbox.name;
+    }
+    return '';
+  }
   /* model */
   @Input()
   get model() {

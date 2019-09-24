@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { DataTableModule } from '../../projects/npm-lib/src/datatable';
 
 import { DropdownModule } from '../../projects/dropdown/src/public_api';
@@ -19,6 +19,15 @@ import { AdService } from './dynamic/ad.service';
 import { AdBannerComponent } from './dynamic/ad-banner.component';
 import { TableComponent } from './table/table.component';
 import { InputComponent } from './input/input.component';
+
+import { NgZorroAntdModule, NZ_I18N, zh_CN, NZ_NOTIFICATION_CONFIG } from 'ng-zorro-antd';
+import { DataOperationComponent } from './data-operation/data-operation.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { registerLocaleData } from '@angular/common';
+import zh from '@angular/common/locales/zh';
+import { DataTableComponent } from './data-table/data-table.component';
+
+registerLocaleData(zh);
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +36,9 @@ import { InputComponent } from './input/input.component';
     HeroProfileComponent,
     AdBannerComponent,
     TableComponent,
-    InputComponent
+    InputComponent,
+    DataOperationComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +49,14 @@ import { InputComponent } from './input/input.component';
     RadioModule,
     CheckboxModule,
     TagModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+    NgZorroAntdModule,
+    BrowserAnimationsModule,
   ],
-  providers: [AdService],
+  providers: [
+    AdService,
+    { provide: NZ_I18N, useValue: zh_CN }],
   entryComponents: [HeroJobAdComponent, HeroProfileComponent],
   bootstrap: [AppComponent]
 })

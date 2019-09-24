@@ -1,0 +1,31 @@
+<div nz-row>
+    <!-- 查询 -->
+    <div nz-col nzSpan="24">
+        <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="查询条件" [(ngModel)]="value" placeholder="input search text" />
+        </nz-input-group>
+        <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch (click)="query($event)"><i nz-icon nzType="search"></i></button>
+        </ng-template>
+    </div>
+</div>
+
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <button nz-button nzType="danger" nzSearch (click)="deleteMany($event)">批量删除</button>
+    </div>
+    <div nz-col nzSpan="24">
+        <!-- 数据列表 -->
+        <data-table #dataTable [columns]="columns" [data]="data"></data-table>
+    </div>
+</div>
+
+<div nz-row>
+    <div nz-col nzSpan="24">
+        <label for="" title="用户名">用户名</label>
+        <input nz-input placeholder="请输入用户名" [(ngModel)]="username" />
+        <label for="" title="密码">密码</label>
+        <input nz-input placeholder="请输入密码" [(ngModel)]="password" />
+        <button nz-button nzType="primary" nzSearch (click)="addData($event)">添加</button>
+    </div>
+</div>

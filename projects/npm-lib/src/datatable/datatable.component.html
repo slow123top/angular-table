@@ -16,12 +16,16 @@
             <ng-template #noData [ngTemplateOutlet]="noDataText"></ng-template>
         </ng-container>
     </div>
-    <farris-page [size]="size" [total]="pagination.total" [pageIndex]="pagination.pageIndex"
-        [pageSize]="pagination.pageSize" [enableChangePageSize]="pagination.enableChangePageSize"
-        [enableChangePageIndex]="pagination.enableChangePageIndex" 
-        (changePage)="changePageHandler($event)" 
-        (changePageSize)="changePageSizeHandler($event)"
-        *ngIf="pageable">
+    <farris-page 
+    [size]="size" 
+    [total]="pagination.total" 
+    [pageIndex]="pagination.pageIndex"
+    [pageSize]="pagination.pageSize" 
+    [enableChangePageSize]="pagination.enableChangePageSize"
+    [enableChangePageIndex]="pagination.enableChangePageIndex" 
+    (changePage)="changePageHandler($event)" 
+    (changePageSize)="changePageSizeHandler($event)"
+    *ngIf="pageable">
     </farris-page>
 </div>
 <!-- <div class="farris-datatable">
