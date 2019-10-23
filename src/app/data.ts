@@ -88,3 +88,5 @@ export const info = [
     { Code: 25, Name: '珠港澳25', Age: 20, birthday: '1998-5-6', idcode: '没有权限查看', postcode: '05310000', address: '地球', correct: false },
 ];
 
+export const data = [{ "blue": "青龙" }, { "white": "白虎" }, { "red": "朱雀" }, { "black": "玄武" }];
+

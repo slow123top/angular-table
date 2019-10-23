@@ -1,0 +1,17 @@
+<div class="ny-select-container">
+    <div #tagsContainer class="ny-select-tags">
+        <ny-tag [type]="'info'" [size]="'small'" [closable]="true" [value]="option.value" *ngFor="let option of model"
+            (close)="closeTag($event)">
+            {{option.label}}
+        </ny-tag>
+    </div>
+    <input #input class="ny-select-input" type="text" [placeholder]="placeholder" (click)="enterFocus($event)"
+        (keydown)="back($event)">
+    <!-- <div class="ny-dropdown"> -->
+    <div class="ny-dropdown-arrow"></div>
+    <ul class="ny-dropdown ny-dropdown-list" [@state]="show">
+        <ng-content>
+        </ng-content>
+    </ul>
+    <!-- </div> -->
+</div>

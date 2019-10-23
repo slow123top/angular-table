@@ -1,10 +1,13 @@
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { pipe, from, of, Observable, interval, fromEvent } from 'rxjs';
+import { tap, map, concatMap, filter, mergeMap } from 'rxjs/operators';
+
 import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
-import { AdItem } from './dynamic/ad-item';
-import { AdService } from './dynamic/ad.service';
-import { HeroProfileComponent } from './dynamic/hero-profile.component';
 import { info } from './data';
 import { PaginationSetting } from '../../projects/npm-lib/src/datatable/pagination';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,9 +21,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   radioValues = [{ text: '男', value: 'male' }, { text: '女', value: 'female' }];
   pagination: PaginationSetting;
 
-  ads: AdItem[];
   tableInstance: any;
-  constructor(private dateSer: DateTimeHelperService, private numberSer: NumberHelperService, private adService: AdService) {
+  constructor(
+    private dateSer: DateTimeHelperService,
+    private numberSer: NumberHelperService,
+    private http: HttpClient
+  ) {
+
     this.pagination = {
       total: info.length,
       pageIndex: 3,
@@ -49,7 +56,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   ];
   data: any;
   ngOnInit() {
-    this.ads = [new AdItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })];
 
   }
   ngAfterViewInit() {
@@ -127,4 +133,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     console.log(this.tableInstance);
   }
 
+  request(e: any) {
+    e.stopPropagation();
+    // 请求node.js服务
+    this.http.get('http://localhost:8080/delete', { responseType: 'json' }).subscribe((res) => {
+      console.log(res);
+    });
+    // rxjs  demo   new observable
+  }
 }

@@ -1,0 +1,22 @@
+<nz-table #basicTable [nzData]="data" [nzSize]="'small'" [nzTitle]="'数据列表'">
+  <thead>
+    <tr>
+      <th nzShowCheckbox [(nzChecked)]="isAllChecked" [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"></th>
+      <th *ngFor="let column of columns">
+        {{column.title}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dataItem of basicTable.data">
+      <td nzShowCheckbox [(nzChecked)]="checkedIds[dataItem.id]" (nzCheckedChange)="refreshStatus()"></td>
+      <td *ngFor="let key of getDataItemKeys(dataItem)">
+        {{dataItem[key]}}
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+<button (click)="linkDashboard()">
+  跳转到dashboard
+</button>

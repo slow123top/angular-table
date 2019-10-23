@@ -1,0 +1,22 @@
+<nz-spin [nzSpinning]="isSpinning">
+    <div class="datatable-box" nz-row>
+        <div nz-col nzSpan="1">
+            <button nz-button nzType="danger" nzSize="small" [disabled]="!isDelete()" nzSearch
+                (click)="delete($event)">删除</button>
+        </div>
+        <div nz-col nzSpan="1">
+            <button nz-button nzType="info" nzSize="small" nzSearch>更新</button>
+        </div>
+    </div>
+    <div class="datatable-box" nz-row nzGutter="16" nzType="flex" nzJustify="center">
+        <div nz-col nzSpan="12">
+            <!-- 数据列表 -->
+            <data-table #dataTable [columns]="columns"></data-table>
+        </div>
+
+        <div nz-col nzSpan="12">
+            <!-- 数据列表 -->
+            <data-form #dataForm></data-form>
+        </div>
+    </div>
+</nz-spin>
