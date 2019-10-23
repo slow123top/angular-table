@@ -14,19 +14,9 @@
       <td *ngFor="let key of getDataItemKeys(dataItem)">
         {{dataItem[key]}}
       </td>
-      <td>
-        <div nz-row>
-          <div nz-col nzSpan="4">
-            <button nz-button nzType="success" nzSearch [nzSize]="'small'" (click)="save($event,dataItem)">保存</button>
-          </div>
-          <div nz-col nzSpan="4">
-            <button nz-button nzType="primary" nzSearch [nzSize]="'small'" (click)="update($event,dataItem)">修改</button>
-          </div>
-          <div nz-col nzSpan="4">
-            <button nz-button nzType="danger" nzSearch [nzSize]="'small'" (click)="delete($event,dataItem)">删除</button>
-          </div>
-        </div>
-      </td>
     </tr>
   </tbody>
 </nz-table>
+<button (click)="linkDashboard()">
+  跳转到dashboard
+</button>

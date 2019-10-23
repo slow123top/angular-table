@@ -1,0 +1,139 @@
+<nz-layout>
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="logo"></div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-submenu>
+        <span title><i nz-icon nzType="dashboard"></i><span>Dashboard</span></span>
+        <ul>
+          <li nz-menu-item (click)="linkMainControl($event)">主控台</li>
+          <li nz-menu-item>监控页</li>
+          <li nz-menu-item>工作台</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="表单页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>表单页面</span></span>
+        <ul>
+          <li nz-menu-item (click)="linkMainControl($event)">基础表单</li>
+          <li nz-menu-item>高级表单</li>
+          <li nz-menu-item>分布表单</li>
+          <li nz-menu-item>表单详情</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="列表页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>列表页面</span></span>
+
+        <ul>
+          <li nz-menu-item>基础列表</li>
+          <li nz-menu-item>卡片列表</li>
+          <li nz-menu-item>用户列表</li>
+          <li nz-menu-item>商品列表</li>
+          <li nz-menu-item>查询表格</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="搜索页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>搜索页面</span></span>
+
+        <ul>
+          <li nz-menu-item>搜索列表（文章）</li>
+          <li nz-menu-item>搜索列表（项目）</li>
+          <li nz-menu-item>搜索列表（应用）</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="详情页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>详情页面</span></span>
+
+        <ul>
+          <li nz-menu-item>基础详情页</li>
+          <li nz-menu-item>高级详情页</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="结果页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>结果页面</span></span>
+
+        <ul>
+          <li nz-menu-item>成功页</li>
+          <li nz-menu-item>失败页</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="异常页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>异常页面</span></span>
+
+        <ul>
+          <li nz-menu-item>403</li>
+          <li nz-menu-item>404</li>
+          <li nz-menu-item>500</li>
+        </ul>
+      </li>
+      <li nz-submenu nzTitle="设置页面" nzIcon="appstore">
+        <span title><i nz-icon nzType="appstore"></i><span>设置页面</span></span>
+
+        <ul>
+          <li nz-menu-item>个人中心</li>
+          <li nz-menu-item>个人设置</li>
+        </ul>
+      </li>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <!-- 收折图标 -->
+      <div nz-row nzType="flex" nzJustify="space-between" nzGutter="16">
+        <div nz-col nzSpan="1">
+          <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+            (click)="isCollapsed = !isCollapsed"></i>
+        </div>
+        <div nz-col nzSpan="4">
+          <!-- 路径 -->
+          <nz-breadcrumb>
+            <nz-breadcrumb-item>User</nz-breadcrumb-item>
+            <nz-breadcrumb-item>Bill</nz-breadcrumb-item>
+          </nz-breadcrumb>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-input-group nzSearch [nzAddOnAfter]="suffixIconButton">
+            <input type="text" nz-input placeholder="搜索" />
+          </nz-input-group>
+          <ng-template #suffixIconButton>
+            <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+          </ng-template>
+        </div>
+        <div nz-col nzSpan="4">
+          <!-- 提示 -->
+          <nz-badge [nzCount]="5" class="nz-header-right">
+            <i nz-icon nzSize="large" [nzType]="'bell'"></i>
+          </nz-badge>
+          <!-- 头像 -->
+          <!-- <span nz-dropdown [nzDropdownMenu]="menu"> -->
+          <nz-avatar nzSrc="assets/img/huyuyang.jpg" class="nz-header-right">
+
+          </nz-avatar>
+          <!-- </span> -->
+          <!-- <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item>
+                <i nz-icon [nzType]="'user'"></i>
+                个人中心
+              </li>
+              <li nz-menu-item>
+                设置
+              </li>
+              <li nz-menu-item>
+                退出登录
+              </li>
+            </ul>
+          </nz-dropdown-menu> -->
+          <i nz-icon nzSize="large" [nzType]="'setting'" class="nz-header-right"></i>
+
+        </div>
+      </div>
+    </nz-header>
+    <br>
+    <nz-content>
+      <!-- 路由到页面内容 -->
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+    <!-- <nz-footer>千投量化</nz-footer> -->
+  </nz-layout>
+</nz-layout>

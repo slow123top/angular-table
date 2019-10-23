@@ -1,8 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd';
 
-import { DataServiceService } from '../data-service.service';
+import { AppService } from '../app.service';
+import { mergeMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 interface Column {
   // 列字段
   field: string;
@@ -38,12 +42,13 @@ export class DataTableComponent implements OnInit {
   checkedIds: { [key: string]: boolean } = {};
 
   constructor(
-    private http: HttpClient,
-    private messager: NzMessageService,
-    private dataService: DataServiceService
+    private appSer: AppService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.add();
+    this.delete();
   }
 
   /* 每条数据的key值 */
@@ -59,6 +64,7 @@ export class DataTableComponent implements OnInit {
       this.checkedIds[dataItem.id] = value;
     });
     this.refreshStatus();
+
   }
 
 
@@ -69,8 +75,6 @@ export class DataTableComponent implements OnInit {
 
     this.isIndeterminate = this.data.some(dataItem => this.checkedIds[dataItem.id]) && !this.isAllChecked;
 
-    // this.dataService.selectItem.next(this.getCheckedIds());
-
   }
 
   /* 获取选中的数据id组合 */
@@ -78,50 +82,92 @@ export class DataTableComponent implements OnInit {
     return Object.keys(this.checkedIds).filter(ele => this.checkedIds[ele]) || [];
   }
 
-  /* 保存 */
-  save(e: MouseEvent, dataItem: any) {
 
-  }
-
-  /* 修改 */
-  update(e: MouseEvent, dataItem: any) {
-
-  }
-
-  /* 删除 */
-  delete(e: MouseEvent, dataItem: any) {
-    const currentId = dataItem.id;
-    const headers = new HttpHeaders().set(
-      'Access-Control-Allow-Origin',
-      '*'
-    );
-    this.http.post(
-      'http://localhost:8080/delete',
-      currentId,
-      { headers }).subscribe(
-        {
-          next: (res: any) => {
-            this.messager.success(
-              res
-            );
-
-          },
-          error: (err: HttpErrorResponse) => {
-            console.log(err);
-            // this.notify.error(
-            //   '错误信息',
-            //   err.message
-            // );
-          },
-          complete: () => {
-
-            console.log('删除成功');
-            // this.notify.success(
-            //   '成功信息',
-            //   '已获取数据'
-            // );
-          }
+  /* 增加数据 */
+  add() {
+    this.appSer.add$.pipe(
+      mergeMap((res) => {
+        return this.appSer.postReq$('POST', 'insert', res);
+      }),
+      mergeMap((res: any) => {
+        if (res.status === 'SUCCESS') {
+          return this.appSer.postReq$('GET', 'query');
+        } else {
+          of(res);
         }
-      );
+      }))
+      .subscribe((res: any) => {
+        if (res.status === 'SUCCESS') {
+          this.data = res.data.map((ele: any) => {
+            return {
+              id: ele.id,
+              name: ele.name,
+              password: ele.password
+            };
+          });
+        }
+      });
+  }
+
+  /* 删除数据 */
+  delete() {
+
+    this.appSer.delete$.pipe(
+      mergeMap(res => {
+        return this.appSer.postReq$('POST', 'deleteMany', res);
+      }),
+      mergeMap((res: any) => {
+        if (res.status === 'SUCCESS') {
+          this.getCheckedIds().forEach(ele => {
+            this.checkedIds[ele] = false;
+          });
+          this.refreshStatus();
+          return this.appSer.postReq$('GET', 'query');
+        }
+      })
+    )
+      .subscribe((res: any) => {
+        if (res.status === 'SUCCESS') {
+          this.data = res.data.map((ele: any) => {
+            return {
+              id: ele.id,
+              name: ele.name,
+              password: ele.password
+            };
+          });
+        }
+      });
+  }
+
+  /* 更改数据 */
+  update() {
+
+  }
+
+  /* 查询数据 */
+  query() {
+    this.appSer.query$.subscribe(res => {
+      if (res.status === 'SUCCESS') {
+        if (res.data.length) {
+          this.data = res.data.map((ele: any) => {
+            return {
+              id: ele.id,
+              name: ele.name,
+              password: ele.password
+            };
+          });
+        }
+        // this.isSpinning = false;
+      } else {
+        //   this.messager.error(
+        //     res.message
+        //   );
+        // }
+      }
+    });
+  }
+
+  linkDashboard() {
+    this.router.navigate(['/dashboard', 111]);
   }
 }

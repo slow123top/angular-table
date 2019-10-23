@@ -1,0 +1,139 @@
+.main-control-div {
+    margin-top: .5rem;
+
+    & p {
+        margin: 0;
+    }
+
+    & p.total-text {
+        font-size: 30px;
+    }
+
+    & .left-text {
+        float: left;
+    }
+
+    & .right-text {
+        float: right;
+    }
+
+    & .size-32 {
+        font-size: 2rem;
+    }
+}
+
+.chart {
+    height: 80px;
+}
+
+.male-percent {
+    margin: 2px 0;
+    opacity: .75;
+}
+
+.male,
+.female {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.anticon.anticon-man {
+    color: rgb(51, 153, 255);
+
+    &+div {
+        color: rgb(51, 153, 255);
+
+    }
+}
+
+.anticon.anticon-woman {
+    color: rgb(190, 107, 224);
+
+    &+div {
+        color: rgb(190, 107, 224);
+
+    }
+}
+
+.anticon.anticon-caret-up {
+    color: #f5222d;
+}
+
+.anticon.anticon-caret-down {
+    color: #52c41a;
+}
+
+.anticon.anticon-team {
+    color: rgb(105, 192, 255);
+}
+
+.anticon.anticon-bar-chart {
+    color: rgb(149, 222, 100);
+}
+
+.anticon.anticon-shopping-cart {
+    color: rgb(255, 156, 110);
+}
+
+.anticon.anticon-calendar {
+    color: rgb(179, 127, 235);
+}
+
+.anticon.anticon-account-book {
+    color: rgb(255, 214, 102);
+}
+
+.anticon.anticon-mail {
+    color: rgb(92, 219, 211);
+}
+
+.anticon.anticon-tags {
+    color: rgb(255, 133, 192)
+}
+
+.anticon.anticon-control {
+    color: rgb(255, 192, 105)
+}
+
+.anticon.anticon-area-chart {
+    color: #007bff;
+
+    &+span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+.anticon.anticon-search {
+    color: rgb(114, 46, 209);
+}
+
+.anticon.anticon-percentage {
+    color: rgb(250, 173, 20);
+
+    &+span {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+
+.anticon-span {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+
+    &>.anticon {
+        position: absolute;
+        top: 5px;
+        left: 5px
+    }
+
+    &+span {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 3px;
+    }
+}

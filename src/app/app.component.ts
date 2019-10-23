@@ -5,9 +5,6 @@ import { pipe, from, of, Observable, interval, fromEvent } from 'rxjs';
 import { tap, map, concatMap, filter, mergeMap } from 'rxjs/operators';
 
 import { DateTimeHelperService, NumberHelperService } from '@farris/ui';
-import { AdItem } from './dynamic/ad-item';
-import { AdService } from './dynamic/ad.service';
-import { HeroProfileComponent } from './dynamic/hero-profile.component';
 import { info } from './data';
 import { PaginationSetting } from '../../projects/npm-lib/src/datatable/pagination';
 
@@ -24,14 +21,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   radioValues = [{ text: '男', value: 'male' }, { text: '女', value: 'female' }];
   pagination: PaginationSetting;
 
-  ads: AdItem[];
   tableInstance: any;
   constructor(
     private dateSer: DateTimeHelperService,
     private numberSer: NumberHelperService,
-    private adService: AdService,
     private http: HttpClient
   ) {
+
     this.pagination = {
       total: info.length,
       pageIndex: 3,
@@ -60,7 +56,6 @@ export class AppComponent implements OnInit, AfterViewInit {
   ];
   data: any;
   ngOnInit() {
-    this.ads = [new AdItem(HeroProfileComponent, { name: 'Bombasto', bio: 'Brave as they come' })];
 
   }
   ngAfterViewInit() {

@@ -1,0 +1,213 @@
+<div class="main-control-div" nz-row nzGutter="16" nzType="flex" nzAlign="middle">
+    <div nz-col nzSpan="6">
+        <nz-card nzTitle="访问量" [nzExtra]="extraTemplate1" nzSize="small" [nzHoverable]="true">
+            <p class="total-text">25,848</p>
+            <p>
+                日同比 12.5%
+                <i nz-icon nzType="caret-up" nzTheme="outline"></i>
+                &nbsp;
+                周同比5%
+                <i nz-icon nzType="caret-down" nzTheme="outline"></i>
+            </p>
+            <nz-divider></nz-divider>
+            <div>
+                <div class="left-text">总访问量</div>
+                <div class="right-text">180万</div>
+            </div>
+        </nz-card>
+        <ng-template #extraTemplate1>
+            <nz-tag [nzColor]="'blue'">日</nz-tag>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzTitle="销售额" [nzExtra]="extraTemplate2" nzSize="small" [nzHoverable]="true">
+            <p class="total-text">¥12,000</p>
+            <nz-progress [nzPercent]="70"></nz-progress>
+            <nz-divider></nz-divider>
+            <div>
+                <div class="left-text">总销售额</div>
+                <div class="right-text">79万</div>
+            </div>
+        </nz-card>
+        <ng-template #extraTemplate2>
+            <nz-tag [nzColor]="'green'">月</nz-tag>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzTitle="订单量" [nzExtra]="extraTemplate3" nzSize="small" [nzHoverable]="true">
+            <p class="total-text">1,823</p>
+            <p>订单数量</p>
+            <nz-divider></nz-divider>
+            <div>
+                <div class="left-text">转化率</div>
+                <div class="right-text">56%</div>
+            </div>
+        </nz-card>
+        <ng-template #extraTemplate3>
+            <nz-tag [nzColor]="'red'">周</nz-tag>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzTitle="新增用户" [nzExtra]="extraTemplate4" nzSize="small" [nzHoverable]="true">
+            <nz-statistic [nzValue]="11.28 | number: '1.0-2'" [nzTitle]="'Active'" [nzPrefix]="prefixTplOne"
+                [nzSuffix]="'%'" [nzValueStyle]="{ color: '#3F8600' }">
+            </nz-statistic>
+            <nz-divider></nz-divider>
+            <div>
+                <div class="left-text">总用户</div>
+                <div class="right-text">12596人</div>
+            </div>
+            <ng-template #prefixTplTwo><i nz-icon nzType="arrow-down"></i></ng-template>
+        </nz-card>
+        <ng-template #extraTemplate4>
+            <nz-tag [nzColor]="'yellow'">年</nz-tag>
+        </ng-template>
+    </div>
+</div>
+
+<!--  -->
+<div class="main-control-div" nz-row nzGutter="16">
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="team" nzTheme="outline"></i>
+                <p>用户</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="bar-chart" nzTheme="outline"></i>
+                <p>分析</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="shopping-cart" nzTheme="outline"></i>
+                <p>商品</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="calendar" nzTheme="outline"></i>
+                <p>订单</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="account-book" nzTheme="outline"></i>
+                <p>票据</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="mail" nzTheme="fill"></i>
+                <p>消息</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="tags" nzTheme="fill"></i>
+                <p>标签</p>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="3">
+        <nz-card nzSize="small" [nzHoverable]="true">
+            <div style="text-align: center;">
+                <i class="size-32" nz-icon nzType="control" nzTheme="fill"></i>
+                <p>配置</p>
+            </div>
+        </nz-card>
+    </div>
+</div>
+
+<div class="main-control-div" nz-row>
+    <div nz-col nzSpan="24">
+        <nz-card [nzTitle]="echartsTemplate" [nzExtra]="timeTemplate" nzSize="small" [nzHoverable]="true">
+            <div echarts [options]="chartOption" class="chart"></div>
+        </nz-card>
+        <ng-template #echartsTemplate>
+            <span class="anticon-span" style="background:rgb(230, 247, 255)">
+                <i nz-icon nzType="area-chart" nzTheme="outline"></i>
+            </span>
+            <span>访问量</span>
+        </ng-template>
+        <ng-template #timeTemplate>
+            <nz-range-picker [(ngModel)]="dateRange"></nz-range-picker>
+        </ng-template>
+    </div>
+</div>
+
+
+<div class="main-control-div" nz-row nzGutter="16">
+    <div nz-col nzSpan="12">
+        <nz-card [nzTitle]="searchTemplate" nzSize="small" [nzHoverable]="true">
+            <nz-table #basicTable nzSize="small" [nzData]="listOfData">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Address</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of basicTable.data">
+                        <td>{{ data.name }}</td>
+                        <td>{{ data.age }}</td>
+                        <td>{{ data.address }}</td>
+                        <td>
+                            <a>Action 一 {{ data.name }}</a>
+                            <nz-divider nzType="vertical"></nz-divider>
+                            <a>Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+        <ng-template #searchTemplate>
+            <span class="anticon-span" style="background:rgb(249, 240, 255)">
+                <i nz-icon nzType="search" nzTheme="outline"></i>
+            </span>
+            <span>热门搜索</span>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="12">
+        <nz-card [nzTitle]="percentTemplate" nzSize="small" [nzHoverable]="true">
+            <div nz-row nzGutter="16" nzType="flex" nzJustify="center">
+                <div class="male" nz-col nzSpan="12">
+                    <i nz-icon nzType="man" nzTheme="outline"></i>
+                    <div>60%</div>
+                </div>
+                <div class="female" nz-col nzSpan="12">
+                    <i nz-icon nzType="woman" nzTheme="outline"></i>
+                    <div>40%</div>
+                </div>
+            </div>
+            <div nz-row nzGutter="4">
+                <div class="male-percent" nz-col nzSpan="1" *ngFor="let item of total" [style.height]="'28px'">
+                    <div [style.background]="item.color" [style.height]="'100%'" [style.borderRadius]="'2px'">
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+        <ng-template #percentTemplate>
+            <span class="anticon-span" style="background:rgb(255, 251, 230)">
+                <i nz-icon nzType="percentage" nzTheme="outline"></i>
+            </span>
+            <span>用户比例</span>
+        </ng-template>
+    </div>
+</div>
