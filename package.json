@@ -35,7 +35,7 @@
     "echarts": "^4.4.0",
     "hyy-angular-table": "0.0.2",
     "iconfont": "^0.3.1",
-    "lodash-es": "^4.17.11",
+    "lodash-es": "^4.17.14",
     "material-design-icons": "^3.0.1",
     "ng-zorro-antd": "^7.5.1",
     "ngx-echarts": "^3.2.0",
