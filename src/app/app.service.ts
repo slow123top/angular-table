@@ -1,6 +1,9 @@
+import { ApplicationRef, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { SwUpdate } from '@angular/service-worker';
+import { Subject, interval, concat } from 'rxjs';
+import { first } from 'rxjs/operators';
+
 @Injectable({
     providedIn: 'root'
 }
@@ -17,9 +20,14 @@ export class AppService {
     query$ = new Subject<any>();
 
     constructor(
-        private http: HttpClient
+        private http: HttpClient,
+        appRef: ApplicationRef,
+        updates: SwUpdate
     ) {
-
+        // updates.available.subscribe(event => {
+        //     console.log(event);
+        //     updates.activateUpdate().then(() => document.location.reload());
+        // });
     }
 
     /* 请求 */

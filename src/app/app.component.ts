@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { SwUpdate } from '@angular/service-worker';
 
 import { pipe, from, of, Observable, interval, fromEvent } from 'rxjs';
 import { tap, map, concatMap, filter, mergeMap } from 'rxjs/operators';
@@ -25,7 +26,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private dateSer: DateTimeHelperService,
     private numberSer: NumberHelperService,
-    private http: HttpClient
+    private http: HttpClient,
+    updates: SwUpdate
   ) {
 
     this.pagination = {
@@ -37,6 +39,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     };
 
     this.loadData();
+
+    updates.available.subscribe(event => {
+      console.log(event);
+      // updates.activateUpdate().then(() => document.location.reload());
+    });
   }
   title = 'ng-table';
   columns = [

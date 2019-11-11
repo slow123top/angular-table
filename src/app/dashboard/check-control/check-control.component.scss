@@ -1,0 +1,213 @@
+.anticon-span-32 {
+    display: inline-block;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+
+    &>.anticon {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        font-size: 16px;
+    }
+
+
+    &>.anticon-team {
+        color: rgb(64, 169, 255);
+    }
+
+    &>.locate {
+        color: rgb(146, 84, 222);
+    }
+
+    &>.plane {
+        color: rgb(255, 169, 64);
+    }
+
+    &>.funnel {
+        color: rgb(115, 209, 61)
+    }
+
+    &~div:first-of-type {
+        font-weight: bold;
+        font-size: 2rem;
+    }
+}
+
+.top-one {
+    background: rgb(230, 247, 255);
+}
+
+.top-two {
+    background: rgb(249, 240, 255);
+
+    &~div:last-of-type {
+        font-weight: 600;
+        color: #19be6b;
+        @extend .common;
+    }
+}
+
+.top-three {
+    background: rgb(255, 247, 230);
+
+    &~div:last-of-type {
+        font-weight: 600;
+        color: #ed4014;
+        @extend .common;
+    }
+
+}
+
+.top-four {
+    background: rgb(246, 255, 237);
+
+    &~div:last-of-type {
+        font-weight: 600;
+        color: #19be6b;
+        @extend .common;
+    }
+}
+
+.check-control-div {
+    margin-top: .5rem;
+}
+
+.common {
+    &>span:first-of-type {
+        position: relative;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+    }
+
+    & i {
+        font-size: 12px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    &>span:last-of-type {
+        font-size: 16px;
+        display: inline-block;
+        margin-left: 5px;
+    }
+}
+
+.anticon-span {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+
+    &>.anticon {
+        position: absolute;
+        top: 5px;
+        left: 5px
+    }
+
+    &+span {
+        display: inline-block;
+        vertical-align: top;
+        margin-left: 3px;
+    }
+}
+
+.anticon-span.chart {
+    background: rgb(230, 247, 255);
+
+    &>.anticon {
+        color: #007bff;
+    }
+}
+
+.anticon-span.progress {
+    background: rgb(255, 247, 230);
+
+    &>.anticon {
+        color: rgb(250, 140, 22);
+    }
+}
+
+.anticon-span.cafe {
+    background: rgb(255, 240, 246);
+
+    &>.anticon {
+        color: rgb(235, 47, 150);
+    }
+}
+
+.anticon-span.thumbs {
+    background: rgb(255, 251, 230);
+
+    &>.anticon {
+        color: rgb(255, 197, 61);
+    }
+}
+
+.anticon-span.happy {
+    background: rgb(240, 245, 255);
+
+    &>.anticon {
+        color: rgb(89, 126, 247);
+    }
+}
+
+.anticon-span.done-all {
+    background: rgb(255, 241, 240);
+
+    &>.anticon {
+        color: rgb(255, 77, 79);
+    }
+}
+
+
+.div-progress-left {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    float: left;
+
+    & .big-progress {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
+    & .middle-progress {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+    }
+
+    & .small-progress {
+        position: absolute;
+        top: 35px;
+        left: 35px;
+    }
+}
+
+.satify-div {
+    padding: .8rem;
+    text-align: center;
+
+    & span {
+        display: inline-block;
+        margin-right: 10rem;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    & .positive-img {
+        display: inline-block;
+        height: 50px;
+    }
+
+    & .nagetive-img {
+        display: inline-block;
+        height: 50px;
+    }
+}

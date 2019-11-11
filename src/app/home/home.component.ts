@@ -34,8 +34,25 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/dashboard/main-control']);
   }
 
+  linkCheckControl(e: MouseEvent) {
+    e.stopPropagation();
+    this.router.navigate(['/dashboard/check-control']);
+  }
+
   linkFormPage(e: MouseEvent) {
     this.router.navigate(['form-page/base-form']);
+  }
+
+  linkSuccessPage(e: MouseEvent) {
+    this.router.navigate(['result-page/success-page']);
+  }
+
+  linkFailPage(e: MouseEvent) {
+    this.router.navigate(['result-page/fail-page']);
+  }
+
+  link404page(e: MouseEvent) {
+    this.router.navigate(['abnormal-page/page-404']);
   }
 
 }

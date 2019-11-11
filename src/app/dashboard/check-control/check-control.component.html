@@ -1,24 +1,235 @@
-<div nz-row>
-    <div nz-col nzSpan="6"></div>
-    <div nz-col nzSpan="6"></div>
-    <div nz-col nzSpan="6"></div>
-    <div nz-col nzSpan="6"></div>
+<div nz-row nzGutter="16">
+    <div nz-col nzSpan="6">
+        <nz-card nzSize="small" [nzHoverable]="true" [nzBodyStyle]="cardBodyStyle">
+            <span class="anticon-span-32 top-one">
+                <i nz-icon nzType="team" nzTheme="outline"></i>
+            </span>
+            <div>21.2k</div>
+            <div>总访问人数</div>
+            <div style="width: 100px;display: inline-block;">
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+                <nz-avatar nzSize="small" nzIcon="user"
+                    nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" style="margin-left: -10px;">
+                </nz-avatar>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzSize="small" [nzHoverable]="true" [nzBodyStyle]="cardBodyStyle">
+            <span class="anticon-span-32 top-two">
+                <i nz-icon class="locate">
+                    <svg t="1571888819236" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        p-id="767">
+                        <path
+                            d="M512 352c-88.008 0-160.002 72-160.002 160 0 88.008 71.994 160 160.002 160 88.01 0 159.998-71.992 159.998-160 0-88-71.988-160-159.998-160z m381.876 117.334c-19.21-177.062-162.148-320-339.21-339.198V64h-85.332v66.134c-177.062 19.198-320 162.136-339.208 339.198H64v85.334h66.124c19.208 177.062 162.144 320 339.208 339.208V960h85.332v-66.124c177.062-19.208 320-162.146 339.21-339.208H960v-85.334h-66.124zM512 810.666c-164.274 0-298.668-134.396-298.668-298.666 0-164.272 134.394-298.666 298.668-298.666 164.27 0 298.664 134.396 298.664 298.666S676.27 810.666 512 810.666z"
+                            fill="" p-id="768">
+                        </path>
+                    </svg>
+                </i>
+            </span>
+            <div>4.6k</div>
+            <div>点击量（近30天）</div>
+            <div>
+                <span>
+                    <i nz-icon nzType="up" nzTheme="outline"></i>
+                </span>
+                <span>37.9%</span>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzSize="small" [nzHoverable]="true" [nzBodyStyle]="cardBodyStyle">
+            <span class="anticon-span-32 top-three">
+                <i nz-icon class="plane">
+                    <svg t="1571901506060" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        p-id="2027">
+                        <path
+                            d="M917.452847 66.11786c10.292414 7.482415 14.502295 17.463744 12.631692 29.938869L810.328038 814.593689c-1.561565 9.041934-6.550183 16.060791-14.969946 21.049409-4.368494 2.494821-9.201569 3.741207-14.502295 3.741207-3.429099 0-7.1744-0.779759-11.227716-2.338255l-246.528789-100.57565L383.697357 889.439328c-5.615904 6.551206-12.941753 9.825786-21.988804 9.825786-4.365424 0-7.951089-0.623193-10.756995-1.870604-5.928013-2.182712-10.604522-5.848195-14.034645-10.992355-3.433192-5.148253-5.148253-10.840906-5.148253-17.076934L331.768661 657.880485 110.970906 567.597249c-11.540847-4.369517-17.776875-12.942777-18.712177-25.731034-0.935302-12.164041 4.053316-21.361517 14.969946-27.600615L885.64235 65.181535C896.558981 58.634422 907.158387 58.94653 917.452847 66.11786L917.452847 66.11786zM757.464039 767.345596l103.385649-618.895589L190.028473 535.319102l157.177785 64.088644 403.711691-298.925137L527.308149 673.318082 757.464039 767.345596zM757.464039 767.345596"
+                            p-id="2028">
+
+                        </path>
+                    </svg>
+                </i>
+            </span>
+            <div>936.0</div>
+            <div>到达量（近30天）</div>
+            <div>
+                <span>
+                    <i nz-icon nzType="down" nzTheme="outline"></i>
+                </span>
+                <span>12.4%</span>
+            </div>
+        </nz-card>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card nzSize="small" [nzHoverable]="true" [nzBodyStyle]="cardBodyStyle">
+            <span class="anticon-span-32 top-four">
+                <i nz-icon class="funnel">
+                    <svg t="1571904738610" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        p-id="2049">
+                        <path
+                            d="M416 800h192v-95.988h-192V800zM64 224v95.988h896V224H64z m160 337.566h576v-99.11H224v99.11z"
+                            p-id="2050"></path>
+                    </svg>
+                </i>
+            </span>
+            <div>43.4%</div>
+            <div>转化率（近30天）</div>
+            <div>
+                <span>
+                    <i nz-icon nzType="up" nzTheme="outline"></i>
+                </span>
+                <span>65.8%</span>
+            </div>
+        </nz-card>
+    </div>
 </div>
 
-<div nz-row>
-    <div nz-col nzSpan="18"></div>
+<div class="check-control-div" nz-row nzGutter="16">
+    <div nz-col nzSpan="18">
+        <nz-card [nzTitle]="echartsTemplate" nzSize="small" [nzHoverable]="true">
+            <div echarts [options]="chartOption" class="chart"></div>
+        </nz-card>
+        <ng-template #echartsTemplate>
+            <span class="anticon-span chart">
+                <i nz-icon nzType="line-chart" nzTheme="outline"></i>
+            </span>
+            <span>最近一小时访问情况</span>
+        </ng-template>
+    </div>
     <div nz-col nzSpan="6">
         <div nz-row>
-            <div nz-col nzSpan="12"></div>
-            <div nz-col nzSpan="12"></div>
+            <div nz-col nzSpan="24">
+                <nz-card [nzTitle]="timeoutTitle" nzSize="small" [nzHoverable]="true">
+                    <nz-countdown [nzValue]="deadline" [nzTitle]="'Million Seconds'" [nzFormat]="'HH:mm:ss:SSS'">
+                    </nz-countdown>
+                    <nz-countdown [nzValue]="deadline" [nzTitle]="'Day Level'" [nzFormat]="'D 天 H 时 m 分 s 秒'">
+                    </nz-countdown>
+                </nz-card>
+                <ng-template #timeoutTitle>
+                    <span class="anticon-span progress">
+                        <i nz-icon nzType="bulb" nzTheme="outline"></i>
+                    </span>
+                    <span>最近一小时访问情况</span>
+                </ng-template>
+            </div>
+            <div class="check-control-div" nz-col nzSpan="24">
+                <nz-card [nzTitle]="progressTitle" nzSize="small" [nzHoverable]="true">
+                    <div class="div-progress-left">
+                        <nz-progress class="big-progress" [nzPercent]="85" nzType="circle" [nzWidth]="120"
+                            [nzFormat]="progressFormat">
+                        </nz-progress>
+                        <nz-progress class="middle-progress" [nzPercent]="65" nzType="circle" [nzWidth]="100"
+                            [nzFormat]="progressFormat" nzStatus="success">
+                        </nz-progress>
+                        <nz-progress class="small-progress" [nzPercent]="45" nzType="circle" [nzWidth]="80"
+                            [nzFormat]="progressFormat" nzStrokeColor="#ff0000">
+                        </nz-progress>
+                    </div>
+                    <div class="div-progress-right">
+
+                    </div>
+                </nz-card>
+                <ng-template #progressTitle>
+                    <span class="anticon-span cafe">
+                        <i nz-icon>
+                            <svg t="1572347958276" viewBox="0 0 1024 1024" version="1.1"
+                                xmlns="http://www.w3.org/2000/svg" p-id="5049">
+                                <path
+                                    d="M739.4 808H220.2c-15.2 0-28.2 11.6-28.8 26.8-0.8 16 12 29.2 28 29.2h519.2c15.2 0 28.2-11.6 28.8-26.8 0.6-16-12.2-29.2-28-29.2z m59-571c0.2-21.6-8.4-41.8-24.4-56.8-14.4-13.2-33.4-20.2-53-20.2H173.6c-19.8 0-39.4 7.2-53.8 20.8-16.2 15.4-24.8 36.4-23.8 58.6C100.8 344 116.6 436 143.6 512.6c22 63.2 51.6 116.2 87.8 157.8 63.6 73.2 137.6 97.6 155.8 97.6h120.2c11 0 50-14.4 88.4-39 44.8-28.8 84.8-73.4 116.2-129.2 4 0.2 8 0.4 11.8 0.4 54.4 0 105.6-19.4 144.2-54.8 38.8-35.6 60.2-82.8 60.2-133.2-0.2-77.8-51.8-147-129.8-175.2z m-59.4 306.2c28.4-69 47.2-152 55.6-246.8 0 0 0-0.2 0.2 0 20.6 10 38.2 24.4 51.6 41.8 16.8 21.8 25.6 47.4 25.6 74 0 68-58.4 124.2-133 131z"
+                                    p-id="5050"></path>
+                            </svg>
+                        </i>
+                    </span>
+                    <span>当前活跃度</span>
+                </ng-template>
+            </div>
         </div>
     </div>
 </div>
 
-<div nz-row>
-    <div nz-col nzSpan="12"></div>
-    <div nz-col nzSpan="6"></div>
-    <div nz-col nzSpan="6"></div>
+<div nz-row class="check-control-div" nzGutter="16">
+    <div nz-col nzSpan="12">
+        <nz-card [nzTitle]="evaluationTitle" nzSize="small" [nzHoverable]="true">
+            <nz-rate [ngModel]="2.5" nzAllowHalf></nz-rate>
+            <nz-progress [nzPercent]="70" [nzShowInfo]="false"></nz-progress>
+            <nz-progress [nzPercent]="50" nzStrokeColor="green" [nzShowInfo]="false"></nz-progress>
+            <nz-progress [nzPercent]="30" nzStrokeColor="red" [nzShowInfo]="false"></nz-progress>
+        </nz-card>
+        <ng-template #evaluationTitle>
+            <span class="anticon-span thumbs">
+                <i nz-icon>
+                    <svg t="1572349399129" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        p-id="2206">
+                        <path
+                            d="M182.857387 768q0-14.848-10.825143-25.746286t-25.746286-10.825143q-15.433143 0-25.965714 10.825143t-10.605714 25.746286q0 15.433143 10.605714 25.965714t25.965714 10.605714q14.848 0 25.746286-10.605714t10.825143-25.965714zM274.285958 475.428571l0 365.714286q0 14.848-10.825143 25.746286t-25.746286 10.825143l-164.571429 0q-14.848 0-25.746286-10.825143t-10.825143-25.746286l0-365.714286q0-14.848 10.825143-25.746286t25.746286-10.825143l164.571429 0q14.848 0 25.746286 10.825143t10.825143 25.746286zM950.857387 475.428571q0 49.152-31.451429 85.138286 8.557714 25.161143 8.557714 43.446857 1.682286 43.446857-24.576 78.262857 9.728 32.036571 0 66.852571-8.557714 32.548571-30.866286 53.686857 5.12 64-28.013714 103.424-36.571429 43.446857-112.566857 44.544l-73.728 0q-37.741714 0-82.285714-8.850286t-69.412571-16.603429-68.827429-22.601143q-70.290286-24.576-90.258286-25.161143-14.848-0.585143-25.746286-11.117714t-10.825143-25.453714l0-366.299429q0-14.262857 10.313143-24.868571t24.576-11.702857q13.677714-1.170286 43.446857-33.718857t57.709714-69.12q38.838857-49.737143 57.709714-68.534857 10.313143-10.313143 17.700571-27.428571t10.020571-27.721143 7.68-34.596571q4.022857-22.308571 7.168-34.889143t11.117714-29.696 19.456-28.598857q10.825143-10.825143 25.746286-10.825143 26.258286 0 47.177143 5.997714t34.304 14.848 22.820571 23.113143 13.677714 25.746286 6.875429 28.598857 2.852571 25.746286 0.292571 22.308571q0 21.723429-5.412571 43.446857t-10.825143 34.304-15.725714 32.036571q-1.682286 3.437714-5.705143 10.313143t-6.290286 12.580571-4.534857 13.677714l158.281143 0q44.544 0 77.165714 32.548571t32.548571 77.165714z"
+                            p-id="2207"></path>
+                    </svg>
+                </i>
+            </span>
+            <span>平均评价</span>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card [nzTitle]="satifyTitle" nzSize="small" [nzHoverable]="true">
+            <div class="satify-div">
+                <span>正面评价</span>
+                <img class="positive-img" src="https://file.iviewui.com/admin-pro-dist/img/icon-happy.89cfbfe9.svg"
+                    alt="正面评价">
+            </div>
+            <nz-divider></nz-divider>
+            <div class="satify-div">
+                <span>负面评价</span>
+                <img class="nagetive-img" src="https://file.iviewui.com/admin-pro-dist/img/icon-sad.22a51559.svg"
+                    alt="负面评价">
+            </div>
+        </nz-card>
+        <ng-template #satifyTitle>
+            <span class="anticon-span happy">
+                <i nz-icon>
+                    <svg t="1572350661623" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2111">
+                        <path
+                            d="M512 1024c282.784 0 512-229.216 512-512s-229.216-512-512-512-512 229.216-512 512 229.216 512 512 512zM512 96c229.76 0 416 186.24 416 416s-186.24 416-416 416-416-186.24-416-416 186.24-416 416-416zM512 598.752c115.936 0 226.24-30.816 320-84.928-14.56 178.432-153.12 318.144-320 318.144s-305.408-139.872-320-318.304c93.76 54.112 204.064 85.056 320 85.056zM256 352c0-53.024 28.64-96 64-96s64 42.976 64 96c0 53.024-28.64 96-64 96s-64-42.976-64-96zM640 352c0-53.024 28.64-96 64-96s64 42.976 64 96c0 53.024-28.64 96-64 96s-64-42.976-64-96z"
+                            p-id="2112"></path>
+                    </svg>
+                </i>
+            </span>
+            <span>客户满意度</span>
+        </ng-template>
+    </div>
+    <div nz-col nzSpan="6">
+        <nz-card [nzTitle]="doTitle" nzSize="small" [nzHoverable]="true" style="text-align: center;">
+            <nz-progress [nzPercent]="75" nzType="circle" [nzFormat]="doFormat"></nz-progress>
+        </nz-card>
+        <ng-template #doTitle>
+            <span class="anticon-span done-all">
+                <i nz-icon>
+                    <svg t="1572350771104" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" p-id="2884">
+                        <path
+                            d="M768 298.666667l-59.733333-59.733334-268.8 268.8 59.733333 59.733334L768 298.666667z m179.2-59.733334L499.2 691.2 320 512l-59.733333 59.733333 238.933333 238.933334 512-512-64-59.733334zM17.066667 571.733333L256 810.666667l59.733333-59.733334L76.8 512 17.066667 571.733333z"
+                            p-id="2885"></path>
+                    </svg>
+                </i>
+            </span>
+            <span>本月目标</span>
+        </ng-template>
+    </div>
 </div>
 
 <!-- <div nz-row>

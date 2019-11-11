@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DataOperationComponent } from './data-operation/data-operation.component';
-import { IndexComponent } from './index/index.component';
-import { } from './form-page/form-page.module'
 // import {}
 const routes: Routes = [
 
@@ -17,6 +15,14 @@ const routes: Routes = [
   {
     path: 'form-page',
     loadChildren: './form-page/form-page.module#FormPageModule'
+  },
+  {
+    path: 'result-page',
+    loadChildren: './result-page/resultpage.module#ResultPageModule'
+  },
+  {
+    path: 'abnormal-page',
+    loadChildren: './abnormal-page/abnormalpage.module#AbnormalPageModule'
   },
   {
     path: '',

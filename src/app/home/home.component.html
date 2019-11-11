@@ -6,7 +6,7 @@
         <span title><i nz-icon nzType="dashboard"></i><span>Dashboard</span></span>
         <ul>
           <li nz-menu-item (click)="linkMainControl($event)">主控台</li>
-          <li nz-menu-item>监控页</li>
+          <li nz-menu-item (click)="linkCheckControl($event)">监控页</li>
           <li nz-menu-item>工作台</li>
         </ul>
       </li>
@@ -51,8 +51,8 @@
         <span title><i nz-icon nzType="appstore"></i><span>结果页面</span></span>
 
         <ul>
-          <li nz-menu-item>成功页</li>
-          <li nz-menu-item>失败页</li>
+          <li nz-menu-item (click)="linkSuccessPage($event)">成功页</li>
+          <li nz-menu-item (click)="linkFailPage($event)">失败页</li>
         </ul>
       </li>
       <li nz-submenu nzTitle="异常页面" nzIcon="appstore">
@@ -60,7 +60,7 @@
 
         <ul>
           <li nz-menu-item>403</li>
-          <li nz-menu-item>404</li>
+          <li nz-menu-item (click)="link404page($event)">404</li>
           <li nz-menu-item>500</li>
         </ul>
       </li>

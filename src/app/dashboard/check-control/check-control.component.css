@@ -1,0 +1,205 @@
+.anticon-span-32 {
+  display: inline-block;
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+}
+
+.anticon-span-32 > .anticon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 16px;
+}
+
+.anticon-span-32 > .anticon-team {
+  color: #40a9ff;
+}
+
+.anticon-span-32 > .locate {
+  color: #9254de;
+}
+
+.anticon-span-32 > .plane {
+  color: #ffa940;
+}
+
+.anticon-span-32 > .funnel {
+  color: #73d13d;
+}
+
+.anticon-span-32 ~ div:first-of-type {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.top-one {
+  background: #e6f7ff;
+}
+
+.top-two {
+  background: #f9f0ff;
+}
+
+.top-two ~ div:last-of-type {
+  font-weight: 600;
+  color: #19be6b;
+}
+
+.top-three {
+  background: #fff7e6;
+}
+
+.top-three ~ div:last-of-type {
+  font-weight: 600;
+  color: #ed4014;
+}
+
+.top-four {
+  background: #f6ffed;
+}
+
+.top-four ~ div:last-of-type {
+  font-weight: 600;
+  color: #19be6b;
+}
+
+.check-control-div {
+  margin-top: .5rem;
+}
+
+.common > span:first-of-type, .top-two ~ div:last-of-type > span:first-of-type, .top-three ~ div:last-of-type > span:first-of-type, .top-four ~ div:last-of-type > span:first-of-type {
+  position: relative;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+}
+
+.common i, .top-two ~ div:last-of-type i, .top-three ~ div:last-of-type i, .top-four ~ div:last-of-type i {
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.common > span:last-of-type, .top-two ~ div:last-of-type > span:last-of-type, .top-three ~ div:last-of-type > span:last-of-type, .top-four ~ div:last-of-type > span:last-of-type {
+  font-size: 16px;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.anticon-span {
+  display: inline-block;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+}
+
+.anticon-span > .anticon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.anticon-span + span {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 3px;
+}
+
+.anticon-span.chart {
+  background: #e6f7ff;
+}
+
+.anticon-span.chart > .anticon {
+  color: #007bff;
+}
+
+.anticon-span.progress {
+  background: #fff7e6;
+}
+
+.anticon-span.progress > .anticon {
+  color: #fa8c16;
+}
+
+.anticon-span.cafe {
+  background: #fff0f6;
+}
+
+.anticon-span.cafe > .anticon {
+  color: #eb2f96;
+}
+
+.anticon-span.thumbs {
+  background: #fffbe6;
+}
+
+.anticon-span.thumbs > .anticon {
+  color: #ffc53d;
+}
+
+.anticon-span.happy {
+  background: #f0f5ff;
+}
+
+.anticon-span.happy > .anticon {
+  color: #597ef7;
+}
+
+.anticon-span.done-all {
+  background: #fff1f0;
+}
+
+.anticon-span.done-all > .anticon {
+  color: #ff4d4f;
+}
+
+.div-progress-left {
+  width: 150px;
+  height: 150px;
+  position: relative;
+  float: left;
+}
+
+.div-progress-left .big-progress {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.div-progress-left .middle-progress {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+
+.div-progress-left .small-progress {
+  position: absolute;
+  top: 35px;
+  left: 35px;
+}
+
+.satify-div {
+  padding: .8rem;
+  text-align: center;
+}
+
+.satify-div span {
+  display: inline-block;
+  margin-right: 10rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.satify-div .positive-img {
+  display: inline-block;
+  height: 50px;
+}
+
+.satify-div .nagetive-img {
+  display: inline-block;
+  height: 50px;
+}

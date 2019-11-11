@@ -16,6 +16,7 @@ import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzRateModule } from 'ng-zorro-antd/rate';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 // 模块
@@ -50,6 +51,7 @@ import { CheckControlComponent } from './check-control/check-control.component';
         NzTableModule,
         NzListModule,
         NgxEchartsModule,
+        NzRateModule,
         DashboardRoutingModule,
     ],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }],
