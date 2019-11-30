@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { MainControlComponent } from './main-control/main-control.component';
 import { CheckControlComponent } from './check-control/check-control.component';
+import { PlatformComponent } from './platform/platform.component';
 const routes: Routes = [
     {
         path: '',
@@ -15,6 +16,10 @@ const routes: Routes = [
             {
                 path: 'check-control',
                 component: CheckControlComponent
+            },
+            {
+                path: 'platform',
+                component: PlatformComponent
             }
         ]
     },

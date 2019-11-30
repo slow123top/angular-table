@@ -39,6 +39,11 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/dashboard/check-control']);
   }
 
+  linkPlatform(e: MouseEvent) {
+    e.stopPropagation();
+    this.router.navigate(['/dashboard/platform']);
+  }
+
   linkFormPage(e: MouseEvent) {
     this.router.navigate(['form-page/base-form']);
   }
@@ -53,6 +58,10 @@ export class HomeComponent implements OnInit {
 
   link404page(e: MouseEvent) {
     this.router.navigate(['abnormal-page/page-404']);
+  }
+
+  linkQueryTable(e: MouseEvent) {
+    this.router.navigate(['table-page/query-table']);
   }
 
 }

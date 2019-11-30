@@ -1,0 +1,130 @@
+.main-control-div {
+  margin-top: .5rem;
+}
+
+.platform-left {
+  float: left;
+}
+
+.platform-right {
+  float: right;
+}
+
+.anticon-span {
+  display: inline-block;
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  margin-left: 20px;
+}
+
+.anticon-span > .anticon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.anticon-span + span {
+  display: inline-block;
+  font-size: 14px;
+  vertical-align: top;
+  margin-left: 3px;
+}
+
+.anticon-span.apps {
+  margin: 0;
+  background: #e6f7ff;
+}
+
+.anticon-span.apps > .anticon {
+  color: #40a9ff;
+}
+
+.anticon-span.checkbox {
+  background: #fff7e6;
+  color: #ffa940;
+}
+
+.anticon-span.usd {
+  background: #f6ffed;
+  color: #73d13d;
+}
+
+.anticon-span.dynamics {
+  margin: 0;
+  background: #f9f0ff;
+  color: #722ed1;
+}
+
+.anticon-span.heart {
+  margin: 0;
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.card-grid {
+  height: 7rem;
+  padding: .2rem;
+}
+
+.card-grid .float-right {
+  display: none;
+}
+
+.card-grid > .card-grid-content {
+  height: 100%;
+  padding-left: .5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50%;
+  cursor: pointer;
+  border-radius: 3px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.card-grid > .card-grid-content .main-text {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.card-grid > .card-grid-content .sub-text {
+  font-size: .8rem;
+  color: #fff;
+}
+
+.card-grid > .content-1,
+.card-grid > .content-3,
+.card-grid > .content-5 {
+  background-image: url("https://dev-file.iviewui.com/p50TGdvvpXWVR06Vu2TAwkpRnpt8FURA/middle");
+}
+
+.card-grid > .content-2 {
+  background-image: url("https://dev-file.iviewui.com/WLXm7gp1EbLDtvVQgkeQeyq5OtDm00Jd/middle");
+}
+
+.card-grid > .content-4 {
+  background-image: url("https://dev-file.iviewui.com/ttkIjNPlVDuv4lUTvRX8GIlM2QqSe0jg/middle");
+}
+
+.card-grid > .content-6 {
+  background-image: url("https://dev-file.iviewui.com/fAenQ8nvRjL7x0i0jEfuDBZHvJfHf3v6/middle");
+}
+
+.card-grid .icon-setting {
+  color: #fff;
+}
+
+.card-grid:hover {
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  transition: 500ms;
+}
+
+.card-grid:hover .float-right {
+  display: block;
+}
+
+.operation {
+  font-size: 1.5rem;
+}

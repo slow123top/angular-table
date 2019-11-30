@@ -1,0 +1,10 @@
+.table-tag {
+  padding: .4rem;
+  font-size: 14px;
+  color: #515a6e;
+}
+
+.tag-border {
+  border: 1px solid #abdcff;
+  width: 100%;
+}

@@ -3,11 +3,13 @@
     <div class="logo"></div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
       <li nz-submenu>
-        <span title><i nz-icon nzType="dashboard"></i><span>Dashboard</span></span>
+        <span title>
+          <i nz-icon nzType="dashboard"></i>
+          <span>Dashboard</span></span>
         <ul>
           <li nz-menu-item (click)="linkMainControl($event)">主控台</li>
           <li nz-menu-item (click)="linkCheckControl($event)">监控页</li>
-          <li nz-menu-item>工作台</li>
+          <li nz-menu-item (click)="linkPlatform($event)">工作台</li>
         </ul>
       </li>
       <li nz-submenu nzTitle="表单页面" nzIcon="appstore">
@@ -27,7 +29,7 @@
           <li nz-menu-item>卡片列表</li>
           <li nz-menu-item>用户列表</li>
           <li nz-menu-item>商品列表</li>
-          <li nz-menu-item>查询表格</li>
+          <li nz-menu-item (click)="linkQueryTable($event)">查询表格</li>
         </ul>
       </li>
       <li nz-submenu nzTitle="搜索页面" nzIcon="appstore">

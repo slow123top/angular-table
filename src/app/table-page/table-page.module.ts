@@ -20,21 +20,17 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 // 模块
-import { DashboardRoutingModule } from './dashboard-routing.module';
+import { TablePageRoutingModule } from './table-page-routing.module';
 
 // 组件
-import { DashboardComponent } from './dashboard.component';
-import { MainControlComponent } from './main-control/main-control.component';
-import { CheckControlComponent } from './check-control/check-control.component';
-import { PlatformComponent } from './platform/platform.component';
+import { TablePageComponent } from './table-page.component';
+import { QueryTableComponent } from './query-table/query-table.component';
 // 服务
 
 @NgModule({
     declarations: [
-        DashboardComponent,
-        MainControlComponent,
-        CheckControlComponent,
-        PlatformComponent
+        QueryTableComponent,
+        TablePageComponent
     ],
     imports: [
         CommonModule,
@@ -54,9 +50,9 @@ import { PlatformComponent } from './platform/platform.component';
         NzListModule,
         NgxEchartsModule,
         NzRateModule,
-        DashboardRoutingModule,
+        TablePageRoutingModule,
     ],
     providers: [{ provide: NZ_I18N, useValue: zh_CN }],
-    exports: [DashboardComponent, MainControlComponent]
+    exports: [QueryTableComponent, TablePageComponent]
 })
-export class DashboardModule { }
+export class TablePageModule { }

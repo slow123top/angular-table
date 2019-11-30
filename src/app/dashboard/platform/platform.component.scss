@@ -1,0 +1,135 @@
+.main-control-div {
+    margin-top: .5rem;
+}
+
+.platform-left {
+    float: left;
+}
+
+.platform-right {
+    float: right;
+}
+
+.anticon-span {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    margin-left: 20px;
+
+    &>.anticon {
+        position: absolute;
+        top: 5px;
+        left: 5px
+    }
+
+    &+span {
+        display: inline-block;
+        font-size: 14px;
+        vertical-align: top;
+        margin-left: 3px;
+    }
+}
+
+.anticon-span.apps {
+    margin: 0;
+    background: rgb(230, 247, 255);
+
+    &>.anticon {
+        color: rgb(64, 169, 255)
+    }
+}
+
+.anticon-span.checkbox {
+    background: rgb(255, 247, 230);
+    color: rgb(255, 169, 64)
+}
+
+.anticon-span.usd {
+    background: rgb(246, 255, 237);
+    color: rgb(115, 209, 61)
+}
+
+.anticon-span.dynamics {
+    margin: 0;
+    background: rgb(249, 240, 255);
+    color: rgb(114, 46, 209);
+}
+
+.anticon-span.heart {
+    margin: 0;
+    background: rgb(255, 241, 240);
+    color: rgb(255, 77, 79);
+}
+
+.card-grid {
+    height: 7rem;
+    padding: .2rem;
+
+
+
+    & .float-right {
+        display: none;
+    }
+
+    &>.card-grid-content {
+        height: 100%;
+        padding-left: .5rem;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50%;
+        cursor: pointer;
+        border-radius: 3px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+
+        & .main-text {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        & .sub-text {
+            font-size: .8rem;
+            color: #fff;
+        }
+
+    }
+
+    &>.content-1,
+    &>.content-3,
+    &>.content-5 {
+        background-image: url("https://dev-file.iviewui.com/p50TGdvvpXWVR06Vu2TAwkpRnpt8FURA/middle")
+    }
+
+    &>.content-2 {
+        background-image: url("https://dev-file.iviewui.com/WLXm7gp1EbLDtvVQgkeQeyq5OtDm00Jd/middle");
+
+    }
+
+    &>.content-4 {
+        background-image: url("https://dev-file.iviewui.com/ttkIjNPlVDuv4lUTvRX8GIlM2QqSe0jg/middle");
+    }
+
+    &>.content-6 {
+        background-image: url("https://dev-file.iviewui.com/fAenQ8nvRjL7x0i0jEfuDBZHvJfHf3v6/middle");
+    }
+
+    & .icon-setting {
+        color: #fff;
+    }
+
+
+    &:hover {
+        box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
+        transition: 500ms;
+    }
+
+    &:hover .float-right {
+        display: block;
+    }
+}
+
+.operation {
+    font-size: 1.5rem;
+}
